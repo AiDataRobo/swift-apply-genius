@@ -26,36 +26,38 @@ const NavBar = () => {
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled 
-          ? 'py-3 bg-white/90 backdrop-blur-md shadow-sm' 
+          ? 'py-3 bg-background/80 backdrop-blur-md border-b border-white/5' 
           : 'py-5 bg-transparent'
       }`}
     >
       <div className="container max-w-7xl flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <FileText className="h-6 w-6 text-primary" />
+          <div className="glowing-icon">
+            <FileText className="h-6 w-6 text-accent" />
+          </div>
           <span className="font-display font-bold text-xl">SwiftApply</span>
         </div>
         
         <nav className="hidden md:flex items-center gap-8">
-          <a href="#features" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+          <a href="#features" className="text-sm font-medium text-foreground hover:text-accent transition-colors">
             Features
           </a>
-          <a href="#how-it-works" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+          <a href="#how-it-works" className="text-sm font-medium text-foreground hover:text-accent transition-colors">
             How It Works
           </a>
-          <a href="#testimonials" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+          <a href="#testimonials" className="text-sm font-medium text-foreground hover:text-accent transition-colors">
             Testimonials
           </a>
-          <a href="#pricing" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+          <a href="#pricing" className="text-sm font-medium text-foreground hover:text-accent transition-colors">
             Pricing
           </a>
         </nav>
         
         <div className="flex items-center gap-4">
-          <Button variant="ghost" className="hidden md:inline-flex">
+          <Button variant="ghost" className="hidden md:inline-flex hover:text-accent hover:bg-accent/10">
             Log in
           </Button>
-          <Button className="glass-button">
+          <Button className="neon-button">
             Get Started
           </Button>
         </div>

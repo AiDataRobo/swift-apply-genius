@@ -117,6 +117,14 @@ export default {
 					'50%': {
 						transform: 'translateY(-10px)'
 					}
+				},
+				'glow': {
+					'0%, 100%': {
+						filter: 'drop-shadow(0 0 5px rgba(139, 92, 246, 0.5))'
+					},
+					'50%': {
+						filter: 'drop-shadow(0 0 20px rgba(139, 92, 246, 0.7))'
+					}
 				}
 			},
 			animation: {
@@ -126,11 +134,12 @@ export default {
 				'fade-in-up': 'fade-in-up 0.7s ease-out',
 				'fade-in-down': 'fade-in-down 0.7s ease-out',
 				'pulse-subtle': 'pulse-subtle 3s ease-in-out infinite',
-				'float': 'float 6s ease-in-out infinite'
+				'float': 'float 6s ease-in-out infinite',
+				'glow': 'glow 3s ease-in-out infinite'
 			},
 			fontFamily: {
 				'sans': ['Inter', 'system-ui', 'sans-serif'],
-				'display': ['SF Pro Display', 'Inter', 'system-ui', 'sans-serif']
+				'display': ['Space Grotesk', 'Inter', 'system-ui', 'sans-serif']
 			}
 		}
 	},
