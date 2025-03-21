@@ -31,13 +31,6 @@ const TestimonialsSection = () => {
       role: "Project Manager",
       company: "GlobalTech",
       image: "https://images.unsplash.com/photo-1557296387-5358ad7997bb?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
-    },
-    {
-      quote: "The ATS optimization feature was a game-changer. My applications started getting responses immediately after I used SwiftApply's templates.",
-      author: "David Wilson",
-      role: "Financial Analyst",
-      company: "Morgan Capital",
-      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=256&q=80"
     }
   ];
 
@@ -66,14 +59,10 @@ const TestimonialsSection = () => {
   };
 
   return (
-    <section id="testimonials" className="py-24 relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-accent/5 to-background pointer-events-none" />
-      <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-accent/5 rounded-full blur-3xl pointer-events-none" />
-      
-      <div className="container section-container relative z-10">
+    <section id="testimonials" className="py-24 bg-accent/5 relative">
+      <div className="container section-container">
         <div className="text-center mb-16">
-          <h2 className="section-heading">Success <span className="neon-text">Stories</span></h2>
+          <h2 className="section-heading">Success Stories</h2>
           <p className="section-subheading mx-auto">
             Hear from job seekers who landed their dream roles with SwiftApply
           </p>
@@ -81,7 +70,7 @@ const TestimonialsSection = () => {
         
         <div className="relative max-w-4xl mx-auto">
           <div 
-            className={`futuristic-card p-10 rounded-3xl transition-opacity duration-500 ${
+            className={`glass-card p-10 rounded-3xl transition-opacity duration-500 ${
               isAnimating ? 'opacity-0' : 'opacity-100'
             }`}
           >
@@ -89,10 +78,10 @@ const TestimonialsSection = () => {
               <img 
                 src={testimonials[currentIndex].image} 
                 alt={testimonials[currentIndex].author}
-                className="w-20 h-20 rounded-full object-cover mb-6 border-4 border-accent/20 shadow-md"
+                className="w-20 h-20 rounded-full object-cover mb-6 border-4 border-white shadow-md"
               />
               
-              <svg className="w-10 h-10 text-accent/20 mb-4" fill="currentColor" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+              <svg className="w-10 h-10 text-primary/20 mb-4" fill="currentColor" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10.722 6.206c-5.945 2.266-10.722 8.09-10.722 13.95 0 5.143 3.249 9.844 8.085 9.844 3.875 0 6.423-2.528 6.423-6.548 0-3.646-2.315-6.843-6.012-6.843-0.182 0-0.449 0.047-0.613 0.093 1.261-1.95 3.757-4.413 6.993-5.65l-4.154-4.846zM24.378 6.206c-5.944 2.266-10.721 8.09-10.721 13.95 0 5.143 3.249 9.844 8.084 9.844 3.876 0 6.424-2.528 6.424-6.548 0-3.646-2.316-6.843-6.013-6.843-0.182 0-0.448 0.047-0.612 0.093 1.26-1.95 3.756-4.413 6.993-5.65l-4.155-4.846z"></path>
               </svg>
               
@@ -116,8 +105,8 @@ const TestimonialsSection = () => {
                 onClick={() => handleDotClick(index)}
                 className={`w-3 h-3 mx-1 rounded-full transition-all duration-300 ${
                   index === currentIndex
-                    ? 'bg-accent w-8 neon-border'
-                    : 'bg-accent/30 hover:bg-accent/50'
+                    ? 'bg-primary w-8'
+                    : 'bg-primary/30 hover:bg-primary/50'
                 }`}
                 aria-label={`Go to testimonial ${index + 1}`}
               />
