@@ -2,6 +2,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { Link } from 'react-router-dom';
 
 const CTASection = () => {
   return (
@@ -22,9 +23,11 @@ const CTASection = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button className="glass-button py-6 px-8 text-lg rounded-xl w-full sm:w-auto">
-                Start Your Resume Now
-                <ArrowRight className="ml-2 h-5 w-5" />
+              <Button className="glass-button py-6 px-8 text-lg rounded-xl w-full sm:w-auto" asChild>
+                <Link to="/dashboard">
+                  Start Your Resume Now
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
               </Button>
               
               <Button variant="outline" className="py-6 px-8 text-lg rounded-xl w-full sm:w-auto">
