@@ -27,7 +27,7 @@ const AIAssistantPanel = () => {
       id: 3,
       type: 'enhancement',
       title: 'Improve job title alignment',
-      description: 'Adjust your job titles to better match the positions you're applying for.',
+      description: "Adjust your job titles to better match the positions you're applying for.",
       icon: <Zap className="h-5 w-5 text-primary" />,
     },
   ];
