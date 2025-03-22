@@ -1,9 +1,11 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { 
   LayoutTemplate, 
   FileText, 
@@ -19,15 +21,49 @@ import {
   Code,
   FileDown,
   FileCode,
-  FilePlus2
+  FilePlus2,
+  Languages,
+  Heart,
+  Save,
+  FileType,
+  ChevronLeft,
+  ArrowUpDown,
+  Palette,
+  Trash2,
+  ScrollText,
+  CreditCard,
+  Sun,
+  Moon
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { Resume, TemplateStyle } from "@/schemas/resume";
+import ResumeTemplate from "@/components/resume/templates";
+import LanguagesSection from "@/components/resume/LanguagesSection";
+import InterestsSection from "@/components/resume/InterestsSection";
+import SectionReorder from "@/components/resume/SectionReorder";
 
 const ResumeBuilder = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("content");
   const [activeSection, setActiveSection] = useState("profile");
-  const [resumeData, setResumeData] = useState({
+  
+  // Default order of sections
+  const defaultSectionOrder = [
+    "profile", 
+    "skills", 
+    "experience", 
+    "education", 
+    "projects", 
+    "certificates", 
+    "languages", 
+    "interests"
+  ];
+  
+  const [sectionOrder, setSectionOrder] = useState(defaultSectionOrder);
+  const [visibleSections, setVisibleSections] = useState(defaultSectionOrder);
+  
+  const [resumeData, setResumeData] = useState<Resume>({
     profile: {
       name: "Sarah Johnson",
       title: "Senior Frontend Developer",
@@ -37,9 +73,9 @@ const ResumeBuilder = () => {
       summary: "Passionate frontend developer with 5+ years of experience creating responsive and accessible web applications."
     },
     skills: [
-      { category: "Programming", items: ["JavaScript", "TypeScript", "React", "Vue.js", "HTML5", "CSS3", "Tailwind CSS"] },
-      { category: "Tools", items: ["Git", "Webpack", "Jest", "Figma"] },
-      { category: "Soft Skills", items: ["Team Leadership", "Communication", "Problem Solving"] }
+      { category: "Programming", items: [{ name: "JavaScript" }, { name: "TypeScript" }, { name: "React" }, { name: "Vue.js" }, { name: "HTML5" }, { name: "CSS3" }, { name: "Tailwind CSS" }] },
+      { category: "Tools", items: [{ name: "Git" }, { name: "Webpack" }, { name: "Jest" }, { name: "Figma" }] },
+      { category: "Soft Skills", items: [{ name: "Team Leadership" }, { name: "Communication" }, { name: "Problem Solving" }] }
     ],
     experience: [
       {
@@ -91,16 +127,128 @@ const ResumeBuilder = () => {
         issuer: "Scrum.org",
         date: "2021"
       }
+    ],
+    languages: [
+      { name: "English", proficiency: "Native" },
+      { name: "Spanish", proficiency: "Professional" },
+      { name: "French", proficiency: "Elementary" }
+    ],
+    interests: [
+      { name: "Web Development" },
+      { name: "UI/UX Design" },
+      { name: "Photography" },
+      { name: "Hiking" },
+      { name: "Reading" }
     ]
   });
 
-  const [templateStyle, setTemplateStyle] = useState({
+  const [templateStyle, setTemplateStyle] = useState<TemplateStyle>({
     template: "modern",
     primaryColor: "#1a73e8",
+    secondaryColor: "#f1f5f9",
     fontFamily: "Inter",
     fontSize: "medium",
-    spacing: "comfortable"
+    spacing: "comfortable",
+    showPhoto: false,
+    darkMode: false,
+    layout: "two-column"
   });
+
+  // Auto-save functionality
+  useEffect(() => {
+    const saveResumeToLocalStorage = () => {
+      localStorage.setItem('resumeData', JSON.stringify(resumeData));
+      localStorage.setItem('templateStyle', JSON.stringify(templateStyle));
+      localStorage.setItem('sectionOrder', JSON.stringify(sectionOrder));
+      localStorage.setItem('visibleSections', JSON.stringify(visibleSections));
+    };
+
+    // Save when data changes
+    const saveTimeout = setTimeout(saveResumeToLocalStorage, 1000);
+    
+    return () => clearTimeout(saveTimeout);
+  }, [resumeData, templateStyle, sectionOrder, visibleSections]);
+
+  // Load saved data
+  useEffect(() => {
+    const loadSavedData = () => {
+      try {
+        const savedResumeData = localStorage.getItem('resumeData');
+        const savedTemplateStyle = localStorage.getItem('templateStyle');
+        const savedSectionOrder = localStorage.getItem('sectionOrder');
+        const savedVisibleSections = localStorage.getItem('visibleSections');
+        
+        if (savedResumeData) {
+          setResumeData(JSON.parse(savedResumeData));
+        }
+        
+        if (savedTemplateStyle) {
+          setTemplateStyle(JSON.parse(savedTemplateStyle));
+        }
+        
+        if (savedSectionOrder) {
+          setSectionOrder(JSON.parse(savedSectionOrder));
+        }
+        
+        if (savedVisibleSections) {
+          setVisibleSections(JSON.parse(savedVisibleSections));
+        }
+      } catch (error) {
+        console.error("Failed to load saved resume data:", error);
+      }
+    };
+    
+    loadSavedData();
+  }, []);
+
+  const handleSaveResume = () => {
+    // In a real app, this would save to a database
+    toast.success("Resume saved successfully!");
+  };
+
+  const handleDownloadResume = () => {
+    // In a real app, this would generate a PDF
+    toast.success("Resume downloaded as PDF!");
+  };
+
+  const handleExportDocx = () => {
+    // In a real app, this would generate a DOCX file
+    toast.success("Resume exported as DOCX!");
+  };
+
+  const handleCreateShareLink = () => {
+    // In a real app, this would generate a shareable link
+    toast.success("Share link created and copied to clipboard!");
+  };
+
+  // Update languages
+  const handleLanguagesChange = (updatedLanguages) => {
+    setResumeData({ ...resumeData, languages: updatedLanguages });
+  };
+
+  // Update interests
+  const handleInterestsChange = (updatedInterests) => {
+    setResumeData({ ...resumeData, interests: updatedInterests });
+  };
+
+  // Update profile
+  const handleProfileChange = (field, value) => {
+    setResumeData({
+      ...resumeData,
+      profile: { ...resumeData.profile, [field]: value }
+    });
+  };
+
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    setTemplateStyle({
+      ...templateStyle,
+      darkMode: !templateStyle.darkMode,
+      // Change colors accordingly
+      primaryColor: templateStyle.darkMode ? "#1a73e8" : "#a78bfa",
+      secondaryColor: templateStyle.darkMode ? "#f1f5f9" : "#1e293b",
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -111,14 +259,33 @@ const ResumeBuilder = () => {
             <h1 className="text-lg font-semibold">Resume Builder</h1>
           </div>
           <div className="flex items-center space-x-3">
-            <button className="flex items-center text-sm px-3 py-1.5 rounded-md bg-muted hover:bg-muted/80">
-              <FileText className="h-4 w-4 mr-1.5" />
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => navigate("/")}
+              className="flex items-center"
+            >
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Back
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleSaveResume}
+              className="flex items-center"
+            >
+              <Save className="h-4 w-4 mr-1.5" />
               Save
-            </button>
-            <button className="flex items-center text-sm px-3 py-1.5 rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
+            </Button>
+            <Button 
+              variant="default" 
+              size="sm"
+              onClick={handleDownloadResume}
+              className="flex items-center"
+            >
               <Download className="h-4 w-4 mr-1.5" />
               Export
-            </button>
+            </Button>
           </div>
         </div>
       </header>
@@ -187,6 +354,27 @@ const ResumeBuilder = () => {
                   <Award className="h-4 w-4 mr-2" />
                   Certificates
                 </button>
+                <button 
+                  onClick={() => setActiveSection("languages")}
+                  className={`w-full flex items-center text-sm p-2 rounded-md ${activeSection === "languages" ? "bg-primary/10 text-primary" : "hover:bg-muted"}`}
+                >
+                  <Languages className="h-4 w-4 mr-2" />
+                  Languages
+                </button>
+                <button 
+                  onClick={() => setActiveSection("interests")}
+                  className={`w-full flex items-center text-sm p-2 rounded-md ${activeSection === "interests" ? "bg-primary/10 text-primary" : "hover:bg-muted"}`}
+                >
+                  <Heart className="h-4 w-4 mr-2" />
+                  Interests
+                </button>
+                <button 
+                  onClick={() => setActiveSection("sections")}
+                  className={`w-full flex items-center text-sm p-2 rounded-md ${activeSection === "sections" ? "bg-primary/10 text-primary" : "hover:bg-muted"}`}
+                >
+                  <ArrowUpDown className="h-4 w-4 mr-2" />
+                  Reorder Sections
+                </button>
               </div>
             )}
 
@@ -210,25 +398,46 @@ const ResumeBuilder = () => {
                       Minimal
                     </button>
                     <button 
+                      onClick={() => setTemplateStyle({...templateStyle, template: "professional"})}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "professional" ? "border-primary" : "border-border"}`}
+                    >
+                      <ScrollText className="h-8 w-8 mb-1" />
+                      Professional
+                    </button>
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, template: "creative"})}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "creative" ? "border-primary" : "border-border"}`}
+                    >
+                      <Palette className="h-8 w-8 mb-1" />
+                      Creative
+                    </button>
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, template: "technical"})}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "technical" ? "border-primary" : "border-border"}`}
+                    >
+                      <Code className="h-8 w-8 mb-1" />
+                      Technical
+                    </button>
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, template: "executive"})}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "executive" ? "border-primary" : "border-border"}`}
+                    >
+                      <CreditCard className="h-8 w-8 mb-1" />
+                      Executive
+                    </button>
+                    <button 
                       onClick={() => setTemplateStyle({...templateStyle, template: "ats"})}
                       className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "ats" ? "border-primary" : "border-border"}`}
                     >
                       <FilePlus2 className="h-8 w-8 mb-1" />
                       ATS
                     </button>
-                    <button 
-                      onClick={() => setTemplateStyle({...templateStyle, template: "creative"})}
-                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "creative" ? "border-primary" : "border-border"}`}
-                    >
-                      <FileCode className="h-8 w-8 mb-1" />
-                      Creative
-                    </button>
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Colors</h3>
-                  <div className="flex space-x-2">
+                  <div className="flex flex-wrap gap-2">
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#1a73e8"})}
                       className={`w-6 h-6 rounded-full bg-blue-600 ${templateStyle.primaryColor === "#1a73e8" ? "ring-2 ring-offset-2 ring-blue-600" : ""}`}
@@ -249,6 +458,18 @@ const ResumeBuilder = () => {
                       onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#1e293b"})}
                       className={`w-6 h-6 rounded-full bg-slate-800 ${templateStyle.primaryColor === "#1e293b" ? "ring-2 ring-offset-2 ring-slate-800" : ""}`}
                     />
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#f97316"})}
+                      className={`w-6 h-6 rounded-full bg-orange-500 ${templateStyle.primaryColor === "#f97316" ? "ring-2 ring-offset-2 ring-orange-500" : ""}`}
+                    />
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#0ea5e9"})}
+                      className={`w-6 h-6 rounded-full bg-sky-500 ${templateStyle.primaryColor === "#0ea5e9" ? "ring-2 ring-offset-2 ring-sky-500" : ""}`}
+                    />
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#8b5cf6"})}
+                      className={`w-6 h-6 rounded-full bg-violet-500 ${templateStyle.primaryColor === "#8b5cf6" ? "ring-2 ring-offset-2 ring-violet-500" : ""}`}
+                    />
                   </div>
                 </div>
 
@@ -267,7 +488,107 @@ const ResumeBuilder = () => {
                     >
                       Poppins
                     </button>
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, fontFamily: "Georgia"})}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.fontFamily === "Georgia" ? "border-primary" : "border-border"}`}
+                      style={{ fontFamily: "Georgia" }}
+                    >
+                      Georgia
+                    </button>
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, fontFamily: "Arial"})}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.fontFamily === "Arial" ? "border-primary" : "border-border"}`}
+                      style={{ fontFamily: "Arial" }}
+                    >
+                      Arial
+                    </button>
                   </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Font Size</h3>
+                  <div className="grid grid-cols-3 gap-2">
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, fontSize: "small"})}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.fontSize === "small" ? "border-primary" : "border-border"}`}
+                    >
+                      Small
+                    </button>
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, fontSize: "medium"})}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.fontSize === "medium" ? "border-primary" : "border-border"}`}
+                    >
+                      Medium
+                    </button>
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, fontSize: "large"})}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.fontSize === "large" ? "border-primary" : "border-border"}`}
+                    >
+                      Large
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Spacing</h3>
+                  <div className="grid grid-cols-3 gap-2">
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, spacing: "compact"})}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.spacing === "compact" ? "border-primary" : "border-border"}`}
+                    >
+                      Compact
+                    </button>
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, spacing: "comfortable"})}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.spacing === "comfortable" ? "border-primary" : "border-border"}`}
+                    >
+                      Comfortable
+                    </button>
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, spacing: "spacious"})}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.spacing === "spacious" ? "border-primary" : "border-border"}`}
+                    >
+                      Spacious
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Layout</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, layout: "single"})}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.layout === "single" ? "border-primary" : "border-border"}`}
+                    >
+                      Single Column
+                    </button>
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, layout: "two-column"})}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.layout === "two-column" ? "border-primary" : "border-border"}`}
+                    >
+                      Two Column
+                    </button>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Theme</h3>
+                  <button 
+                    onClick={toggleDarkMode}
+                    className="w-full p-2 rounded-md text-xs border flex items-center justify-center gap-2"
+                  >
+                    {templateStyle.darkMode ? (
+                      <>
+                        <Sun className="h-4 w-4" />
+                        Switch to Light Mode
+                      </>
+                    ) : (
+                      <>
+                        <Moon className="h-4 w-4" />
+                        Switch to Dark Mode
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
             )}
@@ -276,24 +597,42 @@ const ResumeBuilder = () => {
               <div className="space-y-4 p-1">
                 <div className="space-y-2">
                   <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Export</h3>
-                  <button className="w-full flex items-center justify-center text-sm py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
+                  <Button 
+                    className="w-full flex items-center justify-center" 
+                    onClick={handleDownloadResume}
+                  >
                     <Download className="h-4 w-4 mr-2" />
                     Download PDF
-                  </button>
-                  <button className="w-full flex items-center justify-center text-sm py-2 rounded-md bg-muted hover:bg-muted/80">
-                    <Download className="h-4 w-4 mr-2" />
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full flex items-center justify-center" 
+                    onClick={handleExportDocx}
+                  >
+                    <FileType className="h-4 w-4 mr-2" />
                     Export as DOCX
-                  </button>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="w-full flex items-center justify-center"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Export as TXT
+                  </Button>
                 </div>
                 
                 <Separator />
                 
                 <div className="space-y-2">
                   <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Share</h3>
-                  <button className="w-full flex items-center justify-center text-sm py-2 rounded-md bg-muted hover:bg-muted/80">
+                  <Button 
+                    variant="outline" 
+                    className="w-full flex items-center justify-center" 
+                    onClick={handleCreateShareLink}
+                  >
                     <Share2 className="h-4 w-4 mr-2" />
                     Create Share Link
-                  </button>
+                  </Button>
                 </div>
               </div>
             )}
@@ -314,28 +653,18 @@ const ResumeBuilder = () => {
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                           <div className="space-y-2">
                             <label className="text-sm font-medium" htmlFor="name">Full Name</label>
-                            <input 
+                            <Input 
                               id="name"
-                              type="text" 
-                              className="w-full px-3 py-2 border rounded-md text-sm" 
                               value={resumeData.profile.name}
-                              onChange={(e) => setResumeData({
-                                ...resumeData,
-                                profile: { ...resumeData.profile, name: e.target.value }
-                              })}
+                              onChange={(e) => handleProfileChange("name", e.target.value)}
                             />
                           </div>
                           <div className="space-y-2">
                             <label className="text-sm font-medium" htmlFor="title">Job Title</label>
-                            <input 
+                            <Input 
                               id="title"
-                              type="text" 
-                              className="w-full px-3 py-2 border rounded-md text-sm" 
                               value={resumeData.profile.title}
-                              onChange={(e) => setResumeData({
-                                ...resumeData,
-                                profile: { ...resumeData.profile, title: e.target.value }
-                              })}
+                              onChange={(e) => handleProfileChange("title", e.target.value)}
                             />
                           </div>
                         </div>
@@ -343,44 +672,51 @@ const ResumeBuilder = () => {
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                           <div className="space-y-2">
                             <label className="text-sm font-medium" htmlFor="email">Email</label>
-                            <input 
+                            <Input 
                               id="email"
                               type="email" 
-                              className="w-full px-3 py-2 border rounded-md text-sm" 
                               value={resumeData.profile.email}
-                              onChange={(e) => setResumeData({
-                                ...resumeData,
-                                profile: { ...resumeData.profile, email: e.target.value }
-                              })}
+                              onChange={(e) => handleProfileChange("email", e.target.value)}
                             />
                           </div>
                           <div className="space-y-2">
                             <label className="text-sm font-medium" htmlFor="phone">Phone</label>
-                            <input 
+                            <Input 
                               id="phone"
-                              type="text" 
-                              className="w-full px-3 py-2 border rounded-md text-sm" 
                               value={resumeData.profile.phone}
-                              onChange={(e) => setResumeData({
-                                ...resumeData,
-                                profile: { ...resumeData.profile, phone: e.target.value }
-                              })}
+                              onChange={(e) => handleProfileChange("phone", e.target.value)}
                             />
                           </div>
                         </div>
                         
                         <div className="space-y-2">
                           <label className="text-sm font-medium" htmlFor="location">Location</label>
-                          <input 
+                          <Input 
                             id="location"
-                            type="text" 
-                            className="w-full px-3 py-2 border rounded-md text-sm" 
                             value={resumeData.profile.location}
-                            onChange={(e) => setResumeData({
-                              ...resumeData,
-                              profile: { ...resumeData.profile, location: e.target.value }
-                            })}
+                            onChange={(e) => handleProfileChange("location", e.target.value)}
                           />
+                        </div>
+                        
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium" htmlFor="linkedin">LinkedIn URL</label>
+                            <Input 
+                              id="linkedin"
+                              value={resumeData.profile.linkedin || ""}
+                              onChange={(e) => handleProfileChange("linkedin", e.target.value)}
+                              placeholder="https://linkedin.com/in/yourprofile"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium" htmlFor="website">Personal Website</label>
+                            <Input 
+                              id="website"
+                              value={resumeData.profile.website || ""}
+                              onChange={(e) => handleProfileChange("website", e.target.value)}
+                              placeholder="https://yourwebsite.com"
+                            />
+                          </div>
                         </div>
                         
                         <div className="space-y-2">
@@ -390,21 +726,35 @@ const ResumeBuilder = () => {
                             rows={4} 
                             className="w-full px-3 py-2 border rounded-md text-sm" 
                             value={resumeData.profile.summary}
-                            onChange={(e) => setResumeData({
-                              ...resumeData,
-                              profile: { ...resumeData.profile, summary: e.target.value }
-                            })}
+                            onChange={(e) => handleProfileChange("summary", e.target.value)}
                           />
-                        </div>
-                        
-                        <div className="mt-4">
-                          <button className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm">
-                            Save Changes
-                          </button>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
+                )}
+                
+                {activeSection === "languages" && (
+                  <LanguagesSection 
+                    languages={resumeData.languages || []} 
+                    onChange={handleLanguagesChange} 
+                  />
+                )}
+                
+                {activeSection === "interests" && (
+                  <InterestsSection 
+                    interests={resumeData.interests || []} 
+                    onChange={handleInterestsChange} 
+                  />
+                )}
+                
+                {activeSection === "sections" && (
+                  <SectionReorder 
+                    sections={sectionOrder}
+                    visibleSections={visibleSections}
+                    onReorder={setSectionOrder}
+                    onVisibilityChange={setVisibleSections}
+                  />
                 )}
                 
                 {activeSection === "skills" && (
@@ -462,93 +812,14 @@ const ResumeBuilder = () => {
             <ResizableHandle withHandle />
             
             <ResizablePanel defaultSize={55}>
-              <div className="h-full overflow-y-auto bg-muted/30 flex items-center justify-center p-6">
-                <div className="w-full max-w-[600px] min-h-[800px] mx-auto bg-white shadow-lg rounded-md overflow-hidden">
-                  <div className="p-8" style={{fontFamily: templateStyle.fontFamily}}>
-                    <div className="mb-6">
-                      <h1 className="text-3xl font-bold" style={{color: templateStyle.primaryColor}}>{resumeData.profile.name}</h1>
-                      <p className="text-lg text-gray-700">{resumeData.profile.title}</p>
-                      <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-sm text-gray-600">
-                        <span>{resumeData.profile.email}</span>
-                        <span>{resumeData.profile.phone}</span>
-                        <span>{resumeData.profile.location}</span>
-                      </div>
-                    </div>
-
-                    <div className="mb-6">
-                      <h2 className="text-lg font-semibold mb-2 pb-1 border-b" style={{color: templateStyle.primaryColor}}>Professional Summary</h2>
-                      <p className="text-sm">{resumeData.profile.summary}</p>
-                    </div>
-
-                    <div className="mb-6">
-                      <h2 className="text-lg font-semibold mb-2 pb-1 border-b" style={{color: templateStyle.primaryColor}}>Skills</h2>
-                      {resumeData.skills.map((skillGroup, i) => (
-                        <div key={i} className="mb-2">
-                          <h3 className="text-sm font-medium">{skillGroup.category}</h3>
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {skillGroup.items.map((skill, j) => (
-                              <span key={j} className="text-xs px-2 py-1 bg-gray-100 rounded-full">{skill}</span>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="mb-6">
-                      <h2 className="text-lg font-semibold mb-2 pb-1 border-b" style={{color: templateStyle.primaryColor}}>Experience</h2>
-                      {resumeData.experience.map((job, i) => (
-                        <div key={i} className="mb-4">
-                          <div className="flex justify-between mb-1">
-                            <h3 className="text-sm font-medium">{job.title}</h3>
-                            <span className="text-xs text-gray-600">{job.startDate} - {job.endDate}</span>
-                          </div>
-                          <p className="text-xs text-gray-700 mb-1">{job.company}, {job.location}</p>
-                          <p className="text-xs">{job.description}</p>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="mb-6">
-                      <h2 className="text-lg font-semibold mb-2 pb-1 border-b" style={{color: templateStyle.primaryColor}}>Education</h2>
-                      {resumeData.education.map((edu, i) => (
-                        <div key={i} className="mb-3">
-                          <div className="flex justify-between mb-1">
-                            <h3 className="text-sm font-medium">{edu.degree}</h3>
-                            <span className="text-xs text-gray-600">{edu.startDate} - {edu.endDate}</span>
-                          </div>
-                          <p className="text-xs text-gray-700 mb-1">{edu.institution}</p>
-                          <p className="text-xs">{edu.description}</p>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="mb-6">
-                      <h2 className="text-lg font-semibold mb-2 pb-1 border-b" style={{color: templateStyle.primaryColor}}>Projects</h2>
-                      {resumeData.projects.map((project, i) => (
-                        <div key={i} className="mb-3">
-                          <h3 className="text-sm font-medium">{project.title}</h3>
-                          <p className="text-xs mb-1">{project.description}</p>
-                          <div className="flex flex-wrap gap-1 mt-1">
-                            {project.technologies.map((tech, j) => (
-                              <span key={j} className="text-xs px-2 py-0.5 bg-gray-100 rounded-full">{tech}</span>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div>
-                      <h2 className="text-lg font-semibold mb-2 pb-1 border-b" style={{color: templateStyle.primaryColor}}>Certifications</h2>
-                      {resumeData.certificates.map((cert, i) => (
-                        <div key={i} className="mb-2">
-                          <div className="flex justify-between">
-                            <h3 className="text-sm font-medium">{cert.title}</h3>
-                            <span className="text-xs text-gray-600">{cert.date}</span>
-                          </div>
-                          <p className="text-xs text-gray-700">{cert.issuer}</p>
-                        </div>
-                      ))}
-                    </div>
+              <div className={`h-full overflow-y-auto ${templateStyle.darkMode ? 'bg-slate-900' : 'bg-muted/30'} flex items-center justify-center p-6`}>
+                <div className={`w-full max-w-[600px] min-h-[800px] mx-auto ${templateStyle.darkMode ? 'bg-slate-800 text-white' : 'bg-white'} shadow-lg rounded-md overflow-hidden`}>
+                  <div className="p-8">
+                    <ResumeTemplate 
+                      resume={resumeData} 
+                      style={templateStyle} 
+                      visibleSections={visibleSections} 
+                    />
                   </div>
                 </div>
               </div>
