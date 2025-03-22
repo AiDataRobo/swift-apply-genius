@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { FileText } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -61,10 +62,10 @@ const Footer = () => {
           <div>
             <h4 className="font-semibold text-lg mb-4">Company</h4>
             <ul className="space-y-2">
-              <li><a href="#" className="text-background/70 hover:text-primary transition-colors">About Us</a></li>
-              <li><a href="#" className="text-background/70 hover:text-primary transition-colors">Contact</a></li>
-              <li><a href="#" className="text-background/70 hover:text-primary transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="text-background/70 hover:text-primary transition-colors">Terms of Service</a></li>
+              <li><Link to="/about" className="text-background/70 hover:text-primary transition-colors">About Us</Link></li>
+              <li><Link to="/contact" className="text-background/70 hover:text-primary transition-colors">Contact</Link></li>
+              <li><Link to="/privacy" className="text-background/70 hover:text-primary transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="text-background/70 hover:text-primary transition-colors">Terms of Service</Link></li>
             </ul>
           </div>
         </div>
