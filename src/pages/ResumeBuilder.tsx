@@ -760,5 +760,3 @@ const ResumeBuilder = () => {
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground">Update your personal information and contact details</p>
-                      
-                      <
