@@ -80,7 +80,7 @@ const HeroSection = () => {
       opacity: 1,
       transition: { 
         repeat: Infinity, 
-        repeatType: "reverse", 
+        repeatType: "reverse" as const, 
         duration: 1.5 
       }
     }
