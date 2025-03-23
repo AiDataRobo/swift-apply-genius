@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -760,3 +761,35 @@ const ResumeBuilder = () => {
                         </div>
                       </div>
                       <p className="text-sm text-muted-foreground">Update your personal information and contact details</p>
+                      
+                      {/* Add content for profile section here */}
+                    </CardContent>
+                  </Card>
+                )}
+                
+                {/* Add other section contents here */}
+              </div>
+            </ResizablePanel>
+            
+            <ResizableHandle withHandle />
+            
+            <ResizablePanel defaultSize={55}>
+              <div className="h-full overflow-auto bg-muted p-6 flex justify-center">
+                <div ref={resumeRef} className="bg-white shadow-md h-[842px] w-[595px] overflow-hidden">
+                  <ResumeTemplate 
+                    resumeData={resumeData} 
+                    templateStyle={templateStyle}
+                    visibleSections={visibleSections}
+                    sectionOrder={sectionOrder}
+                  />
+                </div>
+              </div>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default ResumeBuilder;
