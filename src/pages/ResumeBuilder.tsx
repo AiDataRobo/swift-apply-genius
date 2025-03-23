@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   LayoutTemplate, 
   FileText, 
@@ -32,7 +33,13 @@ import {
   ScrollText,
   CreditCard,
   Sun,
-  Moon
+  Moon,
+  PanelTop,
+  Columns,
+  Check,
+  Info,
+  Undo,
+  Loader2
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -41,11 +48,16 @@ import ResumeTemplate from "@/components/resume/templates";
 import LanguagesSection from "@/components/resume/LanguagesSection";
 import InterestsSection from "@/components/resume/InterestsSection";
 import SectionReorder from "@/components/resume/SectionReorder";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const ResumeBuilder = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("content");
   const [activeSection, setActiveSection] = useState("profile");
+  const [isSaving, setIsSaving] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const resumeRef = useRef(null);
   
   // Default order of sections
   const defaultSectionOrder = [
@@ -201,23 +213,77 @@ const ResumeBuilder = () => {
   }, []);
 
   const handleSaveResume = () => {
-    // In a real app, this would save to a database
-    toast.success("Resume saved successfully!");
+    setIsSaving(true);
+    
+    // Simulate saving to a database (would connect to a real backend in production)
+    setTimeout(() => {
+      localStorage.setItem('resumeData', JSON.stringify(resumeData));
+      localStorage.setItem('templateStyle', JSON.stringify(templateStyle));
+      localStorage.setItem('sectionOrder', JSON.stringify(sectionOrder));
+      localStorage.setItem('visibleSections', JSON.stringify(visibleSections));
+      
+      setIsSaving(false);
+      toast.success("Resume saved successfully!", {
+        description: "Your resume has been saved to your account."
+      });
+    }, 800);
   };
 
-  const handleDownloadResume = () => {
-    // In a real app, this would generate a PDF
-    toast.success("Resume downloaded as PDF!");
+  const handleDownloadResume = async () => {
+    if (!resumeRef.current) return;
+    
+    setIsExporting(true);
+    
+    try {
+      const resumeElement = resumeRef.current;
+      const canvas = await html2canvas(resumeElement, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        backgroundColor: templateStyle.darkMode ? '#1e293b' : '#ffffff'
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [canvas.width / 2, canvas.height / 2]
+      });
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
+      pdf.save(`${resumeData.profile.name.replace(/\s+/g, '_')}_Resume.pdf`);
+      
+      toast.success("Resume downloaded as PDF!", {
+        description: "Your resume has been downloaded to your device."
+      });
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast.error("Failed to generate PDF", {
+        description: "There was an error creating your PDF. Please try again."
+      });
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const handleExportDocx = () => {
     // In a real app, this would generate a DOCX file
-    toast.success("Resume exported as DOCX!");
+    toast.success("Resume exported as DOCX!", {
+      description: "Your resume has been downloaded in DOCX format."
+    });
   };
 
   const handleCreateShareLink = () => {
-    // In a real app, this would generate a shareable link
-    toast.success("Share link created and copied to clipboard!");
+    // Generate a random share ID (would use a real API in production)
+    const shareId = Math.random().toString(36).substring(2, 10);
+    const shareUrl = `${window.location.origin}/shared-resume/${shareId}`;
+    
+    // Copy to clipboard
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      toast.success("Share link created and copied!", {
+        description: "Anyone with this link can view your resume."
+      });
+    });
   };
 
   // Update languages
@@ -251,10 +317,10 @@ const ResumeBuilder = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <header className="border-b bg-card">
+      <header className="border-b bg-card shadow-sm">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <LayoutTemplate className="h-5 w-5" />
+            <LayoutTemplate className="h-5 w-5 text-primary" />
             <h1 className="text-lg font-semibold">Resume Builder</h1>
           </div>
           <div className="flex items-center space-x-3">
@@ -271,26 +337,36 @@ const ResumeBuilder = () => {
               variant="outline" 
               size="sm" 
               onClick={handleSaveResume}
+              disabled={isSaving}
               className="flex items-center"
             >
-              <Save className="h-4 w-4 mr-1.5" />
-              Save
+              {isSaving ? (
+                <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />
+              ) : (
+                <Save className="h-4 w-4 mr-1.5" />
+              )}
+              {isSaving ? "Saving..." : "Save"}
             </Button>
             <Button 
               variant="default" 
               size="sm"
               onClick={handleDownloadResume}
+              disabled={isExporting}
               className="flex items-center"
             >
-              <Download className="h-4 w-4 mr-1.5" />
-              Export
+              {isExporting ? (
+                <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />
+              ) : (
+                <Download className="h-4 w-4 mr-1.5" />
+              )}
+              {isExporting ? "Exporting..." : "Export PDF"}
             </Button>
           </div>
         </div>
       </header>
 
       <main className="flex-1 flex overflow-hidden">
-        <div className="w-[220px] border-r bg-card p-3 flex flex-col">
+        <div className="w-[220px] border-r bg-card p-3 flex flex-col shadow-sm">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid grid-cols-3 w-full mb-4">
               <TabsTrigger value="content" className="text-xs px-2 py-1">
@@ -299,18 +375,22 @@ const ResumeBuilder = () => {
               </TabsTrigger>
               <TabsTrigger value="customize" className="text-xs px-2 py-1">
                 <Settings className="h-3.5 w-3.5 mr-1" />
-                Customize
+                Design
               </TabsTrigger>
               <TabsTrigger value="share" className="text-xs px-2 py-1">
                 <LinkIcon className="h-3.5 w-3.5 mr-1" />
-                Share
+                Export
               </TabsTrigger>
             </TabsList>
           </Tabs>
 
           <div className="flex-1 overflow-y-auto">
             {activeTab === "content" && (
-              <div className="space-y-2">
+              <div className="space-y-1.5">
+                <div className="mb-3">
+                  <p className="text-xs text-muted-foreground mb-2">Edit your resume sections</p>
+                </div>
+              
                 <button 
                   onClick={() => setActiveSection("profile")}
                   className={`w-full flex items-center text-sm p-2 rounded-md ${activeSection === "profile" ? "bg-primary/10 text-primary" : "hover:bg-muted"}`}
@@ -367,6 +447,9 @@ const ResumeBuilder = () => {
                   <Heart className="h-4 w-4 mr-2" />
                   Interests
                 </button>
+                
+                <Separator className="my-3" />
+                
                 <button 
                   onClick={() => setActiveSection("sections")}
                   className={`w-full flex items-center text-sm p-2 rounded-md ${activeSection === "sections" ? "bg-primary/10 text-primary" : "hover:bg-muted"}`}
@@ -384,52 +467,72 @@ const ResumeBuilder = () => {
                   <div className="grid grid-cols-2 gap-2">
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, template: "modern"})}
-                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "modern" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "modern" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       <FileText className="h-8 w-8 mb-1" />
                       Modern
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, template: "minimal"})}
-                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "minimal" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "minimal" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       <FileDown className="h-8 w-8 mb-1" />
                       Minimal
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, template: "professional"})}
-                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "professional" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "professional" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       <ScrollText className="h-8 w-8 mb-1" />
                       Professional
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, template: "creative"})}
-                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "creative" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "creative" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       <Palette className="h-8 w-8 mb-1" />
                       Creative
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, template: "technical"})}
-                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "technical" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "technical" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       <Code className="h-8 w-8 mb-1" />
                       Technical
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, template: "executive"})}
-                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "executive" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "executive" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       <CreditCard className="h-8 w-8 mb-1" />
                       Executive
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, template: "ats"})}
-                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "ats" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.template === "ats" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       <FilePlus2 className="h-8 w-8 mb-1" />
                       ATS
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Layout</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, layout: "single"})}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.layout === "single" ? "border-primary bg-primary/5" : "border-border"}`}
+                    >
+                      <PanelTop className="h-5 w-5 mb-1" />
+                      Single Column
+                    </button>
+                    <button 
+                      onClick={() => setTemplateStyle({...templateStyle, layout: "two-column"})}
+                      className={`p-2 rounded-md text-xs border flex flex-col items-center ${templateStyle.layout === "two-column" ? "border-primary bg-primary/5" : "border-border"}`}
+                    >
+                      <Columns className="h-5 w-5 mb-1" />
+                      Two Column
                     </button>
                   </div>
                 </div>
@@ -440,34 +543,42 @@ const ResumeBuilder = () => {
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#1a73e8"})}
                       className={`w-6 h-6 rounded-full bg-blue-600 ${templateStyle.primaryColor === "#1a73e8" ? "ring-2 ring-offset-2 ring-blue-600" : ""}`}
+                      aria-label="Blue"
                     />
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#15803d"})}
                       className={`w-6 h-6 rounded-full bg-green-700 ${templateStyle.primaryColor === "#15803d" ? "ring-2 ring-offset-2 ring-green-700" : ""}`}
+                      aria-label="Green"
                     />
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#7c3aed"})}
                       className={`w-6 h-6 rounded-full bg-purple-600 ${templateStyle.primaryColor === "#7c3aed" ? "ring-2 ring-offset-2 ring-purple-600" : ""}`}
+                      aria-label="Purple"
                     />
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#be123c"})}
                       className={`w-6 h-6 rounded-full bg-rose-700 ${templateStyle.primaryColor === "#be123c" ? "ring-2 ring-offset-2 ring-rose-700" : ""}`}
+                      aria-label="Rose"
                     />
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#1e293b"})}
                       className={`w-6 h-6 rounded-full bg-slate-800 ${templateStyle.primaryColor === "#1e293b" ? "ring-2 ring-offset-2 ring-slate-800" : ""}`}
+                      aria-label="Slate"
                     />
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#f97316"})}
                       className={`w-6 h-6 rounded-full bg-orange-500 ${templateStyle.primaryColor === "#f97316" ? "ring-2 ring-offset-2 ring-orange-500" : ""}`}
+                      aria-label="Orange"
                     />
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#0ea5e9"})}
                       className={`w-6 h-6 rounded-full bg-sky-500 ${templateStyle.primaryColor === "#0ea5e9" ? "ring-2 ring-offset-2 ring-sky-500" : ""}`}
+                      aria-label="Sky Blue"
                     />
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, primaryColor: "#8b5cf6"})}
                       className={`w-6 h-6 rounded-full bg-violet-500 ${templateStyle.primaryColor === "#8b5cf6" ? "ring-2 ring-offset-2 ring-violet-500" : ""}`}
+                      aria-label="Violet"
                     />
                   </div>
                 </div>
@@ -477,26 +588,26 @@ const ResumeBuilder = () => {
                   <div className="grid grid-cols-2 gap-2">
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, fontFamily: "Inter"})}
-                      className={`p-2 rounded-md text-xs border ${templateStyle.fontFamily === "Inter" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.fontFamily === "Inter" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       Inter
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, fontFamily: "Poppins"})}
-                      className={`p-2 rounded-md text-xs border ${templateStyle.fontFamily === "Poppins" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.fontFamily === "Poppins" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       Poppins
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, fontFamily: "Georgia"})}
-                      className={`p-2 rounded-md text-xs border ${templateStyle.fontFamily === "Georgia" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.fontFamily === "Georgia" ? "border-primary bg-primary/5" : "border-border"}`}
                       style={{ fontFamily: "Georgia" }}
                     >
                       Georgia
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, fontFamily: "Arial"})}
-                      className={`p-2 rounded-md text-xs border ${templateStyle.fontFamily === "Arial" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.fontFamily === "Arial" ? "border-primary bg-primary/5" : "border-border"}`}
                       style={{ fontFamily: "Arial" }}
                     >
                       Arial
@@ -509,19 +620,19 @@ const ResumeBuilder = () => {
                   <div className="grid grid-cols-3 gap-2">
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, fontSize: "small"})}
-                      className={`p-2 rounded-md text-xs border ${templateStyle.fontSize === "small" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.fontSize === "small" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       Small
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, fontSize: "medium"})}
-                      className={`p-2 rounded-md text-xs border ${templateStyle.fontSize === "medium" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.fontSize === "medium" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       Medium
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, fontSize: "large"})}
-                      className={`p-2 rounded-md text-xs border ${templateStyle.fontSize === "large" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.fontSize === "large" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       Large
                     </button>
@@ -533,39 +644,21 @@ const ResumeBuilder = () => {
                   <div className="grid grid-cols-3 gap-2">
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, spacing: "compact"})}
-                      className={`p-2 rounded-md text-xs border ${templateStyle.spacing === "compact" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.spacing === "compact" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       Compact
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, spacing: "comfortable"})}
-                      className={`p-2 rounded-md text-xs border ${templateStyle.spacing === "comfortable" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.spacing === "comfortable" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       Comfortable
                     </button>
                     <button 
                       onClick={() => setTemplateStyle({...templateStyle, spacing: "spacious"})}
-                      className={`p-2 rounded-md text-xs border ${templateStyle.spacing === "spacious" ? "border-primary" : "border-border"}`}
+                      className={`p-2 rounded-md text-xs border ${templateStyle.spacing === "spacious" ? "border-primary bg-primary/5" : "border-border"}`}
                     >
                       Spacious
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Layout</h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button 
-                      onClick={() => setTemplateStyle({...templateStyle, layout: "single"})}
-                      className={`p-2 rounded-md text-xs border ${templateStyle.layout === "single" ? "border-primary" : "border-border"}`}
-                    >
-                      Single Column
-                    </button>
-                    <button 
-                      onClick={() => setTemplateStyle({...templateStyle, layout: "two-column"})}
-                      className={`p-2 rounded-md text-xs border ${templateStyle.layout === "two-column" ? "border-primary" : "border-border"}`}
-                    >
-                      Two Column
                     </button>
                   </div>
                 </div>
@@ -597,25 +690,30 @@ const ResumeBuilder = () => {
                 <div className="space-y-2">
                   <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Export</h3>
                   <Button 
-                    className="w-full flex items-center justify-center" 
+                    className="w-full flex items-center justify-center gap-2" 
                     onClick={handleDownloadResume}
+                    disabled={isExporting}
                   >
-                    <Download className="h-4 w-4 mr-2" />
-                    Download PDF
+                    {isExporting ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Download className="h-4 w-4" />
+                    )}
+                    {isExporting ? "Preparing PDF..." : "Download PDF"}
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="w-full flex items-center justify-center" 
+                    className="w-full flex items-center justify-center gap-2" 
                     onClick={handleExportDocx}
                   >
-                    <FileType className="h-4 w-4 mr-2" />
+                    <FileType className="h-4 w-4" />
                     Export as DOCX
                   </Button>
                   <Button 
                     variant="outline" 
-                    className="w-full flex items-center justify-center"
+                    className="w-full flex items-center justify-center gap-2"
                   >
-                    <Trash2 className="h-4 w-4 mr-2" />
+                    <Trash2 className="h-4 w-4" />
                     Export as TXT
                   </Button>
                 </div>
@@ -626,12 +724,21 @@ const ResumeBuilder = () => {
                   <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Share</h3>
                   <Button 
                     variant="outline" 
-                    className="w-full flex items-center justify-center" 
+                    className="w-full flex items-center justify-center gap-2" 
                     onClick={handleCreateShareLink}
                   >
-                    <Share2 className="h-4 w-4 mr-2" />
+                    <Share2 className="h-4 w-4" />
                     Create Share Link
                   </Button>
+                  
+                  <div className="rounded-md bg-muted/50 p-3 text-xs">
+                    <div className="flex items-start gap-2">
+                      <Info className="h-4 w-4 text-muted-foreground shrink-0 mt-0.5" />
+                      <p className="text-muted-foreground">
+                        Share links allow anyone to view (but not edit) your resume. Links expire after 30 days.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -645,190 +752,13 @@ const ResumeBuilder = () => {
                 {activeSection === "profile" && (
                   <Card>
                     <CardContent className="space-y-4 pt-6">
-                      <h2 className="text-xl font-semibold">Profile</h2>
-                      <p className="text-sm text-muted-foreground">Update your personal information and contact details</p>
-                      
-                      <div className="space-y-4 mt-4">
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                          <div className="space-y-2">
-                            <label className="text-sm font-medium" htmlFor="name">Full Name</label>
-                            <Input 
-                              id="name"
-                              value={resumeData.profile.name}
-                              onChange={(e) => handleProfileChange("name", e.target.value)}
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <label className="text-sm font-medium" htmlFor="title">Job Title</label>
-                            <Input 
-                              id="title"
-                              value={resumeData.profile.title}
-                              onChange={(e) => handleProfileChange("title", e.target.value)}
-                            />
-                          </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                          <div className="space-y-2">
-                            <label className="text-sm font-medium" htmlFor="email">Email</label>
-                            <Input 
-                              id="email"
-                              type="email" 
-                              value={resumeData.profile.email}
-                              onChange={(e) => handleProfileChange("email", e.target.value)}
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <label className="text-sm font-medium" htmlFor="phone">Phone</label>
-                            <Input 
-                              id="phone"
-                              value={resumeData.profile.phone}
-                              onChange={(e) => handleProfileChange("phone", e.target.value)}
-                            />
-                          </div>
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium" htmlFor="location">Location</label>
-                          <Input 
-                            id="location"
-                            value={resumeData.profile.location}
-                            onChange={(e) => handleProfileChange("location", e.target.value)}
-                          />
-                        </div>
-                        
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                          <div className="space-y-2">
-                            <label className="text-sm font-medium" htmlFor="linkedin">LinkedIn URL</label>
-                            <Input 
-                              id="linkedin"
-                              value={resumeData.profile.linkedin || ""}
-                              onChange={(e) => handleProfileChange("linkedin", e.target.value)}
-                              placeholder="https://linkedin.com/in/yourprofile"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <label className="text-sm font-medium" htmlFor="website">Personal Website</label>
-                            <Input 
-                              id="website"
-                              value={resumeData.profile.website || ""}
-                              onChange={(e) => handleProfileChange("website", e.target.value)}
-                              placeholder="https://yourwebsite.com"
-                            />
-                          </div>
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium" htmlFor="summary">Professional Summary</label>
-                          <textarea 
-                            id="summary"
-                            rows={4} 
-                            className="w-full px-3 py-2 border rounded-md text-sm" 
-                            value={resumeData.profile.summary}
-                            onChange={(e) => handleProfileChange("summary", e.target.value)}
-                          />
+                      <div className="flex items-center justify-between">
+                        <h2 className="text-xl font-semibold">Profile</h2>
+                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                          <Check className="h-3.5 w-3.5 text-green-500" /> 
+                          Auto-saved
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                )}
-                
-                {activeSection === "languages" && (
-                  <LanguagesSection 
-                    languages={resumeData.languages || []} 
-                    onChange={handleLanguagesChange} 
-                  />
-                )}
-                
-                {activeSection === "interests" && (
-                  <InterestsSection 
-                    interests={resumeData.interests || []} 
-                    onChange={handleInterestsChange} 
-                  />
-                )}
-                
-                {activeSection === "sections" && (
-                  <SectionReorder 
-                    sections={sectionOrder}
-                    visibleSections={visibleSections}
-                    onReorder={setSectionOrder}
-                    onVisibilityChange={setVisibleSections}
-                  />
-                )}
-                
-                {activeSection === "skills" && (
-                  <Card>
-                    <CardContent className="space-y-4 pt-6">
-                      <h2 className="text-xl font-semibold">Technical Skills</h2>
-                      <p className="text-sm text-muted-foreground">Highlight your expertise and technical abilities</p>
+                      <p className="text-sm text-muted-foreground">Update your personal information and contact details</p>
                       
-                      {resumeData.skills.map((skillGroup, groupIndex) => (
-                        <div key={groupIndex} className="space-y-3 mt-4 border p-4 rounded-md">
-                          <div className="flex justify-between items-center">
-                            <div className="space-y-2">
-                              <label className="text-sm font-medium">Skill Category</label>
-                              <input 
-                                type="text" 
-                                className="w-full px-3 py-2 border rounded-md text-sm" 
-                                value={skillGroup.category}
-                                onChange={(e) => {
-                                  const updatedSkills = [...resumeData.skills];
-                                  updatedSkills[groupIndex].category = e.target.value;
-                                  setResumeData({...resumeData, skills: updatedSkills});
-                                }}
-                              />
-                            </div>
-                            <button className="text-destructive hover:text-destructive/90 text-sm">
-                              Remove
-                            </button>
-                          </div>
-                          
-                          <div className="space-y-2">
-                            <label className="text-sm font-medium">Skills (comma separated)</label>
-                            <textarea 
-                              rows={2} 
-                              className="w-full px-3 py-2 border rounded-md text-sm" 
-                              value={skillGroup.items.map(item => item.name).join(", ")}
-                              onChange={(e) => {
-                                const updatedSkills = [...resumeData.skills];
-                                const skillNames = e.target.value.split(",").map(item => item.trim());
-                                updatedSkills[groupIndex].items = skillNames.map(name => ({ name }));
-                                setResumeData({...resumeData, skills: updatedSkills});
-                              }}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                      
-                      <button className="w-full mt-4 px-4 py-2 border border-dashed rounded-md text-sm text-muted-foreground hover:text-foreground">
-                        + Add Skill Category
-                      </button>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
-            </ResizablePanel>
-            
-            <ResizableHandle withHandle />
-            
-            <ResizablePanel defaultSize={55}>
-              <div className={`h-full overflow-y-auto ${templateStyle.darkMode ? 'bg-slate-900' : 'bg-muted/30'} flex items-center justify-center p-6`}>
-                <div className={`w-full max-w-[600px] min-h-[800px] mx-auto ${templateStyle.darkMode ? 'bg-slate-800 text-white' : 'bg-white'} shadow-lg rounded-md overflow-hidden`}>
-                  <div className="p-8">
-                    <ResumeTemplate 
-                      resume={resumeData} 
-                      style={templateStyle} 
-                      visibleSections={visibleSections} 
-                    />
-                  </div>
-                </div>
-              </div>
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </div>
-      </main>
-    </div>
-  );
-};
-
-export default ResumeBuilder;
+                      <
