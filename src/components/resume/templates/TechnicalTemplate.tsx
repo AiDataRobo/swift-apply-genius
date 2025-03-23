@@ -6,9 +6,10 @@ interface TechnicalTemplateProps {
   resume: Resume;
   style: TemplateStyle;
   visibleSections: string[];
+  sectionOrder: string[];
 }
 
-const TechnicalTemplate = ({ resume, style, visibleSections }: TechnicalTemplateProps) => {
+const TechnicalTemplate = ({ resume, style, visibleSections, sectionOrder }: TechnicalTemplateProps) => {
   const { 
     primaryColor = "#0ea5e9", 
     fontFamily = "Inter",

@@ -1,12 +1,14 @@
+
 import { Resume, TemplateStyle } from "@/schemas/resume";
 
 interface ProfessionalTemplateProps {
   resume: Resume;
   style: TemplateStyle;
   visibleSections: string[];
+  sectionOrder: string[];
 }
 
-const ProfessionalTemplate = ({ resume, style, visibleSections }: ProfessionalTemplateProps) => {
+const ProfessionalTemplate = ({ resume, style, visibleSections, sectionOrder }: ProfessionalTemplateProps) => {
   const { 
     primaryColor = "#1e293b", 
     fontFamily = "Inter",

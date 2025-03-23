@@ -1,12 +1,14 @@
+
 import { Resume, TemplateStyle } from "@/schemas/resume";
 
 interface MinimalTemplateProps {
   resume: Resume;
   style: TemplateStyle;
   visibleSections: string[];
+  sectionOrder: string[];
 }
 
-const MinimalTemplate = ({ resume, style, visibleSections }: MinimalTemplateProps) => {
+const MinimalTemplate = ({ resume, style, visibleSections, sectionOrder }: MinimalTemplateProps) => {
   const { 
     primaryColor = "#333333", 
     fontFamily = "Inter",

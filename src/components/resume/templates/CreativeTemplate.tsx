@@ -1,12 +1,14 @@
+
 import { Resume, TemplateStyle } from "@/schemas/resume";
 
 interface CreativeTemplateProps {
   resume: Resume;
   style: TemplateStyle;
   visibleSections: string[];
+  sectionOrder: string[];
 }
 
-const CreativeTemplate = ({ resume, style, visibleSections }: CreativeTemplateProps) => {
+const CreativeTemplate = ({ resume, style, visibleSections, sectionOrder }: CreativeTemplateProps) => {
   const { 
     primaryColor = "#8b5cf6", 
     fontFamily = "Inter",

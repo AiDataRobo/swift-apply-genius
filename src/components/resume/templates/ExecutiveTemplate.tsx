@@ -5,9 +5,10 @@ interface ExecutiveTemplateProps {
   resume: Resume;
   style: TemplateStyle;
   visibleSections: string[];
+  sectionOrder: string[];
 }
 
-const ExecutiveTemplate = ({ resume, style, visibleSections }: ExecutiveTemplateProps) => {
+const ExecutiveTemplate = ({ resume, style, visibleSections, sectionOrder }: ExecutiveTemplateProps) => {
   const { 
     primaryColor = "#1e293b", 
     fontFamily = "Inter",

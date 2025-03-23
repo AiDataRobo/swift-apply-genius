@@ -5,9 +5,10 @@ interface AtsTemplateProps {
   resume: Resume;
   style: TemplateStyle;
   visibleSections: string[];
+  sectionOrder: string[];
 }
 
-const AtsTemplate = ({ resume, style, visibleSections }: AtsTemplateProps) => {
+const AtsTemplate = ({ resume, style, visibleSections, sectionOrder }: AtsTemplateProps) => {
   const { 
     fontFamily = "Arial",
     fontSize = "medium",
