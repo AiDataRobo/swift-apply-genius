@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -789,10 +788,11 @@ const ResumeBuilder = () => {
                             <textarea 
                               rows={2} 
                               className="w-full px-3 py-2 border rounded-md text-sm" 
-                              value={skillGroup.items.join(", ")}
+                              value={skillGroup.items.map(item => item.name).join(", ")}
                               onChange={(e) => {
                                 const updatedSkills = [...resumeData.skills];
-                                updatedSkills[groupIndex].items = e.target.value.split(",").map(item => item.trim());
+                                const skillNames = e.target.value.split(",").map(item => item.trim());
+                                updatedSkills[groupIndex].items = skillNames.map(name => ({ name }));
                                 setResumeData({...resumeData, skills: updatedSkills});
                               }}
                             />
