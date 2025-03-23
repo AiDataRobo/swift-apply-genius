@@ -9,6 +9,7 @@ import PricingSection from '@/components/landing/PricingSection';
 import CTASection from '@/components/landing/CTASection';
 import Footer from '@/components/landing/Footer';
 import { useToast } from "@/components/ui/use-toast";
+import { motion } from "framer-motion";
 
 const Index = () => {
   const { toast } = useToast();
@@ -35,11 +36,11 @@ const Index = () => {
 
     initAnimations();
 
-    // Welcome toast
+    // Welcome toast with improved message
     setTimeout(() => {
       toast({
         title: "Welcome to SwiftApply",
-        description: "Create your perfect resume in minutes with AI",
+        description: "Create your perfect resume in minutes with AI-powered tools",
         duration: 5000,
       });
     }, 2000);
