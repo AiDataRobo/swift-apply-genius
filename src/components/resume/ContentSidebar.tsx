@@ -8,9 +8,16 @@ import {
   FileCode, 
   Award, 
   Languages, 
-  Heart, 
+  Heart,
   ArrowUpDown,
-  CheckCircle2
+  CheckCircle2,
+  BookOpen,
+  Users,
+  FileText,
+  Landmark,
+  ScrollText,
+  ClipboardSignature,
+  Plus
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
@@ -29,7 +36,13 @@ const ContentSidebar = ({ activeSection, onSectionChange }: ContentSidebarProps)
     { id: "projects", icon: FileCode, label: "Projects", status: "optional" },
     { id: "certificates", icon: Award, label: "Certificates", status: "optional" },
     { id: "languages", icon: Languages, label: "Languages", status: "optional" },
+    { id: "courses", icon: BookOpen, label: "Courses", status: "optional" },
+    { id: "awards", icon: Award, label: "Awards", status: "optional" },
+    { id: "organizations", icon: Landmark, label: "Organizations", status: "optional" },
+    { id: "publications", icon: ScrollText, label: "Publications", status: "optional" },
+    { id: "references", icon: Users, label: "References", status: "optional" },
     { id: "interests", icon: Heart, label: "Interests", status: "optional" },
+    { id: "declaration", icon: ClipboardSignature, label: "Declaration", status: "optional" },
   ];
 
   return (

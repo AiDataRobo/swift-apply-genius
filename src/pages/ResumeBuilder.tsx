@@ -3,15 +3,13 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/componen
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Settings, Link as LinkIcon, Pencil, Info, Sparkles, FileDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
-import { Resume, TemplateStyle, Contact, SkillGroup, Experience, Education, Project, Certificate, Language, Interest } from "@/schemas/resume";
+import { Resume, TemplateStyle, Contact, SkillGroup, Experience, Education, Project, Certificate, Language, Interest, Declaration } from "@/schemas/resume";
 import ResumeTemplate from "@/components/resume/templates";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-
-// Import our components
 import ProfileSection from "@/components/resume/ProfileSection";
 import SkillsSection from "@/components/resume/SkillsSection";
 import ExperienceSection from "@/components/resume/ExperienceSection";
@@ -25,6 +23,7 @@ import ResumeHeader from "@/components/resume/ResumeHeader";
 import ContentSidebar from "@/components/resume/ContentSidebar";
 import DesignSidebar from "@/components/resume/DesignSidebar";
 import ExportSidebar from "@/components/resume/ExportSidebar";
+import DeclarationSection from "@/components/resume/DeclarationSection";
 
 const ResumeBuilder = () => {
   const [activeTab, setActiveTab] = useState("content");
@@ -34,7 +33,6 @@ const ResumeBuilder = () => {
   const [showInstructions, setShowInstructions] = useState(true);
   const resumeRef = useRef(null);
   
-  // Default order of sections
   const defaultSectionOrder = [
     "profile", 
     "skills", 
@@ -140,7 +138,6 @@ const ResumeBuilder = () => {
     layout: "two-column"
   });
 
-  // Profile section handler
   const handleProfileChange = (field: keyof Contact, value: string) => {
     setResumeData(prev => ({
       ...prev,
@@ -151,7 +148,6 @@ const ResumeBuilder = () => {
     }));
   };
 
-  // Skills section handler
   const handleSkillsChange = (updatedSkills: SkillGroup[]) => {
     setResumeData(prev => ({
       ...prev,
@@ -159,7 +155,6 @@ const ResumeBuilder = () => {
     }));
   };
 
-  // Experience section handler
   const handleExperienceChange = (updatedExperiences: Experience[]) => {
     setResumeData(prev => ({
       ...prev,
@@ -167,7 +162,6 @@ const ResumeBuilder = () => {
     }));
   };
 
-  // Education section handler
   const handleEducationChange = (updatedEducation: Education[]) => {
     setResumeData(prev => ({
       ...prev,
@@ -175,7 +169,6 @@ const ResumeBuilder = () => {
     }));
   };
 
-  // Projects section handler
   const handleProjectsChange = (updatedProjects: Project[]) => {
     setResumeData(prev => ({
       ...prev,
@@ -183,7 +176,6 @@ const ResumeBuilder = () => {
     }));
   };
 
-  // Certificates section handler
   const handleCertificatesChange = (updatedCertificates: Certificate[]) => {
     setResumeData(prev => ({
       ...prev,
@@ -191,7 +183,6 @@ const ResumeBuilder = () => {
     }));
   };
 
-  // Languages section handler
   const handleLanguagesChange = (updatedLanguages: Language[]) => {
     setResumeData(prev => ({
       ...prev,
@@ -199,7 +190,6 @@ const ResumeBuilder = () => {
     }));
   };
 
-  // Interests section handler
   const handleInterestsChange = (updatedInterests: Interest[]) => {
     setResumeData(prev => ({
       ...prev,
@@ -207,7 +197,13 @@ const ResumeBuilder = () => {
     }));
   };
 
-  // Auto-save functionality
+  const handleDeclarationChange = (updatedDeclaration: Declaration) => {
+    setResumeData(prev => ({
+      ...prev,
+      declaration: updatedDeclaration
+    }));
+  };
+
   useEffect(() => {
     const saveResumeToLocalStorage = () => {
       localStorage.setItem('resumeData', JSON.stringify(resumeData));
@@ -216,13 +212,11 @@ const ResumeBuilder = () => {
       localStorage.setItem('visibleSections', JSON.stringify(visibleSections));
     };
 
-    // Save when data changes
     const saveTimeout = setTimeout(saveResumeToLocalStorage, 1000);
     
     return () => clearTimeout(saveTimeout);
   }, [resumeData, templateStyle, sectionOrder, visibleSections]);
 
-  // Load saved data
   useEffect(() => {
     const loadSavedData = () => {
       try {
@@ -257,7 +251,6 @@ const ResumeBuilder = () => {
   const handleSaveResume = () => {
     setIsSaving(true);
     
-    // Simulate saving to a database (would connect to a real backend in production)
     setTimeout(() => {
       localStorage.setItem('resumeData', JSON.stringify(resumeData));
       localStorage.setItem('templateStyle', JSON.stringify(templateStyle));
@@ -309,18 +302,15 @@ const ResumeBuilder = () => {
   };
 
   const handleExportDocx = () => {
-    // In a real app, this would generate a DOCX file
     toast.success("Resume exported as DOCX!", {
       description: "Your resume has been downloaded in DOCX format."
     });
   };
 
   const handleCreateShareLink = () => {
-    // Generate a random share ID (would use a real API in production)
     const shareId = Math.random().toString(36).substring(2, 10);
     const shareUrl = `${window.location.origin}/shared-resume/${shareId}`;
     
-    // Copy to clipboard
     navigator.clipboard.writeText(shareUrl).then(() => {
       toast.success("Share link created and copied!", {
         description: "Anyone with this link can view your resume."
@@ -526,6 +516,13 @@ const ResumeBuilder = () => {
                     visibleSections={visibleSections}
                     onReorder={setSectionOrder}
                     onVisibilityChange={setVisibleSections}
+                  />
+                )}
+                
+                {activeSection === "declaration" && (
+                  <DeclarationSection
+                    declaration={resumeData.declaration}
+                    onChange={handleDeclarationChange}
                   />
                 )}
 

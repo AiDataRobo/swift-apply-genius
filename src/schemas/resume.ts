@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 
 // Basic schemas
@@ -72,7 +71,54 @@ export const interestSchema = z.object({
   name: z.string()
 });
 
-// Resume schema
+export const awardSchema = z.object({
+  title: z.string(),
+  issuer: z.string(),
+  date: z.string(),
+  description: z.string().optional()
+});
+
+export const organizationSchema = z.object({
+  name: z.string(),
+  role: z.string(),
+  startDate: z.string(),
+  endDate: z.string().optional(),
+  current: z.boolean().optional(),
+  description: z.string().optional()
+});
+
+export const publicationSchema = z.object({
+  title: z.string(),
+  publisher: z.string(),
+  date: z.string(),
+  url: z.string().optional(),
+  description: z.string().optional()
+});
+
+export const courseSchema = z.object({
+  name: z.string(),
+  institution: z.string(),
+  date: z.string(),
+  credential: z.string().optional(),
+  url: z.string().optional()
+});
+
+export const referenceSchema = z.object({
+  name: z.string(),
+  title: z.string(),
+  company: z.string(),
+  email: z.string().optional(),
+  phone: z.string().optional(),
+  relationship: z.string().optional()
+});
+
+export const declarationSchema = z.object({
+  text: z.string(),
+  signature: z.string().optional(),
+  date: z.string().optional(),
+  place: z.string().optional()
+});
+
 export const resumeSchema = z.object({
   profile: contactSchema,
   skills: z.array(skillGroupSchema),
@@ -82,24 +128,17 @@ export const resumeSchema = z.object({
   certificates: z.array(certificateSchema),
   languages: z.array(languageSchema).optional(),
   interests: z.array(interestSchema).optional(),
+  awards: z.array(awardSchema).optional(),
+  organizations: z.array(organizationSchema).optional(),
+  publications: z.array(publicationSchema).optional(),
+  courses: z.array(courseSchema).optional(),
+  references: z.array(referenceSchema).optional(),
+  declaration: declarationSchema.optional(),
   sections: z.array(z.string()).optional(),
   customSections: z.record(z.string(), z.array(z.object({
     title: z.string(),
     description: z.string().optional()
   }))).optional()
-});
-
-export const templateStyleSchema = z.object({
-  template: z.enum(["modern", "minimal", "professional", "creative", "executive", "technical", "ats"]),
-  primaryColor: z.string(),
-  secondaryColor: z.string().optional(),
-  fontFamily: z.string(),
-  fontSize: z.enum(["small", "medium", "large"]),
-  spacing: z.enum(["compact", "comfortable", "spacious"]),
-  showPhoto: z.boolean().optional(),
-  darkMode: z.boolean().optional(),
-  layout: z.enum(["single", "two-column", "mixed"]).optional(),
-  sectionOrder: z.array(z.string()).optional()
 });
 
 export type Contact = z.infer<typeof contactSchema>;
@@ -111,5 +150,11 @@ export type Project = z.infer<typeof projectSchema>;
 export type Certificate = z.infer<typeof certificateSchema>;
 export type Language = z.infer<typeof languageSchema>;
 export type Interest = z.infer<typeof interestSchema>;
+export type Award = z.infer<typeof awardSchema>;
+export type Organization = z.infer<typeof organizationSchema>;
+export type Publication = z.infer<typeof publicationSchema>;
+export type Course = z.infer<typeof courseSchema>;
+export type Reference = z.infer<typeof referenceSchema>;
+export type Declaration = z.infer<typeof declarationSchema>;
 export type Resume = z.infer<typeof resumeSchema>;
 export type TemplateStyle = z.infer<typeof templateStyleSchema>;
