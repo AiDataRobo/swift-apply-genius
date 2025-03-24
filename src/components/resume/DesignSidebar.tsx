@@ -1,10 +1,9 @@
-
 import { TemplateStyle } from "@/schemas/resume";
 import { 
   Palette, FileText, FileDown, ScrollText, Code, CreditCard, FilePlus2, PanelTop, 
-  Columns, Sun, Moon, Landmark, LucideProps, FileSpreadsheet, AlignLeft, AlignCenter, 
+  Columns, Sun, Moon, Landmark, AlignLeft, AlignCenter, 
   Dot, ArrowRight, Minus, CircleDot, Square, ListFilter, Type, TextCursorInput, 
-  Box, CircleOff, LineChart, Shapes, Combine, CornerDownRight, Layers
+  Box, CircleOff, LineChart, Shapes, LucideIcon
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -19,11 +18,7 @@ interface DesignSidebarProps {
   onStyleChange: (newStyle: TemplateStyle) => void;
 }
 
-type BulletIcon = {
-  [key: string]: (props: LucideProps) => JSX.Element;
-};
-
-const bulletIcons: BulletIcon = {
+const bulletIcons: Record<string, LucideIcon> = {
   "disc": CircleDot,
   "circle": Dot,
   "square": Square,
@@ -42,7 +37,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
     decorative: false
   });
 
-  // Toggle section
   const toggleSection = (section: string) => {
     setExpandedSections(prev => ({
       ...prev,
@@ -50,12 +44,10 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
     }));
   };
 
-  // Toggle dark mode
   const toggleDarkMode = () => {
     onStyleChange({
       ...templateStyle,
       darkMode: !templateStyle.darkMode,
-      // Change colors accordingly
       primaryColor: templateStyle.darkMode ? "#1a73e8" : "#a78bfa",
       secondaryColor: templateStyle.darkMode ? "#f1f5f9" : "#1e293b",
     });
@@ -64,7 +56,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
   return (
     <ScrollArea className="h-full">
       <div className="space-y-4 pr-4">
-        {/* Templates */}
         <Collapsible open={expandedSections.templates} onOpenChange={() => toggleSection('templates')}>
           <CollapsibleTrigger className="flex w-full items-center justify-between">
             <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Templates</h3>
@@ -125,7 +116,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
           </CollapsibleContent>
         </Collapsible>
 
-        {/* Layout */}
         <Collapsible open={expandedSections.layout} onOpenChange={() => toggleSection('layout')}>
           <CollapsibleTrigger className="flex w-full items-center justify-between">
             <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Layout</h3>
@@ -149,7 +139,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
               </button>
             </div>
 
-            {/* Paper Size */}
             <div className="space-y-2 mb-4">
               <h4 className="text-xs font-medium">Paper Size</h4>
               <div className="grid grid-cols-3 gap-2">
@@ -174,7 +163,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
               </div>
             </div>
 
-            {/* Text Alignment */}
             <div className="space-y-2">
               <h4 className="text-xs font-medium">Text Alignment</h4>
               <div className="grid grid-cols-3 gap-2">
@@ -204,7 +192,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
           </CollapsibleContent>
         </Collapsible>
 
-        {/* Colors */}
         <Collapsible open={expandedSections.colors} onOpenChange={() => toggleSection('colors')}>
           <CollapsibleTrigger className="flex w-full items-center justify-between">
             <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Colors</h3>
@@ -275,14 +262,12 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
           </CollapsibleContent>
         </Collapsible>
 
-        {/* Typography */}
         <Collapsible open={expandedSections.typography} onOpenChange={() => toggleSection('typography')}>
           <CollapsibleTrigger className="flex w-full items-center justify-between">
             <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Typography</h3>
             <span className="text-xs text-muted-foreground">{expandedSections.typography ? '−' : '+'}</span>
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-2">
-            {/* Font Family */}
             <div className="space-y-2 mb-4">
               <h4 className="text-xs font-medium">Font Family</h4>
               <div className="grid grid-cols-2 gap-2">
@@ -315,7 +300,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
               </div>
             </div>
             
-            {/* Font Size */}
             <div className="space-y-2 mb-4">
               <h4 className="text-xs font-medium">Font Size</h4>
               <div className="grid grid-cols-3 gap-2">
@@ -340,7 +324,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
               </div>
             </div>
 
-            {/* Line Height */}
             <div className="space-y-2 mb-4">
               <h4 className="text-xs font-medium">Line Height</h4>
               <div className="grid grid-cols-3 gap-2">
@@ -365,7 +348,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
               </div>
             </div>
 
-            {/* Date Format */}
             <div className="space-y-2">
               <h4 className="text-xs font-medium">Date Format</h4>
               <RadioGroup 
@@ -394,14 +376,12 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
           </CollapsibleContent>
         </Collapsible>
 
-        {/* Section Styling */}
         <Collapsible open={expandedSections.sections} onOpenChange={() => toggleSection('sections')}>
           <CollapsibleTrigger className="flex w-full items-center justify-between">
             <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Section Styling</h3>
             <span className="text-xs text-muted-foreground">{expandedSections.sections ? '−' : '+'}</span>
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-2">
-            {/* Section Heading Style */}
             <div className="space-y-2 mb-4">
               <h4 className="text-xs font-medium">Section Headings</h4>
               <div className="grid grid-cols-2 gap-2">
@@ -436,7 +416,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
               </div>
             </div>
 
-            {/* Bullet Point Style */}
             <div className="space-y-2 mb-4">
               <h4 className="text-xs font-medium">Bullet Point Style</h4>
               <div className="grid grid-cols-3 gap-2">
@@ -453,7 +432,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
               </div>
             </div>
 
-            {/* Header Style */}
             <div className="space-y-2">
               <h4 className="text-xs font-medium">Header Style</h4>
               <div className="grid grid-cols-2 gap-2">
@@ -486,7 +464,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
           </CollapsibleContent>
         </Collapsible>
 
-        {/* Spacing */}
         <Collapsible open={expandedSections.spacing} onOpenChange={() => toggleSection('spacing')}>
           <CollapsibleTrigger className="flex w-full items-center justify-between">
             <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Spacing</h3>
@@ -516,14 +493,12 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
           </CollapsibleContent>
         </Collapsible>
 
-        {/* Decorative Elements */}
         <Collapsible open={expandedSections.decorative} onOpenChange={() => toggleSection('decorative')}>
           <CollapsibleTrigger className="flex w-full items-center justify-between">
             <h3 className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Decorative Elements</h3>
             <span className="text-xs text-muted-foreground">{expandedSections.decorative ? '−' : '+'}</span>
           </CollapsibleTrigger>
           <CollapsibleContent className="pt-2">
-            {/* Accent Elements */}
             <div className="space-y-2 mb-4">
               <h4 className="text-xs font-medium">Accent Elements</h4>
               <div className="grid grid-cols-2 gap-2">
@@ -565,7 +540,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
               </div>
             </div>
 
-            {/* Border Style */}
             <div className="space-y-2 mb-4">
               <h4 className="text-xs font-medium">Border Style</h4>
               <div className="grid grid-cols-2 gap-2">
@@ -596,7 +570,6 @@ const DesignSidebar = ({ templateStyle, onStyleChange }: DesignSidebarProps) => 
               </div>
             </div>
 
-            {/* Additional Options */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <Label htmlFor="show-borders" className="text-xs font-medium">Section Borders</Label>
