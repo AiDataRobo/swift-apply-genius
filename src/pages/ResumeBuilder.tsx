@@ -3,7 +3,7 @@ import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/componen
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Settings, Link as LinkIcon, Pencil, Info, Sparkles, FileDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
-import { Resume, TemplateStyle } from "@/schemas/resume";
+import { Resume, TemplateStyle, Contact, SkillGroup, Experience, Education, Project, Certificate, Language, Interest } from "@/schemas/resume";
 import ResumeTemplate from "@/components/resume/templates";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -139,6 +139,73 @@ const ResumeBuilder = () => {
     darkMode: false,
     layout: "two-column"
   });
+
+  // Profile section handler
+  const handleProfileChange = (field: keyof Contact, value: string) => {
+    setResumeData(prev => ({
+      ...prev,
+      profile: {
+        ...prev.profile,
+        [field]: value
+      }
+    }));
+  };
+
+  // Skills section handler
+  const handleSkillsChange = (updatedSkills: SkillGroup[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      skills: updatedSkills
+    }));
+  };
+
+  // Experience section handler
+  const handleExperienceChange = (updatedExperiences: Experience[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      experience: updatedExperiences
+    }));
+  };
+
+  // Education section handler
+  const handleEducationChange = (updatedEducation: Education[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      education: updatedEducation
+    }));
+  };
+
+  // Projects section handler
+  const handleProjectsChange = (updatedProjects: Project[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      projects: updatedProjects
+    }));
+  };
+
+  // Certificates section handler
+  const handleCertificatesChange = (updatedCertificates: Certificate[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      certificates: updatedCertificates
+    }));
+  };
+
+  // Languages section handler
+  const handleLanguagesChange = (updatedLanguages: Language[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      languages: updatedLanguages
+    }));
+  };
+
+  // Interests section handler
+  const handleInterestsChange = (updatedInterests: Interest[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      interests: updatedInterests
+    }));
+  };
 
   // Auto-save functionality
   useEffect(() => {
