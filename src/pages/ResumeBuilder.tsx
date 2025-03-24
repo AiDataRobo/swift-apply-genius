@@ -1,15 +1,17 @@
-
 import { useState, useEffect, useRef } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Settings, Link as LinkIcon, Pencil } from "lucide-react";
+import { Settings, Link as LinkIcon, Pencil, Info, Sparkles, FileDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { Resume, TemplateStyle } from "@/schemas/resume";
 import ResumeTemplate from "@/components/resume/templates";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 
-// Import our new components
+// Import our components
 import ProfileSection from "@/components/resume/ProfileSection";
 import SkillsSection from "@/components/resume/SkillsSection";
 import ExperienceSection from "@/components/resume/ExperienceSection";
@@ -29,6 +31,7 @@ const ResumeBuilder = () => {
   const [activeSection, setActiveSection] = useState("profile");
   const [isSaving, setIsSaving] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(true);
   const resumeRef = useRef(null);
   
   // Default order of sections
@@ -258,47 +261,8 @@ const ResumeBuilder = () => {
     });
   };
 
-  // Update profile
-  const handleProfileChange = (field, value) => {
-    setResumeData({
-      ...resumeData,
-      profile: { ...resumeData.profile, [field]: value }
-    });
-  };
-
-  // Update skills
-  const handleSkillsChange = (updatedSkills) => {
-    setResumeData({ ...resumeData, skills: updatedSkills });
-  };
-
-  // Update experience
-  const handleExperienceChange = (updatedExperience) => {
-    setResumeData({ ...resumeData, experience: updatedExperience });
-  };
-
-  // Update education
-  const handleEducationChange = (updatedEducation) => {
-    setResumeData({ ...resumeData, education: updatedEducation });
-  };
-
-  // Update projects
-  const handleProjectsChange = (updatedProjects) => {
-    setResumeData({ ...resumeData, projects: updatedProjects });
-  };
-
-  // Update certificates
-  const handleCertificatesChange = (updatedCertificates) => {
-    setResumeData({ ...resumeData, certificates: updatedCertificates });
-  };
-
-  // Update languages
-  const handleLanguagesChange = (updatedLanguages) => {
-    setResumeData({ ...resumeData, languages: updatedLanguages });
-  };
-
-  // Update interests
-  const handleInterestsChange = (updatedInterests) => {
-    setResumeData({ ...resumeData, interests: updatedInterests });
+  const toggleInstructions = () => {
+    setShowInstructions(prev => !prev);
   };
 
   return (
@@ -353,12 +317,86 @@ const ResumeBuilder = () => {
               />
             )}
           </div>
+
+          <div className="pt-4 mt-2 border-t">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-full flex items-center justify-center gap-2 text-xs"
+                    onClick={toggleInstructions}
+                  >
+                    <Info className="h-3.5 w-3.5" />
+                    {showInstructions ? "Hide Tips" : "Show Tips"}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {showInstructions ? "Hide resume building tips" : "Show helpful tips for building your resume"}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
 
         <div className="flex-1 flex overflow-hidden">
           <ResizablePanelGroup direction="horizontal">
             <ResizablePanel defaultSize={45} minSize={30}>
-              <div className="h-full overflow-y-auto p-6">
+              <div className="h-full overflow-y-auto p-6 relative">
+                <AnimatePresence>
+                  {showInstructions && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 text-sm"
+                    >
+                      <div className="flex items-start gap-3">
+                        <Sparkles className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <h3 className="font-medium text-blue-700">Resume Building Tips</h3>
+                          {activeSection === "profile" && (
+                            <p className="text-blue-600 mt-1">Use a professional summary that highlights your key strengths and career goals in 2-3 sentences.</p>
+                          )}
+                          {activeSection === "skills" && (
+                            <p className="text-blue-600 mt-1">Group similar skills and prioritize those most relevant to the job you're applying for.</p>
+                          )}
+                          {activeSection === "experience" && (
+                            <p className="text-blue-600 mt-1">Use action verbs and quantify achievements with numbers when possible (e.g., "Increased sales by 20%").</p>
+                          )}
+                          {activeSection === "education" && (
+                            <p className="text-blue-600 mt-1">List your most recent education first, and include relevant coursework or academic achievements.</p>
+                          )}
+                          {activeSection === "projects" && (
+                            <p className="text-blue-600 mt-1">Highlight projects that demonstrate your skills and are relevant to your target position.</p>
+                          )}
+                          {activeSection === "certificates" && (
+                            <p className="text-blue-600 mt-1">Include the date of certification and any expiration dates if applicable.</p>
+                          )}
+                          {activeSection === "languages" && (
+                            <p className="text-blue-600 mt-1">Be honest about your proficiency level for each language you list.</p>
+                          )}
+                          {activeSection === "interests" && (
+                            <p className="text-blue-600 mt-1">Include interests that demonstrate valuable soft skills or align with company culture.</p>
+                          )}
+                          {activeSection === "sections" && (
+                            <p className="text-blue-600 mt-1">Arrange sections in order of relevance to the position you're applying for.</p>
+                          )}
+                        </div>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-5 w-5 text-blue-500" 
+                          onClick={toggleInstructions}
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 {activeSection === "profile" && (
                   <ProfileSection 
                     profile={resumeData.profile}
@@ -423,20 +461,83 @@ const ResumeBuilder = () => {
                     onVisibilityChange={setVisibleSections}
                   />
                 )}
+
+                <div className="flex justify-between mt-8">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const currentIndex = sectionOrder.indexOf(activeSection);
+                      if (currentIndex > 0) {
+                        setActiveSection(sectionOrder[currentIndex - 1]);
+                      }
+                    }}
+                    disabled={sectionOrder.indexOf(activeSection) === 0 || activeSection === "sections"}
+                    className="flex items-center gap-1"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    Previous Section
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const currentIndex = sectionOrder.indexOf(activeSection);
+                      if (currentIndex < sectionOrder.length - 1) {
+                        setActiveSection(sectionOrder[currentIndex + 1]);
+                      }
+                    }}
+                    disabled={sectionOrder.indexOf(activeSection) === sectionOrder.length - 1 || activeSection === "sections"}
+                    className="flex items-center gap-1"
+                  >
+                    Next Section
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             </ResizablePanel>
             
             <ResizableHandle withHandle />
             
             <ResizablePanel defaultSize={55}>
-              <div className="h-full overflow-auto bg-muted p-6 flex justify-center">
-                <div ref={resumeRef} className="bg-white shadow-md h-[842px] w-[595px] overflow-hidden">
+              <div className="h-full overflow-auto bg-muted p-6 flex flex-col items-center">
+                <div className="flex justify-between w-full mb-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs flex items-center gap-1"
+                    onClick={handleDownloadResume}
+                    disabled={isExporting}
+                  >
+                    <FileDown className="h-3.5 w-3.5" />
+                    {isExporting ? "Generating..." : "Download PDF"}
+                  </Button>
+                  <div className="text-xs text-muted-foreground flex items-center">
+                    Preview: A4 size
+                  </div>
+                </div>
+                
+                <motion.div 
+                  ref={resumeRef} 
+                  className="bg-white shadow-lg h-[842px] w-[595px] overflow-hidden relative"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                >
                   <ResumeTemplate 
                     resumeData={resumeData} 
                     templateStyle={templateStyle}
                     visibleSections={visibleSections}
                     sectionOrder={sectionOrder}
                   />
+                  
+                  <div className="absolute bottom-3 right-3 text-[9px] text-gray-400 opacity-70">
+                    Created with ResumeBuilder
+                  </div>
+                </motion.div>
+
+                <div className="mt-4 text-xs text-center text-muted-foreground">
+                  <p>Your resume is automatically saved as you type</p>
                 </div>
               </div>
             </ResizablePanel>

@@ -9,9 +9,11 @@ import {
   Award, 
   Languages, 
   Heart, 
-  ArrowUpDown 
+  ArrowUpDown,
+  CheckCircle2
 } from "lucide-react";
 import { motion } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
 
 interface ContentSidebarProps {
   activeSection: string;
@@ -20,14 +22,14 @@ interface ContentSidebarProps {
 
 const ContentSidebar = ({ activeSection, onSectionChange }: ContentSidebarProps) => {
   const sectionItems = [
-    { id: "profile", icon: User, label: "Profile" },
-    { id: "skills", icon: Code, label: "Skills" },
-    { id: "experience", icon: Briefcase, label: "Experience" },
-    { id: "education", icon: GraduationCap, label: "Education" },
-    { id: "projects", icon: FileCode, label: "Projects" },
-    { id: "certificates", icon: Award, label: "Certificates" },
-    { id: "languages", icon: Languages, label: "Languages" },
-    { id: "interests", icon: Heart, label: "Interests" },
+    { id: "profile", icon: User, label: "Profile", status: "required" },
+    { id: "skills", icon: Code, label: "Skills", status: "required" },
+    { id: "experience", icon: Briefcase, label: "Experience", status: "required" },
+    { id: "education", icon: GraduationCap, label: "Education", status: "required" },
+    { id: "projects", icon: FileCode, label: "Projects", status: "optional" },
+    { id: "certificates", icon: Award, label: "Certificates", status: "optional" },
+    { id: "languages", icon: Languages, label: "Languages", status: "optional" },
+    { id: "interests", icon: Heart, label: "Interests", status: "optional" },
   ];
 
   return (
@@ -38,7 +40,12 @@ const ContentSidebar = ({ activeSection, onSectionChange }: ContentSidebarProps)
       transition={{ duration: 0.3 }}
     >
       <div className="mb-3">
-        <p className="text-xs text-muted-foreground mb-2">Edit your resume sections</p>
+        <p className="text-xs text-muted-foreground mb-2 flex justify-between">
+          <span>Resume Sections</span>
+          <span className="text-green-500 flex items-center">
+            <CheckCircle2 className="h-3 w-3 mr-1" />Auto-saved
+          </span>
+        </p>
       </div>
     
       {sectionItems.map((item, index) => (
@@ -57,7 +64,14 @@ const ContentSidebar = ({ activeSection, onSectionChange }: ContentSidebarProps)
         >
           <item.icon className={`h-4 w-4 mr-2 ${activeSection === item.id ? "text-primary" : ""}`} />
           {item.label}
-          {activeSection === item.id && (
+          
+          {item.status === "required" && (
+            <Badge variant="outline" className="ml-auto text-[9px] px-1 py-0 h-4 border-primary/20 text-primary">
+              Required
+            </Badge>
+          )}
+          
+          {activeSection === item.id && item.status !== "required" && (
             <motion.div 
               className="ml-auto h-1.5 w-1.5 rounded-full bg-primary"
               layoutId="activeDot"
