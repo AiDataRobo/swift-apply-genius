@@ -141,6 +141,18 @@ export const resumeSchema = z.object({
   }))).optional()
 });
 
+export const templateStyleSchema = z.object({
+  template: z.enum(["modern", "minimal", "professional", "creative", "technical", "executive", "ats"]),
+  primaryColor: z.string(),
+  secondaryColor: z.string(),
+  fontFamily: z.string(),
+  fontSize: z.enum(["small", "medium", "large"]),
+  spacing: z.enum(["compact", "comfortable", "spacious"]),
+  showPhoto: z.boolean(),
+  darkMode: z.boolean(),
+  layout: z.enum(["single", "two-column"])
+});
+
 export type Contact = z.infer<typeof contactSchema>;
 export type SkillItem = z.infer<typeof skillItemSchema>;
 export type SkillGroup = z.infer<typeof skillGroupSchema>;
