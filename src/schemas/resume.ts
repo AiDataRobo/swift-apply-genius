@@ -150,7 +150,20 @@ export const templateStyleSchema = z.object({
   spacing: z.enum(["compact", "comfortable", "spacious"]),
   showPhoto: z.boolean(),
   darkMode: z.boolean(),
-  layout: z.enum(["single", "two-column"])
+  layout: z.enum(["single", "two-column"]),
+  paperSize: z.enum(["a4", "letter", "legal"]).default("a4"),
+  borderStyle: z.enum(["none", "simple", "shadow", "double"]).default("none"),
+  headerStyle: z.enum(["standard", "centered", "compact", "modern"]).default("standard"),
+  sectionHeadingStyle: z.enum(["standard", "underlined", "boxed", "colored"]).default("standard"),
+  bulletStyle: z.enum(["disc", "circle", "square", "dash", "arrow"]).default("disc"),
+  accentElements: z.enum(["none", "dots", "lines", "shapes", "bars"]).default("none"),
+  dateFormat: z.enum(["mmyyyy", "mmyy", "monthyear", "monthyy"]).default("mmyyyy"),
+  includePageNumbers: z.boolean().default(false),
+  showBorders: z.boolean().default(false),
+  roundedCorners: z.boolean().default(false),
+  customHeaderImage: z.string().optional(),
+  lineHeight: z.enum(["tight", "normal", "relaxed"]).default("normal"),
+  textAlign: z.enum(["left", "center", "justified"]).default("left")
 });
 
 export type Contact = z.infer<typeof contactSchema>;
