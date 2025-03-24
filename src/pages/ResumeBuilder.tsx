@@ -1,9 +1,10 @@
+
 import { useState, useEffect, useRef } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Settings, Link as LinkIcon, Pencil, Info, Sparkles, FileDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
-import { Resume, TemplateStyle, Contact, SkillGroup, Experience, Education, Project, Certificate, Language, Interest, Declaration } from "@/schemas/resume";
+import { Resume, TemplateStyle, Contact, SkillGroup, Experience, Education, Project, Certificate, Language, Interest, Declaration, Award, Organization, Publication, Course, Reference } from "@/schemas/resume";
 import ResumeTemplate from "@/components/resume/templates";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -24,6 +25,9 @@ import ContentSidebar from "@/components/resume/ContentSidebar";
 import DesignSidebar from "@/components/resume/DesignSidebar";
 import ExportSidebar from "@/components/resume/ExportSidebar";
 import DeclarationSection from "@/components/resume/DeclarationSection";
+import AwardsSection from "@/components/resume/AwardsSection";
+import CoursesSection from "@/components/resume/CoursesSection";
+import CustomSection from "@/components/resume/CustomSection";
 
 const ResumeBuilder = () => {
   const [activeTab, setActiveTab] = useState("content");
@@ -46,6 +50,15 @@ const ResumeBuilder = () => {
   
   const [sectionOrder, setSectionOrder] = useState(defaultSectionOrder);
   const [visibleSections, setVisibleSections] = useState(defaultSectionOrder);
+  const [availableSections, setAvailableSections] = useState([
+    ...defaultSectionOrder,
+    "awards",
+    "courses",
+    "organizations",
+    "publications",
+    "references",
+    "declaration"
+  ]);
   
   const [resumeData, setResumeData] = useState<Resume>({
     profile: {
@@ -123,7 +136,13 @@ const ResumeBuilder = () => {
       { name: "Photography" },
       { name: "Hiking" },
       { name: "Reading" }
-    ]
+    ],
+    awards: [],
+    courses: [],
+    organizations: [],
+    publications: [],
+    references: [],
+    customSections: {}
   });
 
   const [templateStyle, setTemplateStyle] = useState<TemplateStyle>({
@@ -204,18 +223,139 @@ const ResumeBuilder = () => {
     }));
   };
 
+  const handleAwardsChange = (updatedAwards: Award[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      awards: updatedAwards
+    }));
+  };
+
+  const handleCoursesChange = (updatedCourses: Course[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      courses: updatedCourses
+    }));
+  };
+
+  const handleOrganizationsChange = (updatedOrganizations: Organization[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      organizations: updatedOrganizations
+    }));
+  };
+
+  const handlePublicationsChange = (updatedPublications: Publication[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      publications: updatedPublications
+    }));
+  };
+
+  const handleReferencesChange = (updatedReferences: Reference[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      references: updatedReferences
+    }));
+  };
+
+  const handleCustomSectionChange = (sectionName: string, items: any[]) => {
+    setResumeData(prev => ({
+      ...prev,
+      customSections: {
+        ...prev.customSections,
+        [sectionName]: items
+      }
+    }));
+  };
+
+  const handleAddCustomSection = (sectionName: string) => {
+    // Format section name to lowercase with no spaces
+    const formattedName = sectionName.toLowerCase().replace(/\s+/g, '_');
+    
+    // Check if section already exists
+    if (availableSections.includes(formattedName)) {
+      toast.error("This section already exists", {
+        description: "Please choose a different name for your section"
+      });
+      return;
+    }
+    
+    // Add to available sections
+    const updatedAvailableSections = [...availableSections, formattedName];
+    setAvailableSections(updatedAvailableSections);
+    
+    // Add to section order and visible sections
+    const updatedSectionOrder = [...sectionOrder, formattedName];
+    setSectionOrder(updatedSectionOrder);
+    setVisibleSections([...visibleSections, formattedName]);
+    
+    // Initialize empty custom section
+    setResumeData(prev => ({
+      ...prev,
+      customSections: {
+        ...prev.customSections,
+        [formattedName]: []
+      }
+    }));
+    
+    // Set as active section
+    setActiveSection(formattedName);
+    
+    toast.success("New section added", {
+      description: `Your ${sectionName} section has been added to the resume`
+    });
+  };
+
+  const handleRemoveSection = (sectionName: string) => {
+    // Don't allow removing required sections
+    const requiredSections = ["profile", "skills", "experience", "education"];
+    if (requiredSections.includes(sectionName)) {
+      toast.error("Cannot remove required sections", {
+        description: "Profile, skills, experience and education are required"
+      });
+      return;
+    }
+    
+    // Remove from available sections, order and visibility
+    setAvailableSections(prev => prev.filter(s => s !== sectionName));
+    setSectionOrder(prev => prev.filter(s => s !== sectionName));
+    setVisibleSections(prev => prev.filter(s => s !== sectionName));
+    
+    // If it's a custom section, remove from customSections
+    if (sectionName.includes('_') || !["projects", "certificates", "languages", "interests", "awards", "courses", "organizations", "publications", "references", "declaration"].includes(sectionName)) {
+      setResumeData(prev => {
+        const newCustomSections = { ...prev.customSections };
+        delete newCustomSections[sectionName];
+        return {
+          ...prev,
+          customSections: newCustomSections
+        };
+      });
+    }
+    
+    // If active section is being removed, set to profile
+    if (activeSection === sectionName) {
+      setActiveSection("profile");
+    }
+    
+    toast.success("Section removed", {
+      description: `The ${sectionName} section has been removed from your resume`
+    });
+  };
+
   useEffect(() => {
     const saveResumeToLocalStorage = () => {
       localStorage.setItem('resumeData', JSON.stringify(resumeData));
       localStorage.setItem('templateStyle', JSON.stringify(templateStyle));
       localStorage.setItem('sectionOrder', JSON.stringify(sectionOrder));
       localStorage.setItem('visibleSections', JSON.stringify(visibleSections));
+      localStorage.setItem('availableSections', JSON.stringify(availableSections));
     };
 
     const saveTimeout = setTimeout(saveResumeToLocalStorage, 1000);
     
     return () => clearTimeout(saveTimeout);
-  }, [resumeData, templateStyle, sectionOrder, visibleSections]);
+  }, [resumeData, templateStyle, sectionOrder, visibleSections, availableSections]);
 
   useEffect(() => {
     const loadSavedData = () => {
@@ -224,6 +364,7 @@ const ResumeBuilder = () => {
         const savedTemplateStyle = localStorage.getItem('templateStyle');
         const savedSectionOrder = localStorage.getItem('sectionOrder');
         const savedVisibleSections = localStorage.getItem('visibleSections');
+        const savedAvailableSections = localStorage.getItem('availableSections');
         
         if (savedResumeData) {
           setResumeData(JSON.parse(savedResumeData));
@@ -239,6 +380,10 @@ const ResumeBuilder = () => {
         
         if (savedVisibleSections) {
           setVisibleSections(JSON.parse(savedVisibleSections));
+        }
+        
+        if (savedAvailableSections) {
+          setAvailableSections(JSON.parse(savedAvailableSections));
         }
       } catch (error) {
         console.error("Failed to load saved resume data:", error);
@@ -256,6 +401,7 @@ const ResumeBuilder = () => {
       localStorage.setItem('templateStyle', JSON.stringify(templateStyle));
       localStorage.setItem('sectionOrder', JSON.stringify(sectionOrder));
       localStorage.setItem('visibleSections', JSON.stringify(visibleSections));
+      localStorage.setItem('availableSections', JSON.stringify(availableSections));
       
       setIsSaving(false);
       toast.success("Resume saved successfully!", {
@@ -322,6 +468,110 @@ const ResumeBuilder = () => {
     setShowInstructions(prev => !prev);
   };
 
+  // Function to render the active section content
+  const renderSectionContent = () => {
+    switch (activeSection) {
+      case "profile":
+        return (
+          <ProfileSection 
+            profile={resumeData.profile}
+            onChange={handleProfileChange}
+          />
+        );
+      case "skills":
+        return (
+          <SkillsSection
+            skills={resumeData.skills}
+            onChange={handleSkillsChange}
+          />
+        );
+      case "experience":
+        return (
+          <ExperienceSection
+            experiences={resumeData.experience}
+            onChange={handleExperienceChange}
+          />
+        );
+      case "education":
+        return (
+          <EducationSection
+            education={resumeData.education}
+            onChange={handleEducationChange}
+          />
+        );
+      case "projects":
+        return (
+          <ProjectsSection
+            projects={resumeData.projects}
+            onChange={handleProjectsChange}
+          />
+        );
+      case "certificates":
+        return (
+          <CertificatesSection
+            certificates={resumeData.certificates}
+            onChange={handleCertificatesChange}
+          />
+        );
+      case "languages":
+        return (
+          <LanguagesSection
+            languages={resumeData.languages || []}
+            onChange={handleLanguagesChange}
+          />
+        );
+      case "interests":
+        return (
+          <InterestsSection
+            interests={resumeData.interests || []}
+            onChange={handleInterestsChange}
+          />
+        );
+      case "awards":
+        return (
+          <AwardsSection
+            awards={resumeData.awards || []}
+            onChange={handleAwardsChange}
+          />
+        );
+      case "courses":
+        return (
+          <CoursesSection
+            courses={resumeData.courses || []}
+            onChange={handleCoursesChange}
+          />
+        );
+      case "declaration":
+        return (
+          <DeclarationSection
+            declaration={resumeData.declaration}
+            onChange={handleDeclarationChange}
+          />
+        );
+      case "sections":
+        return (
+          <SectionReorder
+            sections={sectionOrder}
+            visibleSections={visibleSections}
+            onReorder={setSectionOrder}
+            onVisibilityChange={setVisibleSections}
+          />
+        );
+      default:
+        // Check if it's a custom section
+        if (resumeData.customSections && resumeData.customSections[activeSection]) {
+          return (
+            <CustomSection
+              sectionName={activeSection}
+              items={resumeData.customSections[activeSection]}
+              onChange={(items) => handleCustomSectionChange(activeSection, items)}
+            />
+          );
+        }
+        return null;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <ResumeHeader 
@@ -355,6 +605,9 @@ const ResumeBuilder = () => {
               <ContentSidebar 
                 activeSection={activeSection}
                 onSectionChange={setActiveSection}
+                availableSections={availableSections}
+                onAddCustomSection={handleAddCustomSection}
+                onRemoveSection={handleRemoveSection}
               />
             )}
 
@@ -437,8 +690,20 @@ const ResumeBuilder = () => {
                           {activeSection === "interests" && (
                             <p className="text-blue-600 mt-1">Include interests that demonstrate valuable soft skills or align with company culture.</p>
                           )}
+                          {activeSection === "awards" && (
+                            <p className="text-blue-600 mt-1">Showcase awards that highlight your achievements and recognition in your field.</p>
+                          )}
+                          {activeSection === "courses" && (
+                            <p className="text-blue-600 mt-1">List relevant courses that have enhanced your skills or knowledge in your profession.</p>
+                          )}
+                          {activeSection === "declaration" && (
+                            <p className="text-blue-600 mt-1">Keep your declaration concise and professional, typically stating the information provided is accurate.</p>
+                          )}
                           {activeSection === "sections" && (
                             <p className="text-blue-600 mt-1">Arrange sections in order of relevance to the position you're applying for.</p>
+                          )}
+                          {resumeData.customSections && resumeData.customSections[activeSection] && (
+                            <p className="text-blue-600 mt-1">Customize this section to highlight additional qualifications relevant to your target job.</p>
                           )}
                         </div>
                         <Button 
@@ -454,77 +719,7 @@ const ResumeBuilder = () => {
                   )}
                 </AnimatePresence>
 
-                {activeSection === "profile" && (
-                  <ProfileSection 
-                    profile={resumeData.profile}
-                    onChange={handleProfileChange}
-                  />
-                )}
-                
-                {activeSection === "skills" && (
-                  <SkillsSection
-                    skills={resumeData.skills}
-                    onChange={handleSkillsChange}
-                  />
-                )}
-                
-                {activeSection === "experience" && (
-                  <ExperienceSection
-                    experiences={resumeData.experience}
-                    onChange={handleExperienceChange}
-                  />
-                )}
-                
-                {activeSection === "education" && (
-                  <EducationSection
-                    education={resumeData.education}
-                    onChange={handleEducationChange}
-                  />
-                )}
-                
-                {activeSection === "projects" && (
-                  <ProjectsSection
-                    projects={resumeData.projects}
-                    onChange={handleProjectsChange}
-                  />
-                )}
-                
-                {activeSection === "certificates" && (
-                  <CertificatesSection
-                    certificates={resumeData.certificates}
-                    onChange={handleCertificatesChange}
-                  />
-                )}
-                
-                {activeSection === "languages" && (
-                  <LanguagesSection
-                    languages={resumeData.languages}
-                    onChange={handleLanguagesChange}
-                  />
-                )}
-                
-                {activeSection === "interests" && (
-                  <InterestsSection
-                    interests={resumeData.interests}
-                    onChange={handleInterestsChange}
-                  />
-                )}
-                
-                {activeSection === "sections" && (
-                  <SectionReorder
-                    sections={sectionOrder}
-                    visibleSections={visibleSections}
-                    onReorder={setSectionOrder}
-                    onVisibilityChange={setVisibleSections}
-                  />
-                )}
-                
-                {activeSection === "declaration" && (
-                  <DeclarationSection
-                    declaration={resumeData.declaration}
-                    onChange={handleDeclarationChange}
-                  />
-                )}
+                {renderSectionContent()}
 
                 <div className="flex justify-between mt-8">
                   <Button

@@ -23,24 +23,37 @@ const ResumeTemplate = ({ resumeData, templateStyle, visibleSections, sectionOrd
     transition: { duration: 0.5 }
   };
 
+  // Process the resume data to include only visible sections
+  const processedResumeData: Resume = {
+    ...resumeData,
+    // Filter out sections that shouldn't be visible
+    sections: sectionOrder.filter(section => visibleSections.includes(section)),
+    // Only include custom sections that are in the visible sections
+    customSections: resumeData.customSections ? 
+      Object.fromEntries(
+        Object.entries(resumeData.customSections)
+          .filter(([key]) => visibleSections.includes(key))
+      ) : {}
+  };
+
   const renderTemplate = () => {
     switch (templateStyle.template) {
       case "modern":
-        return <ModernTemplate resume={resumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
+        return <ModernTemplate resume={processedResumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
       case "minimal":
-        return <MinimalTemplate resume={resumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
+        return <MinimalTemplate resume={processedResumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
       case "professional":
-        return <ProfessionalTemplate resume={resumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
+        return <ProfessionalTemplate resume={processedResumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
       case "creative":
-        return <CreativeTemplate resume={resumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
+        return <CreativeTemplate resume={processedResumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
       case "technical":
-        return <TechnicalTemplate resume={resumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
+        return <TechnicalTemplate resume={processedResumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
       case "executive":
-        return <ExecutiveTemplate resume={resumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
+        return <ExecutiveTemplate resume={processedResumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
       case "ats":
-        return <AtsTemplate resume={resumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
+        return <AtsTemplate resume={processedResumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
       default:
-        return <ModernTemplate resume={resumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
+        return <ModernTemplate resume={processedResumeData} style={templateStyle} visibleSections={visibleSections} sectionOrder={sectionOrder} />;
     }
   };
 

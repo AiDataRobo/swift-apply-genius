@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Card, CardContent } from "@/components/ui/card";
-import { GripVertical, Eye, EyeOff } from "lucide-react";
+import { GripVertical, Eye, EyeOff, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 
@@ -11,6 +11,7 @@ interface SectionReorderProps {
   visibleSections: string[];
   onReorder: (sections: string[]) => void;
   onVisibilityChange: (sections: string[]) => void;
+  onRemoveSection?: (section: string) => void;
 }
 
 const sectionIcons: Record<string, string> = {
@@ -21,14 +22,21 @@ const sectionIcons: Record<string, string> = {
   projects: "🚀",
   certificates: "🏆",
   languages: "🌐",
-  interests: "⭐"
+  interests: "⭐",
+  awards: "🏅",
+  courses: "📚",
+  organizations: "🏢",
+  publications: "📄",
+  references: "👥",
+  declaration: "📝"
 };
 
 const SectionReorder = ({ 
   sections, 
   visibleSections, 
   onReorder, 
-  onVisibilityChange 
+  onVisibilityChange,
+  onRemoveSection
 }: SectionReorderProps) => {
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -48,6 +56,17 @@ const SectionReorder = ({
     }
   };
 
+  // Required sections that cannot be removed
+  const requiredSections = ["profile", "skills", "experience", "education"];
+
+  // Format section name for display
+  const formatSectionName = (name: string) => {
+    return name
+      .split(/[_\s]/)
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
   return (
     <Card>
       <CardContent className="space-y-4 pt-6">
@@ -64,6 +83,7 @@ const SectionReorder = ({
               >
                 {sections.map((section, index) => {
                   const isVisible = visibleSections.includes(section);
+                  const isRequired = requiredSections.includes(section);
                   return (
                     <Draggable key={section} draggableId={section} index={index}>
                       {(provided) => (
@@ -77,7 +97,7 @@ const SectionReorder = ({
                               <GripVertical className="h-4 w-4 text-muted-foreground" />
                             </div>
                             <span className="mr-2">{sectionIcons[section] || "📄"}</span>
-                            <span className="capitalize">{section}</span>
+                            <span className="capitalize">{formatSectionName(section)}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <Button
@@ -95,6 +115,16 @@ const SectionReorder = ({
                               checked={isVisible}
                               onCheckedChange={() => toggleSectionVisibility(section)}
                             />
+                            {!isRequired && onRemoveSection && (
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => onRemoveSection(section)}
+                                className="ml-1"
+                              >
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                              </Button>
+                            )}
                           </div>
                         </div>
                       )}
