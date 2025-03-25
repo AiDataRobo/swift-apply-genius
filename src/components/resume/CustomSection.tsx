@@ -7,7 +7,7 @@ import { Check, Trash2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
-interface CustomSectionItem {
+export interface CustomSectionItem {
   title: string;
   description?: string;
 }

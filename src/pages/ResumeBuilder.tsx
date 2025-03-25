@@ -1,10 +1,9 @@
-
 import { useState, useEffect, useRef } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Settings, Link as LinkIcon, Pencil, Info, Sparkles, FileDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
-import { Resume, TemplateStyle, Contact, SkillGroup, Experience, Education, Project, Certificate, Language, Interest, Declaration, Award, Organization, Publication, Course, Reference } from "@/schemas/resume";
+import { Resume, TemplateStyle, Contact, SkillGroup, Experience, Education, Project, Certificate, Language, Interest, Declaration, Award, Organization, Publication, Course, Reference, CustomSectionItem } from "@/schemas/resume";
 import ResumeTemplate from "@/components/resume/templates";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -258,7 +257,7 @@ const ResumeBuilder = () => {
     }));
   };
 
-  const handleCustomSectionChange = (sectionName: string, items: any[]) => {
+  const handleCustomSectionChange = (sectionName: string, items: CustomSectionItem[]) => {
     setResumeData(prev => ({
       ...prev,
       customSections: {
@@ -269,10 +268,8 @@ const ResumeBuilder = () => {
   };
 
   const handleAddCustomSection = (sectionName: string) => {
-    // Format section name to lowercase with no spaces
     const formattedName = sectionName.toLowerCase().replace(/\s+/g, '_');
     
-    // Check if section already exists
     if (availableSections.includes(formattedName)) {
       toast.error("This section already exists", {
         description: "Please choose a different name for your section"
@@ -280,16 +277,13 @@ const ResumeBuilder = () => {
       return;
     }
     
-    // Add to available sections
     const updatedAvailableSections = [...availableSections, formattedName];
     setAvailableSections(updatedAvailableSections);
     
-    // Add to section order and visible sections
     const updatedSectionOrder = [...sectionOrder, formattedName];
     setSectionOrder(updatedSectionOrder);
     setVisibleSections([...visibleSections, formattedName]);
     
-    // Initialize empty custom section
     setResumeData(prev => ({
       ...prev,
       customSections: {
@@ -298,7 +292,6 @@ const ResumeBuilder = () => {
       }
     }));
     
-    // Set as active section
     setActiveSection(formattedName);
     
     toast.success("New section added", {
@@ -307,7 +300,6 @@ const ResumeBuilder = () => {
   };
 
   const handleRemoveSection = (sectionName: string) => {
-    // Don't allow removing required sections
     const requiredSections = ["profile", "skills", "experience", "education"];
     if (requiredSections.includes(sectionName)) {
       toast.error("Cannot remove required sections", {
@@ -316,12 +308,10 @@ const ResumeBuilder = () => {
       return;
     }
     
-    // Remove from available sections, order and visibility
     setAvailableSections(prev => prev.filter(s => s !== sectionName));
     setSectionOrder(prev => prev.filter(s => s !== sectionName));
     setVisibleSections(prev => prev.filter(s => s !== sectionName));
     
-    // If it's a custom section, remove from customSections
     if (sectionName.includes('_') || !["projects", "certificates", "languages", "interests", "awards", "courses", "organizations", "publications", "references", "declaration"].includes(sectionName)) {
       setResumeData(prev => {
         const newCustomSections = { ...prev.customSections };
@@ -333,7 +323,6 @@ const ResumeBuilder = () => {
       });
     }
     
-    // If active section is being removed, set to profile
     if (activeSection === sectionName) {
       setActiveSection("profile");
     }
@@ -468,7 +457,6 @@ const ResumeBuilder = () => {
     setShowInstructions(prev => !prev);
   };
 
-  // Function to render the active section content
   const renderSectionContent = () => {
     switch (activeSection) {
       case "profile":
@@ -558,7 +546,6 @@ const ResumeBuilder = () => {
           />
         );
       default:
-        // Check if it's a custom section
         if (resumeData.customSections && resumeData.customSections[activeSection]) {
           return (
             <CustomSection

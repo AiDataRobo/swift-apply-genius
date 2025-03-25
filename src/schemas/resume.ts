@@ -1,3 +1,4 @@
+
 import { z } from "zod";
 
 // Basic schemas
@@ -119,6 +120,12 @@ export const declarationSchema = z.object({
   place: z.string().optional()
 });
 
+// Define a schema for custom section items
+export const customSectionItemSchema = z.object({
+  title: z.string(),
+  description: z.string().optional()
+});
+
 export const resumeSchema = z.object({
   profile: contactSchema,
   skills: z.array(skillGroupSchema),
@@ -135,10 +142,7 @@ export const resumeSchema = z.object({
   references: z.array(referenceSchema).optional(),
   declaration: declarationSchema.optional(),
   sections: z.array(z.string()).optional(),
-  customSections: z.record(z.string(), z.array(z.object({
-    title: z.string(),
-    description: z.string().optional()
-  }))).optional()
+  customSections: z.record(z.string(), z.array(customSectionItemSchema)).optional()
 });
 
 export const templateStyleSchema = z.object({
@@ -181,5 +185,6 @@ export type Publication = z.infer<typeof publicationSchema>;
 export type Course = z.infer<typeof courseSchema>;
 export type Reference = z.infer<typeof referenceSchema>;
 export type Declaration = z.infer<typeof declarationSchema>;
+export type CustomSectionItem = z.infer<typeof customSectionItemSchema>;
 export type Resume = z.infer<typeof resumeSchema>;
 export type TemplateStyle = z.infer<typeof templateStyleSchema>;
