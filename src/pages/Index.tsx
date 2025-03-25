@@ -2,13 +2,14 @@
 import React, { useEffect } from 'react';
 import NavBar from '@/components/landing/NavBar';
 import HeroSection from '@/components/landing/HeroSection';
+import WhyChooseUsSection from '@/components/landing/WhyChooseUsSection';
 import FeaturesSection from '@/components/landing/FeaturesSection';
 import HowItWorksSection from '@/components/landing/HowItWorksSection';
 import TestimonialsSection from '@/components/landing/TestimonialsSection';
 import PricingSection from '@/components/landing/PricingSection';
 import CTASection from '@/components/landing/CTASection';
 import Footer from '@/components/landing/Footer';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 
 const Index = () => {
@@ -75,6 +76,7 @@ const Index = () => {
       <NavBar />
       <main>
         <HeroSection />
+        <WhyChooseUsSection />
         <FeaturesSection />
         <HowItWorksSection />
         <TestimonialsSection />
