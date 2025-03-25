@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Zap, FileText, CheckCircle, Star, PenTool, Users, Award, Download } from 'lucide-react';
+import { Zap, FileText, CheckCircle, Star, PenTool, Users, Award, Download, ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
