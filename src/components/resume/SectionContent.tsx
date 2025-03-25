@@ -128,7 +128,10 @@ const SectionContent: React.FC = () => {
           return (
             <CustomSection
               sectionName={activeSection}
-              items={resumeData.customSections[activeSection]}
+              items={resumeData.customSections[activeSection].map(item => ({
+                ...item,
+                title: item.title || "" // Ensure title is always a string (never undefined)
+              }))}
               onChange={(items) => handleCustomSectionChange(activeSection, items)}
             />
           );

@@ -1,5 +1,7 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { toast } from "sonner";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { 
   Resume, 
   TemplateStyle, 
@@ -358,10 +360,9 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
   };
 
   const handleCustomSectionChange = (sectionName: string, items: CustomSectionItem[]) => {
-    // Ensure each item has a title property (required by CustomSectionItem)
     const validatedItems = items.map(item => ({
       ...item,
-      title: item.title || "" // Ensure title is always a string (never undefined)
+      title: item.title || ""
     }));
     
     setResumeData(prev => ({
@@ -390,7 +391,6 @@ export const ResumeProvider: React.FC<ResumeProviderProps> = ({ children }) => {
     setSectionOrder(updatedSectionOrder);
     setVisibleSections([...visibleSections, formattedName]);
     
-    // Initialize with an empty array of CustomSectionItems with required title
     setResumeData(prev => ({
       ...prev,
       customSections: {
