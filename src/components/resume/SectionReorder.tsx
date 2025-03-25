@@ -1,63 +1,69 @@
 
-import { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useResumeContext } from "@/contexts/ResumeContext";
 import { Card, CardContent } from "@/components/ui/card";
-import { GripVertical, Eye, EyeOff, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import { ArrowUp, ArrowDown, Check, Eye, EyeOff } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
-interface SectionReorderProps {
-  sections: string[];
-  visibleSections: string[];
-  onReorder: (sections: string[]) => void;
-  onVisibilityChange: (sections: string[]) => void;
-  onRemoveSection?: (section: string) => void;
-}
+const SectionReorder = () => {
+  const { 
+    sectionOrder, 
+    visibleSections, 
+    setSectionOrder, 
+    setVisibleSections 
+  } = useResumeContext();
 
-const sectionIcons: Record<string, string> = {
-  profile: "👤",
-  skills: "🛠️",
-  experience: "💼",
-  education: "🎓",
-  projects: "🚀",
-  certificates: "🏆",
-  languages: "🌐",
-  interests: "⭐",
-  awards: "🏅",
-  courses: "📚",
-  organizations: "🏢",
-  publications: "📄",
-  references: "👥",
-  declaration: "📝"
-};
-
-const SectionReorder = ({ 
-  sections, 
-  visibleSections, 
-  onReorder, 
-  onVisibilityChange,
-  onRemoveSection
-}: SectionReorderProps) => {
-  const handleDragEnd = (result: any) => {
-    if (!result.destination) return;
-    
-    const items = Array.from(sections);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    
-    onReorder(items);
-  };
-
-  const toggleSectionVisibility = (section: string) => {
-    if (visibleSections.includes(section)) {
-      onVisibilityChange(visibleSections.filter(s => s !== section));
-    } else {
-      onVisibilityChange([...visibleSections, section]);
+  const moveSectionUp = (index: number) => {
+    if (index > 0) {
+      const newOrder = [...sectionOrder];
+      [newOrder[index], newOrder[index - 1]] = [newOrder[index - 1], newOrder[index]];
+      setSectionOrder(newOrder);
+      
+      toast.success("Section order updated", {
+        description: "The section has been moved up"
+      });
     }
   };
 
-  // Required sections that cannot be removed
-  const requiredSections = ["profile", "skills", "experience", "education"];
+  const moveSectionDown = (index: number) => {
+    if (index < sectionOrder.length - 1) {
+      const newOrder = [...sectionOrder];
+      [newOrder[index], newOrder[index + 1]] = [newOrder[index + 1], newOrder[index]];
+      setSectionOrder(newOrder);
+      
+      toast.success("Section order updated", {
+        description: "The section has been moved down"
+      });
+    }
+  };
+
+  const toggleVisibility = (section: string) => {
+    const isVisible = visibleSections.includes(section);
+    
+    if (isVisible) {
+      // Don't allow hiding required sections
+      if (["profile", "skills", "experience", "education"].includes(section)) {
+        toast.error("Cannot hide required sections", {
+          description: "Profile, skills, experience and education are required"
+        });
+        return;
+      }
+      
+      setVisibleSections(visibleSections.filter(s => s !== section));
+      
+      toast.success("Section hidden", {
+        description: `The ${section} section is now hidden from your resume`
+      });
+    } else {
+      setVisibleSections([...visibleSections, section]);
+      
+      toast.success("Section shown", {
+        description: `The ${section} section is now visible on your resume`
+      });
+    }
+  };
 
   // Format section name for display
   const formatSectionName = (name: string) => {
@@ -70,72 +76,82 @@ const SectionReorder = ({
   return (
     <Card>
       <CardContent className="space-y-4 pt-6">
-        <h2 className="text-xl font-semibold">Resume Sections</h2>
-        <p className="text-sm text-muted-foreground">Drag and drop to reorder sections or toggle to show/hide</p>
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-semibold">Reorder Sections</h2>
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Check className="h-3.5 w-3.5 text-green-500" /> 
+            Auto-saved
+          </div>
+        </div>
+        <p className="text-sm text-muted-foreground">Drag and drop sections to change their order or toggle visibility</p>
         
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="sections">
-            {(provided) => (
-              <div
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="space-y-2"
-              >
-                {sections.map((section, index) => {
-                  const isVisible = visibleSections.includes(section);
-                  const isRequired = requiredSections.includes(section);
-                  return (
-                    <Draggable key={section} draggableId={section} index={index}>
-                      {(provided) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          className={`flex items-center justify-between p-3 rounded-md border ${isVisible ? 'bg-card' : 'bg-muted/30'}`}
-                        >
-                          <div className="flex items-center">
-                            <div {...provided.dragHandleProps} className="mr-2 cursor-grab">
-                              <GripVertical className="h-4 w-4 text-muted-foreground" />
-                            </div>
-                            <span className="mr-2">{sectionIcons[section] || "📄"}</span>
-                            <span className="capitalize">{formatSectionName(section)}</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => toggleSectionVisibility(section)}
-                            >
-                              {isVisible ? (
-                                <Eye className="h-4 w-4" />
-                              ) : (
-                                <EyeOff className="h-4 w-4 text-muted-foreground" />
-                              )}
-                            </Button>
-                            <Switch
-                              checked={isVisible}
-                              onCheckedChange={() => toggleSectionVisibility(section)}
-                            />
-                            {!isRequired && onRemoveSection && (
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => onRemoveSection(section)}
-                                className="ml-1"
-                              >
-                                <Trash2 className="h-4 w-4 text-destructive" />
-                              </Button>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </Draggable>
-                  );
-                })}
-                {provided.placeholder}
+        <div className="space-y-2 mt-4">
+          {sectionOrder.map((section, index) => (
+            <div 
+              key={section} 
+              className="flex items-center justify-between p-3 bg-card border rounded-md"
+            >
+              <div className="flex items-center">
+                <div className="w-10 text-center text-muted-foreground">
+                  {index + 1}
+                </div>
+                <span className="font-medium">{formatSectionName(section)}</span>
+                
+                {["profile", "skills", "experience", "education"].includes(section) && (
+                  <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">
+                    Required
+                  </span>
+                )}
               </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+              
+              <div className="flex items-center gap-2">
+                <div className="flex items-center space-x-2">
+                  <Switch 
+                    id={`show-${section}`}
+                    checked={visibleSections.includes(section)}
+                    onCheckedChange={() => toggleVisibility(section)}
+                    disabled={["profile", "skills", "experience", "education"].includes(section)}
+                  />
+                  <Label htmlFor={`show-${section}`} className="text-xs">
+                    {visibleSections.includes(section) ? 
+                      <div className="flex items-center gap-1">
+                        <Eye className="h-3 w-3" /> Show
+                      </div> : 
+                      <div className="flex items-center gap-1">
+                        <EyeOff className="h-3 w-3" /> Hide
+                      </div>
+                    }
+                  </Label>
+                </div>
+                
+                <div className="flex">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => moveSectionUp(index)}
+                    disabled={index === 0}
+                    className="h-7 w-7"
+                  >
+                    <ArrowUp className="h-4 w-4" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    onClick={() => moveSectionDown(index)}
+                    disabled={index === sectionOrder.length - 1}
+                    className="h-7 w-7"
+                  >
+                    <ArrowDown className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <div className="bg-muted/40 p-3 rounded-md text-sm mt-4">
+          <p className="text-muted-foreground">Tip: The order of sections on this page will be reflected in your resume. Customize the order to highlight your most relevant qualifications for the job.</p>
+        </div>
       </CardContent>
     </Card>
   );

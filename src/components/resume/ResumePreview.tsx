@@ -1,0 +1,64 @@
+
+import React from "react";
+import { useResumeContext } from "@/contexts/ResumeContext";
+import ResumeTemplate from "@/components/resume/templates";
+import { Button } from "@/components/ui/button";
+import { FileDown } from "lucide-react";
+import { motion } from "framer-motion";
+
+const ResumePreview: React.FC = () => {
+  const { 
+    resumeData, 
+    templateStyle, 
+    visibleSections, 
+    sectionOrder, 
+    resumeRef, 
+    isExporting, 
+    handleDownloadResume 
+  } = useResumeContext();
+
+  return (
+    <div className="h-full overflow-auto bg-muted p-6 flex flex-col items-center">
+      <div className="flex justify-between w-full mb-3">
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-xs flex items-center gap-1"
+          onClick={handleDownloadResume}
+          disabled={isExporting}
+        >
+          <FileDown className="h-3.5 w-3.5" />
+          {isExporting ? "Generating..." : "Download PDF"}
+        </Button>
+        <div className="text-xs text-muted-foreground flex items-center">
+          Preview: A4 size
+        </div>
+      </div>
+      
+      <motion.div 
+        ref={resumeRef} 
+        className="bg-white shadow-lg h-[842px] w-[595px] overflow-hidden relative"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <ResumeTemplate 
+          resumeData={resumeData} 
+          templateStyle={templateStyle}
+          visibleSections={visibleSections}
+          sectionOrder={sectionOrder}
+        />
+        
+        <div className="absolute bottom-3 right-3 text-[9px] text-gray-400 opacity-70">
+          Created with ResumeBuilder
+        </div>
+      </motion.div>
+
+      <div className="mt-4 text-xs text-center text-muted-foreground">
+        <p>Your resume is automatically saved as you type</p>
+      </div>
+    </div>
+  );
+};
+
+export default ResumePreview;
