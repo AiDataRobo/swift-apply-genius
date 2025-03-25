@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -258,11 +259,17 @@ const ResumeBuilder = () => {
   };
 
   const handleCustomSectionChange = (sectionName: string, items: CustomSectionItem[]) => {
+    // Ensure each item has a title property (required by CustomSectionItem)
+    const validatedItems = items.map(item => ({
+      ...item,
+      title: item.title || "" // Ensure title is always a string (never undefined)
+    }));
+    
     setResumeData(prev => ({
       ...prev,
       customSections: {
         ...prev.customSections,
-        [sectionName]: items
+        [sectionName]: validatedItems
       }
     }));
   };
@@ -284,6 +291,7 @@ const ResumeBuilder = () => {
     setSectionOrder(updatedSectionOrder);
     setVisibleSections([...visibleSections, formattedName]);
     
+    // Initialize with an empty array of CustomSectionItems with required title
     setResumeData(prev => ({
       ...prev,
       customSections: {

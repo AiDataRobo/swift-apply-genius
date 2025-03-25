@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,7 +32,10 @@ const CustomSection = ({ sectionName, items = [], onChange }: CustomSectionProps
 
   const handleItemChange = (index: number, field: keyof CustomSectionItem, value: string) => {
     const updatedItems = [...items];
-    updatedItems[index] = { ...updatedItems[index], [field]: value };
+    updatedItems[index] = { 
+      ...updatedItems[index], 
+      [field]: value 
+    };
     onChange(updatedItems);
   };
 
