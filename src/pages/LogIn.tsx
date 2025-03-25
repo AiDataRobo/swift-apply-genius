@@ -9,7 +9,7 @@ import AuthPageLayout from '@/components/layout/AuthPageLayout';
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import SocialLoginButtons from '@/components/auth/SocialLoginButtons';
 import PasswordInput from '@/components/auth/PasswordInput';
 
@@ -100,7 +100,12 @@ const LogIn = () => {
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                       <Lock className="h-4 w-4" />
                     </span>
-                    <PasswordInput id="password" className="pl-10" {...field} />
+                    <PasswordInput 
+                      className="pl-10" 
+                      placeholder="Enter your password"
+                      id="password"
+                      {...field} 
+                    />
                   </div>
                 </FormControl>
                 <FormMessage />
