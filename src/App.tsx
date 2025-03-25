@@ -10,6 +10,7 @@ import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import SignUp from "./pages/SignUp";
 import LogIn from "./pages/LogIn";
+import ForgotPassword from "./pages/ForgotPassword";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import TermsOfService from "./pages/TermsOfService";
@@ -32,6 +33,7 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<LogIn />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/about" element={<About />} />
               <Route path="/terms" element={<TermsOfService />} />

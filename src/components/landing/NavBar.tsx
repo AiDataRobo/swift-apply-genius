@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { FileText, Menu, X } from "lucide-react";
+import { FileText, Menu, X, FileCheck, Star, DollarSign, Users, MessageSquare } from "lucide-react";
 import { Link } from 'react-router-dom';
 
 const NavBar = () => {
@@ -43,23 +43,29 @@ const NavBar = () => {
         </div>
         
         <nav className="hidden md:flex items-center gap-8">
-          <a href="#features" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-            Features
-          </a>
-          <a href="#how-it-works" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-            How It Works
-          </a>
-          <a href="#testimonials" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-            Testimonials
-          </a>
-          <a href="#pricing" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-            Pricing
-          </a>
-          <Link to="/about" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-            About
+          <Link to="/resume-templates" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
+            <FileText className="h-4 w-4" />
+            <span>Resume Templates</span>
           </Link>
-          <Link to="/contact" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-            Contact
+          <Link to="/cover-letter-templates" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
+            <FileCheck className="h-4 w-4" />
+            <span>Cover Letter</span>
+          </Link>
+          <Link to="#testimonials" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
+            <Star className="h-4 w-4" />
+            <span>Testimonials</span>
+          </Link>
+          <Link to="#pricing" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
+            <DollarSign className="h-4 w-4" />
+            <span>Pricing</span>
+          </Link>
+          <Link to="/about" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
+            <Users className="h-4 w-4" />
+            <span>About</span>
+          </Link>
+          <Link to="/contact" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
+            <MessageSquare className="h-4 w-4" />
+            <span>Contact</span>
           </Link>
         </nav>
         
@@ -88,47 +94,53 @@ const NavBar = () => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-white border-t mt-3 py-4">
           <div className="container space-y-3">
-            <a 
-              href="#features" 
-              className="block py-2 text-foreground hover:text-primary"
+            <Link 
+              to="/resume-templates" 
+              className="flex items-center gap-2 py-2 text-foreground hover:text-primary"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Features
-            </a>
-            <a 
-              href="#how-it-works" 
-              className="block py-2 text-foreground hover:text-primary"
+              <FileText className="h-4 w-4" />
+              <span>Resume Templates</span>
+            </Link>
+            <Link 
+              to="/cover-letter-templates" 
+              className="flex items-center gap-2 py-2 text-foreground hover:text-primary"
               onClick={() => setMobileMenuOpen(false)}
             >
-              How It Works
-            </a>
-            <a 
-              href="#testimonials" 
-              className="block py-2 text-foreground hover:text-primary"
+              <FileCheck className="h-4 w-4" />
+              <span>Cover Letter</span>
+            </Link>
+            <Link 
+              to="#testimonials" 
+              className="flex items-center gap-2 py-2 text-foreground hover:text-primary"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Testimonials
-            </a>
-            <a 
-              href="#pricing" 
-              className="block py-2 text-foreground hover:text-primary"
+              <Star className="h-4 w-4" />
+              <span>Testimonials</span>
+            </Link>
+            <Link 
+              to="#pricing" 
+              className="flex items-center gap-2 py-2 text-foreground hover:text-primary"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Pricing
-            </a>
+              <DollarSign className="h-4 w-4" />
+              <span>Pricing</span>
+            </Link>
             <Link 
               to="/about" 
-              className="block py-2 text-foreground hover:text-primary"
+              className="flex items-center gap-2 py-2 text-foreground hover:text-primary"
               onClick={() => setMobileMenuOpen(false)}
             >
-              About
+              <Users className="h-4 w-4" />
+              <span>About</span>
             </Link>
             <Link 
               to="/contact" 
-              className="block py-2 text-foreground hover:text-primary"
+              className="flex items-center gap-2 py-2 text-foreground hover:text-primary"
               onClick={() => setMobileMenuOpen(false)}
             >
-              Contact
+              <MessageSquare className="h-4 w-4" />
+              <span>Contact</span>
             </Link>
             <div className="pt-3 border-t">
               <Link 

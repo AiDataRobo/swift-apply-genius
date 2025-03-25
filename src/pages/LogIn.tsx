@@ -1,36 +1,32 @@
 
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Eye, EyeOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import SocialLoginButtons from '@/components/auth/SocialLoginButtons';
+import React, { useState } from 'react';
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock } from "lucide-react";
 import AuthPageLayout from '@/components/layout/AuthPageLayout';
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
+import SocialLoginButtons from '@/components/auth/SocialLoginButtons';
+import PasswordInput from '@/components/auth/PasswordInput';
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address." }),
-  password: z.string().min(1, { message: "Password is required." }),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
   rememberMe: z.boolean().optional(),
 });
 
-type FormData = z.infer<typeof formSchema>;
+type FormValues = z.infer<typeof formSchema>;
 
 const LogIn = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const form = useForm<FormData>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
@@ -39,18 +35,34 @@ const LogIn = () => {
     },
   });
 
-  const togglePasswordVisibility = () => setShowPassword(!showPassword);
-
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormValues) => {
+    setIsSubmitting(true);
     console.log(data);
-    // Handle form submission
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // This would be a real API call in a production app
+      toast({
+        title: "Welcome back!",
+        description: "You've successfully logged in.",
+      });
+      
+      navigate('/dashboard');
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Invalid email or password. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <AuthPageLayout 
-      title="Welcome back" 
-      subtitle="Log in to access your AI-powered resume builder"
-    >
+    <AuthPageLayout title="Welcome back" subtitle="Log in to your account to continue">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -58,9 +70,14 @@ const LogIn = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel htmlFor="email">Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="Enter your email" {...field} />
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                      <Mail className="h-4 w-4" />
+                    </span>
+                    <Input id="email" type="email" className="pl-10" placeholder="you@example.com" {...field} />
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -73,25 +90,17 @@ const LogIn = () => {
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center justify-between">
-                  <FormLabel>Password</FormLabel>
-                  <Link to="#" className="text-xs text-primary hover:underline">
-                    Forgot Password?
+                  <FormLabel htmlFor="password">Password</FormLabel>
+                  <Link to="/forgot-password" className="text-xs text-primary hover:underline">
+                    Forgot password?
                   </Link>
                 </div>
                 <FormControl>
                   <div className="relative">
-                    <Input 
-                      type={showPassword ? "text" : "password"} 
-                      placeholder="Enter your password" 
-                      {...field} 
-                    />
-                    <button
-                      type="button"
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                      onClick={togglePasswordVisibility}
-                    >
-                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </button>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                      <Lock className="h-4 w-4" />
+                    </span>
+                    <PasswordInput id="password" className="pl-10" {...field} />
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -103,34 +112,52 @@ const LogIn = () => {
             control={form.control}
             name="rememberMe"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-start space-x-3 space-y-0 pt-2">
+              <FormItem className="flex flex-row items-center space-x-2 space-y-0">
                 <FormControl>
-                  <Checkbox 
-                    checked={field.value} 
-                    onCheckedChange={field.onChange} 
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    checked={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
-                <div className="space-y-1 leading-none">
-                  <FormLabel className="font-normal">
-                    Remember me
-                  </FormLabel>
-                </div>
+                <label htmlFor="rememberMe" className="text-sm font-medium leading-none cursor-pointer">
+                  Remember me
+                </label>
               </FormItem>
             )}
           />
           
-          <Button type="submit" className="w-full">Log In</Button>
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <span className="flex items-center">
+                <span className="mr-2">Logging in</span>
+                <span className="animate-spin rounded-full h-4 w-4 border-2 border-b-transparent border-white"></span>
+              </span>
+            ) : (
+              "Log in"
+            )}
+          </Button>
         </form>
       </Form>
       
       <div className="mt-6">
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-200"></div>
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="px-2 bg-white text-muted-foreground">Or continue with</span>
+          </div>
+        </div>
+        
         <SocialLoginButtons />
       </div>
       
-      <div className="mt-6 text-center">
-        <p className="text-sm text-muted-foreground">
-          Don't have an account?{' '}
-          <Link to="/signup" className="font-medium text-primary hover:underline">
+      <div className="mt-6 text-center text-sm">
+        <p>
+          Don't have an account?{" "}
+          <Link to="/signup" className="text-primary hover:underline">
             Sign up
           </Link>
         </p>
