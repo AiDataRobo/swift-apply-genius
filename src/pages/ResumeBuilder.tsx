@@ -5,7 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Info, Pencil, Settings, Link as LinkIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { ResumeProvider, useResumeContext } from "@/contexts/ResumeContext";
@@ -94,24 +94,22 @@ const ResumeBuilderContent: React.FC = () => {
           </div>
 
           <div className="pt-4 mt-2 border-t">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="w-full flex items-center justify-center gap-2 text-xs"
-                    onClick={toggleInstructions}
-                  >
-                    <Info className="h-3.5 w-3.5" />
-                    {showInstructions ? "Hide Tips" : "Show Tips"}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {showInstructions ? "Hide resume building tips" : "Show helpful tips for building your resume"}
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="w-full flex items-center justify-center gap-2 text-xs"
+                  onClick={toggleInstructions}
+                >
+                  <Info className="h-3.5 w-3.5" />
+                  {showInstructions ? "Hide Tips" : "Show Tips"}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                {showInstructions ? "Hide resume building tips" : "Show helpful tips for building your resume"}
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
 

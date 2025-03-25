@@ -6,7 +6,7 @@ import { Check, UserCircle, Mail, Phone, MapPin, FileText } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Contact } from "@/schemas/resume";
 import { motion } from "framer-motion";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ProfileSectionProps {
   profile: Contact;
@@ -50,21 +50,19 @@ const ProfileSection = ({ profile, onChange }: ProfileSectionProps) => {
                 />
               </div>
               <div className="space-y-2">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Label htmlFor="title" className="flex items-center gap-1.5 cursor-help">
-                        <FileText className="h-3.5 w-3.5 text-primary/70" />
-                        Professional Title
-                      </Label>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="text-xs max-w-[200px]">
-                        Use a specific title that matches the job you're applying for
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Label htmlFor="title" className="flex items-center gap-1.5 cursor-help">
+                      <FileText className="h-3.5 w-3.5 text-primary/70" />
+                      Professional Title
+                    </Label>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-xs max-w-[200px]">
+                      Use a specific title that matches the job you're applying for
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
                 <Input 
                   id="title"
                   value={profile.title || ''} 
@@ -120,20 +118,18 @@ const ProfileSection = ({ profile, onChange }: ProfileSectionProps) => {
             </div>
             
             <div className="space-y-2">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Label htmlFor="summary" className="flex items-center gap-1.5 cursor-help">
-                      Professional Summary
-                    </Label>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="text-xs max-w-[250px]">
-                      Keep your summary concise (2-3 sentences) and highlight your most relevant skills and experience
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Label htmlFor="summary" className="flex items-center gap-1.5 cursor-help">
+                    Professional Summary
+                  </Label>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="text-xs max-w-[250px]">
+                    Keep your summary concise (2-3 sentences) and highlight your most relevant skills and experience
+                  </p>
+                </TooltipContent>
+              </Tooltip>
               <Textarea 
                 id="summary"
                 value={profile.summary || ''} 

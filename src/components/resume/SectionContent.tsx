@@ -17,6 +17,7 @@ import CustomSection from "@/components/resume/CustomSection";
 import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 const SectionContent: React.FC = () => {
   const { 
