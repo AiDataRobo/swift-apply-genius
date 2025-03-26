@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -44,6 +45,15 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Section backgrounds */
+    --section-bg-hero: 210 40% 98%;
+    --section-bg-why-choose-us: 0 0% 100%;
+    --section-bg-features: 210 33% 98%;
+    --section-bg-how-it-works: 220 13% 97%;
+    --section-bg-testimonials: 210 40% 99%;
+    --section-bg-pricing: 0 0% 100%;
+    --section-bg-cta: 225 25% 98%;
   }
 
   * {
@@ -100,6 +110,46 @@
   
   .appear-on-scroll.is-visible {
     @apply opacity-100 transition-opacity duration-700;
+  }
+
+  /* Section-specific styling */
+  .section-hero {
+    @apply bg-gradient-to-b from-white to-[#f8fafc];
+  }
+
+  .section-why-choose-us {
+    @apply bg-gradient-to-b from-[#f8fafc] to-white;
+  }
+
+  .section-features {
+    @apply bg-gradient-to-b from-white to-[#f5f7fa];
+  }
+
+  .section-how-it-works {
+    @apply bg-gradient-to-b from-[#f5f7fa] to-white;
+  }
+
+  .section-testimonials {
+    @apply bg-gradient-to-t from-[#f8fafc] to-white;
+  }
+
+  .section-pricing {
+    @apply bg-white;
+  }
+
+  .section-cta {
+    @apply bg-gradient-to-b from-white to-[#f0f4f8];
+  }
+
+  /* Enhanced card styling */
+  .feature-card {
+    @apply p-6 rounded-2xl transition-all duration-300 hover:shadow-lg bg-white;
+    box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+  }
+
+  .feature-card:hover {
+    box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
   }
 }
 

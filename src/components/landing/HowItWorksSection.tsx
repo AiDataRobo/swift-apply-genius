@@ -9,9 +9,10 @@ interface StepProps {
   title: string;
   description: string;
   delay: number;
+  bgClass?: string;
 }
 
-const Step = ({ number, icon, title, description, delay }: StepProps) => {
+const Step = ({ number, icon, title, description, delay, bgClass = "bg-white" }: StepProps) => {
   return (
     <motion.div 
       className="relative"
@@ -20,7 +21,7 @@ const Step = ({ number, icon, title, description, delay }: StepProps) => {
       transition={{ duration: 0.5, delay: delay }}
       viewport={{ once: true }}
     >
-      <div className="bg-white rounded-2xl p-6 shadow-md border border-gray-100 h-full">
+      <div className={`${bgClass} rounded-2xl p-6 shadow-md border border-gray-100 h-full`}>
         <div className="absolute -top-3 -left-3 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">
           {number}
         </div>
@@ -45,21 +46,24 @@ const HowItWorksSection = () => {
       icon: <FileText className="h-6 w-6" />,
       title: "Enter Details & Choose Template",
       description: "Add your information and select from our professional templates",
-      delay: 0.1
+      delay: 0.1,
+      bgClass: "bg-gradient-to-br from-white to-blue-50/40"
     },
     {
       number: "2",
       icon: <Sparkles className="h-6 w-6" />,
       title: "AI Generates Your Resume",
       description: "Our AI creates a tailored, ATS-optimized resume",
-      delay: 0.2
+      delay: 0.2,
+      bgClass: "bg-gradient-to-br from-white to-purple-50/40"
     },
     {
       number: "3",
       icon: <Download className="h-6 w-6" />,
       title: "Customize & Download",
       description: "Make final adjustments and download your resume in one click",
-      delay: 0.3
+      delay: 0.3,
+      bgClass: "bg-gradient-to-br from-white to-green-50/40"
     }
   ];
 
@@ -69,33 +73,37 @@ const HowItWorksSection = () => {
       icon: <Upload className="h-6 w-6" />,
       title: "Upload Your Resume",
       description: "Share your current resume for a free expert review",
-      delay: 0.3
+      delay: 0.3,
+      bgClass: "bg-gradient-to-br from-white to-amber-50/40"
     },
     {
       number: "2",
       icon: <CheckSquare className="h-6 w-6" />,
       title: "Get Improvement Suggestions",
       description: "Receive personalized feedback from our experts",
-      delay: 0.4
+      delay: 0.4,
+      bgClass: "bg-gradient-to-br from-white to-red-50/40"
     },
     {
       number: "3",
       icon: <MessageSquare className="h-6 w-6" />,
       title: "Work With a Certified Writer",
       description: "Collaborate with a resume professional to perfect your document",
-      delay: 0.5
+      delay: 0.5,
+      bgClass: "bg-gradient-to-br from-white to-teal-50/40"
     },
     {
       number: "4",
       icon: <FileText className="h-6 w-6" />,
       title: "Receive Your Polished Resume",
       description: "Get your job-winning resume ready for applications",
-      delay: 0.6
+      delay: 0.6,
+      bgClass: "bg-gradient-to-br from-white to-indigo-50/40"
     }
   ];
 
   return (
-    <section id="how-it-works" className="py-24 bg-gradient-to-b from-slate-50/50 to-white relative overflow-hidden">
+    <section id="how-it-works" className="py-24 relative">
       <div className="container max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <motion.div 
@@ -147,6 +155,7 @@ const HowItWorksSection = () => {
                   title={step.title}
                   description={step.description}
                   delay={step.delay}
+                  bgClass={step.bgClass}
                 />
               ))}
             </div>
@@ -172,6 +181,7 @@ const HowItWorksSection = () => {
                   title={step.title}
                   description={step.description}
                   delay={step.delay}
+                  bgClass={step.bgClass}
                 />
               ))}
             </div>

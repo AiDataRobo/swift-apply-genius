@@ -8,11 +8,12 @@ interface FeatureCardProps {
   title: string;
   description: string;
   delay: number;
+  gradientClass: string;
 }
 
-const FeatureCard = ({ icon, title, description, delay }: FeatureCardProps) => (
+const FeatureCard = ({ icon, title, description, delay, gradientClass }: FeatureCardProps) => (
   <Card 
-    className="feature-card border-0 shadow-md animate-fade-in-up hover:shadow-xl transition-all duration-300" 
+    className={`feature-card border-0 shadow-md animate-fade-in-up hover:shadow-xl transition-all duration-300 ${gradientClass}`} 
     style={{ animationDelay: `${delay}s`, animationFillMode: 'backwards' }}
   >
     <CardContent className="p-6">
@@ -31,37 +32,43 @@ const FeaturesSection = () => {
       icon: <Sparkles className="h-6 w-6" />,
       title: "AI-Powered Content",
       description: "Our AI generates tailored content highlighting your skills and experience in the most impactful way.",
-      delay: 0.1
+      delay: 0.1,
+      gradientClass: "bg-gradient-to-br from-white to-blue-50/50"
     },
     {
       icon: <FileCode className="h-6 w-6" />,
       title: "ATS Optimization",
       description: "Beat applicant tracking systems with perfectly optimized keywords tailored to each job description.",
-      delay: 0.2
+      delay: 0.2,
+      gradientClass: "bg-gradient-to-br from-white to-indigo-50/50"
     },
     {
       icon: <Star className="h-6 w-6" />,
       title: "Premium Templates",
       description: "Choose from dozens of professionally designed templates that stand out to recruiters.",
-      delay: 0.3
+      delay: 0.3,
+      gradientClass: "bg-gradient-to-br from-white to-amber-50/50"
     },
     {
       icon: <Settings className="h-6 w-6" />,
       title: "Real-Time Editing",
       description: "Make changes instantly and see how they'll look on your resume with our live preview editor.",
-      delay: 0.4
+      delay: 0.4,
+      gradientClass: "bg-gradient-to-br from-white to-gray-50/50"
     },
     {
       icon: <Clock className="h-6 w-6" />,
       title: "Time-Saving",
       description: "Create a professional resume in minutes instead of hours with our intuitive interface.",
-      delay: 0.5
+      delay: 0.5,
+      gradientClass: "bg-gradient-to-br from-white to-green-50/50"
     },
     {
       icon: <Download className="h-6 w-6" />,
       title: "Multiple Formats",
       description: "Download your resume in PDF, DOCX, or TXT formats to suit any application requirement.",
-      delay: 0.6
+      delay: 0.6,
+      gradientClass: "bg-gradient-to-br from-white to-purple-50/50"
     }
   ];
 
@@ -92,7 +99,7 @@ const FeaturesSection = () => {
   }, []);
 
   return (
-    <section id="features" className="py-24 relative bg-slate-50/50" ref={sectionRef}>
+    <section id="features" className="py-24 relative" ref={sectionRef}>
       <div className="container section-container relative z-10">
         <div className="text-center mb-16">
           <div className="inline-flex items-center px-4 py-2 bg-primary/5 rounded-full mb-4">
@@ -112,6 +119,7 @@ const FeaturesSection = () => {
               title={feature.title}
               description={feature.description}
               delay={feature.delay}
+              gradientClass={feature.gradientClass}
             />
           ))}
         </div>
