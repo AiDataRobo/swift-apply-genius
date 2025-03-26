@@ -9,6 +9,8 @@ import TestimonialsSection from '@/components/landing/TestimonialsSection';
 import PricingSection from '@/components/landing/PricingSection';
 import CTASection from '@/components/landing/CTASection';
 import Footer from '@/components/landing/Footer';
+import BookConsultationSection from '@/components/landing/BookConsultationSection';
+import FloatingBookButton from '@/components/booking/FloatingBookButton';
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 
@@ -78,6 +80,9 @@ const Index = () => {
         <section className="section-hero">
           <HeroSection />
         </section>
+        <section className="section-book-consultation">
+          <BookConsultationSection />
+        </section>
         <section className="section-why-choose-us">
           <WhyChooseUsSection />
         </section>
@@ -98,6 +103,7 @@ const Index = () => {
         </section>
       </main>
       <Footer />
+      <FloatingBookButton />
     </div>
   );
 };
