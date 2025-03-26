@@ -16,7 +16,17 @@ const HeroTrustBadge: React.FC = () => {
         }
       }}
     >
-      <div className="text-sm text-muted-foreground mb-4">Trusted by 10,000+ Job Seekers & Professionals</div>
+      <div className="text-sm text-muted-foreground mb-4 flex items-center">
+        <motion.span
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+          className="inline-flex items-center px-3 py-1 mr-3 rounded-full bg-primary/10 text-primary text-xs font-semibold"
+        >
+          500,000+ Resumes Reviewed
+        </motion.span>
+        <span>Trusted by Job Seekers & Professionals</span>
+      </div>
       <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6">
         {["ATS-Optimized", "Recruiter-Approved", "Interview-Winning"].map((feature, index) => (
           <HeroFeatureItem key={index} text={feature} />

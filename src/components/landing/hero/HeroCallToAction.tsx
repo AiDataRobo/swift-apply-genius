@@ -1,53 +1,53 @@
 
-import React from 'react';
-import { motion } from "framer-motion";
-import { ArrowRight, FileText } from 'lucide-react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
+import { ArrowRight, FileText, CalendarDays, Palette } from "lucide-react";
 import { Link } from "react-router-dom";
+import CalBookingModal from "@/components/booking/CalBookingModal";
 
-const HeroCallToAction: React.FC = () => {
+const HeroCallToAction = () => {
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+
+  const openBookingModal = () => setIsBookingModalOpen(true);
+  const closeBookingModal = () => setIsBookingModalOpen(false);
+
   return (
-    <motion.div 
-      className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        visible: { 
-          opacity: 1, 
-          y: 0,
-          transition: { duration: 0.6 }
-        }
-      }}
-    >
-      <motion.div
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <Button className="glass-button text-base py-6 px-8 rounded-xl w-full sm:w-auto group relative overflow-hidden" asChild>
-          <Link to="/resume-builder">
-            <span className="relative z-10 flex items-center">
-              Build My Resume
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-            </span>
-            <motion.span 
-              className="absolute inset-0 bg-primary/20"
-              initial={{ x: '-100%' }}
-              whileHover={{ x: '100%' }}
-              transition={{ duration: 1 }}
-            />
-          </Link>
-        </Button>
-      </motion.div>
-      
-      <motion.div
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <Button variant="outline" className="text-base py-6 px-8 rounded-xl w-full sm:w-auto">
+    <div className="flex flex-col sm:flex-row gap-4 mt-8">
+      <Link to="/resume-builder">
+        <Button size="lg" className="glass-button w-full sm:w-auto">
           <FileText className="mr-2 h-5 w-5" />
-          Get a Free Resume Review
+          Create Your Resume
+          <ArrowRight className="ml-2 h-5 w-5" />
         </Button>
-      </motion.div>
-    </motion.div>
+      </Link>
+      
+      <Link to="/templates">
+        <Button 
+          variant="outline" 
+          size="lg"
+          className="border-primary/20 hover:border-primary/40 w-full sm:w-auto"
+        >
+          <Palette className="mr-2 h-5 w-5 text-primary" />
+          Browse Templates
+        </Button>
+      </Link>
+      
+      <Button 
+        variant="outline" 
+        size="lg"
+        className="group border-primary/20 hover:border-primary/40 w-full sm:w-auto"
+        onClick={openBookingModal}
+      >
+        <CalendarDays className="mr-2 h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
+        Book a Mentorship Session
+      </Button>
+
+      <CalBookingModal isOpen={isBookingModalOpen} onClose={closeBookingModal} />
+      
+      <p className="text-xs text-muted-foreground mt-2 sm:hidden">
+        Get personalized career guidance from our expert mentors!
+      </p>
+    </div>
   );
 };
 

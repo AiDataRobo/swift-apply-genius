@@ -1,119 +1,85 @@
-
-import React, { useEffect, useRef } from 'react';
-import { FileText, Check, Star, Clock, Sparkles, FileCode, Settings, Download } from 'lucide-react';
-import { Card, CardContent } from "@/components/ui/card";
-
-interface FeatureCardProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  delay: number;
-}
-
-const FeatureCard = ({ icon, title, description, delay }: FeatureCardProps) => (
-  <Card 
-    className="feature-card border-0 shadow-md animate-fade-in-up hover:shadow-xl transition-all duration-300" 
-    style={{ animationDelay: `${delay}s`, animationFillMode: 'backwards' }}
-  >
-    <CardContent className="p-6">
-      <div className="icon-container bg-primary/10 text-primary">
-        {icon}
-      </div>
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-muted-foreground">{description}</p>
-    </CardContent>
-  </Card>
-);
+import React from 'react';
+import { RocketIcon, Code, GraduationCap, LayoutDashboard } from "lucide-react";
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
 
 const FeaturesSection = () => {
-  const features = [
-    {
-      icon: <Sparkles className="h-6 w-6" />,
-      title: "AI-Powered Content",
-      description: "Our AI generates tailored content highlighting your skills and experience in the most impactful way.",
-      delay: 0.1
-    },
-    {
-      icon: <FileCode className="h-6 w-6" />,
-      title: "ATS Optimization",
-      description: "Beat applicant tracking systems with perfectly optimized keywords tailored to each job description.",
-      delay: 0.2
-    },
-    {
-      icon: <Star className="h-6 w-6" />,
-      title: "Premium Templates",
-      description: "Choose from dozens of professionally designed templates that stand out to recruiters.",
-      delay: 0.3
-    },
-    {
-      icon: <Settings className="h-6 w-6" />,
-      title: "Real-Time Editing",
-      description: "Make changes instantly and see how they'll look on your resume with our live preview editor.",
-      delay: 0.4
-    },
-    {
-      icon: <Clock className="h-6 w-6" />,
-      title: "Time-Saving",
-      description: "Create a professional resume in minutes instead of hours with our intuitive interface.",
-      delay: 0.5
-    },
-    {
-      icon: <Download className="h-6 w-6" />,
-      title: "Multiple Formats",
-      description: "Download your resume in PDF, DOCX, or TXT formats to suit any application requirement.",
-      delay: 0.6
-    }
-  ];
-
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    const elements = document.querySelectorAll('.appear-on-scroll');
-    elements.forEach((el) => {
-      observer.observe(el);
-    });
-
-    return () => {
-      elements.forEach((el) => {
-        observer.unobserve(el);
-      });
-    };
-  }, []);
-
   return (
-    <section id="features" className="py-24 relative bg-slate-50/50" ref={sectionRef}>
-      <div className="container section-container relative z-10">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 bg-primary/5 rounded-full mb-4">
-            <span className="text-xs font-medium text-primary">POWERFUL FEATURES</span>
+    <section className="py-24 bg-muted/30">
+      <div className="container px-4 md:px-6">
+        <div className="flex flex-col items-center justify-center space-y-4 text-center">
+          <div className="space-y-2">
+            <div className="inline-block rounded-lg bg-muted px-3 py-1 text-sm">Features</div>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Make Your Resume Stand Out</h2>
+            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
+              Our platform provides all the tools you need to create a professional resume in minutes.
+            </p>
           </div>
-          <h2 className="section-heading">Everything You Need to Create the Perfect Resume</h2>
-          <p className="section-subheading mx-auto">
-            Leverage AI technology to create impressive, job-winning documents in minutes
-          </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {features.map((feature, index) => (
-            <FeatureCard 
-              key={index}
-              icon={feature.icon}
-              title={feature.title}
-              description={feature.description}
-              delay={feature.delay}
-            />
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-16">
+          <div className="flex flex-col items-center space-y-2">
+            <RocketIcon className="h-10 w-10 text-primary" />
+            <h3 className="text-lg font-semibold">Easy to Use</h3>
+            <p className="text-muted-foreground text-sm text-center">
+              Intuitive interface for quick resume creation.
+            </p>
+          </div>
+          <div className="flex flex-col items-center space-y-2">
+            <Code className="h-10 w-10 text-primary" />
+            <h3 className="text-lg font-semibold">Customizable</h3>
+            <p className="text-muted-foreground text-sm text-center">
+              Tailor your resume with various templates and sections.
+            </p>
+          </div>
+          <div className="flex flex-col items-center space-y-2">
+            <GraduationCap className="h-10 w-10 text-primary" />
+            <h3 className="text-lg font-semibold">Professional</h3>
+            <p className="text-muted-foreground text-sm text-center">
+              Create a resume that highlights your skills and experience.
+            </p>
+          </div>
+          <div className="flex flex-col items-center space-y-2">
+            <LayoutDashboard className="h-10 w-10 text-primary" />
+            <h3 className="text-lg font-semibold">ATS Optimized</h3>
+            <p className="text-muted-foreground text-sm text-center">
+              Ensure your resume gets noticed by applicant tracking systems.
+            </p>
+          </div>
+        </div>
+        
+        <div className="mt-16 text-center">
+          <h3 className="text-2xl font-bold mb-6">Choose from Multiple Professional Templates</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-10">
+            <div className="relative aspect-[3/4] bg-card rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all">
+              <img src="/lovable-uploads/632f7133-bba3-48c3-abfb-99add820f62b.png" alt="Modern Template" className="w-full h-full object-cover object-top" />
+              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white">
+                <h4 className="font-medium">Modern Professional</h4>
+                <p className="text-sm text-white/80">Clean and professional layout</p>
+              </div>
+            </div>
+            <div className="relative aspect-[3/4] bg-card rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all">
+              <img src="/lovable-uploads/632f7133-bba3-48c3-abfb-99add820f62b.png" alt="Creative Template" className="w-full h-full object-cover object-top" />
+              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white">
+                <h4 className="font-medium">Creative Portfolio</h4>
+                <p className="text-sm text-white/80">Stand out with a unique design</p>
+              </div>
+            </div>
+            <div className="relative aspect-[3/4] bg-card rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all">
+              <img src="/lovable-uploads/632f7133-bba3-48c3-abfb-99add820f62b.png" alt="Minimal Template" className="w-full h-full object-cover object-top" />
+              <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white">
+                <h4 className="font-medium">ATS Optimized</h4>
+                <p className="text-sm text-white/80">Designed to pass screening systems</p>
+              </div>
+            </div>
+          </div>
+          <Link to="/templates">
+            <Button className="gap-2 group">
+              Browse All Templates
+              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

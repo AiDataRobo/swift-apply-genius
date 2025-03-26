@@ -9,6 +9,8 @@ import TestimonialsSection from '@/components/landing/TestimonialsSection';
 import PricingSection from '@/components/landing/PricingSection';
 import CTASection from '@/components/landing/CTASection';
 import Footer from '@/components/landing/Footer';
+import MentorshipSection from '@/components/landing/MentorshipSection';
+import FloatingBookButton from '@/components/booking/FloatingBookButton';
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
 
@@ -75,15 +77,33 @@ const Index = () => {
     <div className="min-h-screen flex flex-col overflow-x-hidden">
       <NavBar />
       <main>
-        <HeroSection />
-        <WhyChooseUsSection />
-        <FeaturesSection />
-        <HowItWorksSection />
-        <TestimonialsSection />
-        <PricingSection />
-        <CTASection />
+        <section className="section-hero">
+          <HeroSection />
+        </section>
+        <section className="section-mentorship">
+          <MentorshipSection />
+        </section>
+        <section className="section-why-choose-us">
+          <WhyChooseUsSection />
+        </section>
+        <section className="section-features">
+          <FeaturesSection />
+        </section>
+        <section className="section-how-it-works">
+          <HowItWorksSection />
+        </section>
+        <section className="section-testimonials">
+          <TestimonialsSection />
+        </section>
+        <section className="section-pricing">
+          <PricingSection />
+        </section>
+        <section className="section-cta">
+          <CTASection />
+        </section>
       </main>
       <Footer />
+      <FloatingBookButton />
     </div>
   );
 };

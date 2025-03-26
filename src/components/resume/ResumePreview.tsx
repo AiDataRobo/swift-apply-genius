@@ -1,9 +1,10 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
 import { useResumeContext } from "@/contexts/ResumeContext";
 import ResumeTemplate from "@/components/resume/templates";
 import { Button } from "@/components/ui/button";
-import { FileDown } from "lucide-react";
+import { FileDown, Palette } from "lucide-react";
 import { motion } from "framer-motion";
 
 const ResumePreview: React.FC = () => {
@@ -20,16 +21,30 @@ const ResumePreview: React.FC = () => {
   return (
     <div className="h-full overflow-auto bg-muted p-6 flex flex-col items-center">
       <div className="flex justify-between w-full mb-3">
-        <Button
-          variant="outline"
-          size="sm"
-          className="text-xs flex items-center gap-1"
-          onClick={handleDownloadResume}
-          disabled={isExporting}
-        >
-          <FileDown className="h-3.5 w-3.5" />
-          {isExporting ? "Generating..." : "Download PDF"}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-xs flex items-center gap-1"
+            onClick={handleDownloadResume}
+            disabled={isExporting}
+          >
+            <FileDown className="h-3.5 w-3.5" />
+            {isExporting ? "Generating..." : "Download PDF"}
+          </Button>
+          
+          <Link to="/templates">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-xs flex items-center gap-1"
+            >
+              <Palette className="h-3.5 w-3.5" />
+              Change Template
+            </Button>
+          </Link>
+        </div>
+        
         <div className="text-xs text-muted-foreground flex items-center">
           Preview: A4 size
         </div>

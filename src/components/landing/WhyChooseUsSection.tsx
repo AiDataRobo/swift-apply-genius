@@ -41,7 +41,7 @@ const WhyChooseUsSection = () => {
   };
 
   return (
-    <section id="why-choose-us" className="py-24 relative bg-gradient-to-b from-white to-slate-50/80">
+    <section id="why-choose-us" className="py-24 relative">
       <div className="container max-w-7xl mx-auto px-6">
         <motion.div 
           className="text-center mb-16"
@@ -73,7 +73,7 @@ const WhyChooseUsSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* AI Resume Generator */}
           <motion.div 
-            className="bg-white p-8 md:p-10 rounded-3xl shadow-lg border border-slate-100 relative overflow-hidden"
+            className="bg-gradient-to-br from-white to-slate-50 p-8 md:p-10 rounded-3xl shadow-lg border border-slate-100 relative overflow-hidden"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -124,7 +124,7 @@ const WhyChooseUsSection = () => {
           
           {/* Professional Resume Writing */}
           <motion.div 
-            className="bg-white p-8 md:p-10 rounded-3xl shadow-lg border border-slate-100 relative overflow-hidden"
+            className="bg-gradient-to-br from-white to-blue-50 p-8 md:p-10 rounded-3xl shadow-lg border border-slate-100 relative overflow-hidden"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}

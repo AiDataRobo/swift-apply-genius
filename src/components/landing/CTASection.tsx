@@ -42,7 +42,7 @@ const CTASection = () => {
   return (
     <section className="py-24 relative overflow-hidden">
       <motion.div 
-        className="absolute inset-0 bg-gradient-to-b from-background to-primary/5 pointer-events-none"
+        className="absolute inset-0 bg-gradient-to-b from-white to-slate-50/80 pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
@@ -64,7 +64,7 @@ const CTASection = () => {
       
       <div className="container max-w-5xl mx-auto px-6 relative z-10">
         <motion.div 
-          className="glass-card bg-white p-12 md:p-16 rounded-3xl relative overflow-hidden shadow-xl border border-slate-100"
+          className="glass-card bg-gradient-to-br from-white to-blue-50/50 p-12 md:p-16 rounded-3xl relative overflow-hidden shadow-xl border border-slate-100"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
@@ -117,19 +117,19 @@ const CTASection = () => {
               className="flex flex-wrap justify-center gap-4 mb-10"
               variants={itemVariants}
             >
-              <div className="flex items-center text-sm font-medium bg-muted/50 rounded-full pl-2 pr-4 py-1.5">
+              <div className="flex items-center text-sm font-medium bg-white/80 rounded-full pl-2 pr-4 py-1.5">
                 <div className="bg-primary/20 rounded-full p-1 mr-2">
                   <Star className="h-3 w-3 text-amber-500 fill-amber-500" />
                 </div>
                 <span>4.9/5 Rating</span>
               </div>
-              <div className="flex items-center text-sm font-medium bg-muted/50 rounded-full pl-2 pr-4 py-1.5">
+              <div className="flex items-center text-sm font-medium bg-white/80 rounded-full pl-2 pr-4 py-1.5">
                 <div className="bg-primary/20 rounded-full p-1 mr-2">
                   <Shield className="h-3 w-3 text-green-500" />
                 </div>
                 <span>100% Satisfaction Guarantee</span>
               </div>
-              <div className="flex items-center text-sm font-medium bg-muted/50 rounded-full pl-2 pr-4 py-1.5">
+              <div className="flex items-center text-sm font-medium bg-white/80 rounded-full pl-2 pr-4 py-1.5">
                 <div className="bg-primary/20 rounded-full p-1 mr-2">
                   <FileText className="h-3 w-3 text-blue-500" />
                 </div>
@@ -162,7 +162,7 @@ const CTASection = () => {
                 whileHover="hover"
                 whileTap="tap"
               >
-                <Button variant="outline" className="py-6 px-8 text-lg rounded-xl w-full sm:w-auto hover:bg-secondary/50 transition-all duration-300">
+                <Button variant="outline" className="py-6 px-8 text-lg rounded-xl w-full sm:w-auto hover:bg-white/80 transition-all duration-300">
                   <FileText className="mr-2 h-5 w-5" />
                   Get a Free Resume Review
                 </Button>
