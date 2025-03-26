@@ -1,160 +1,154 @@
-
 import React, { useState, useEffect } from 'react';
-import { Button } from "@/components/ui/button";
-import { FileText, Menu, X, FileCheck, Star, DollarSign, Users, MessageSquare } from "lucide-react";
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { cn } from "@/lib/utils";
+import { ModeToggle } from "@/components/ModeToggle";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LogOut } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 
 const NavBar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const { user, logout } = useAuth();
+  const location = useLocation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      const offset = window.scrollY;
-      if (offset > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled 
-          ? 'py-3 bg-white/90 backdrop-blur-md shadow-sm' 
-          : 'py-5 bg-transparent'
-      }`}
-    >
-      <div className="container max-w-7xl flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Link to="/" className="flex items-center gap-2">
-            <FileText className="h-6 w-6 text-primary" />
-            <span className="font-display font-bold text-xl">SwiftApply</span>
-          </Link>
-        </div>
+    <nav className={`${isScrolled ? 'bg-background/80 backdrop-blur-md shadow-sm' : 'bg-transparent'} fixed top-0 left-0 right-0 z-50 transition-all duration-300`}>
+      <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+        <Link to="/" className="flex items-center font-semibold">
+          ResumeBuilder
+        </Link>
         
-        <nav className="hidden md:flex items-center gap-8">
-          <Link to="/resume-templates" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
-            <FileText className="h-4 w-4" />
-            <span>Resume Templates</span>
+        <div className="hidden md:flex items-center gap-6">
+          <Link to="/" className="text-sm font-medium transition-colors hover:text-primary">
+            Home
           </Link>
-          <Link to="/cover-letter-templates" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
-            <FileCheck className="h-4 w-4" />
-            <span>Cover Letter</span>
+          <Link to="/templates" className="text-sm font-medium transition-colors hover:text-primary">
+            Templates
           </Link>
-          <Link to="#testimonials" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
-            <Star className="h-4 w-4" />
-            <span>Testimonials</span>
-          </Link>
-          <Link to="#pricing" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
-            <DollarSign className="h-4 w-4" />
-            <span>Pricing</span>
-          </Link>
-          <Link to="/about" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
-            <Users className="h-4 w-4" />
-            <span>About</span>
-          </Link>
-          <Link to="/contact" className="text-sm font-medium text-foreground hover:text-primary transition-colors flex items-center gap-1">
-            <MessageSquare className="h-4 w-4" />
-            <span>Contact</span>
-          </Link>
-        </nav>
-        
-        <div className="flex items-center gap-4">
-          <Link to="/login" className="hidden md:inline-flex">
-            <Button variant="ghost">
-              Log in
-            </Button>
-          </Link>
-          <Link to="/signup">
-            <Button className="glass-button">
-              Get Started
-            </Button>
-          </Link>
-          
-          <button 
-            className="md:hidden"
-            onClick={toggleMobileMenu}
-          >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-      </div>
-      
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t mt-3 py-4">
-          <div className="container space-y-3">
-            <Link 
-              to="/resume-templates" 
-              className="flex items-center gap-2 py-2 text-foreground hover:text-primary"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <FileText className="h-4 w-4" />
-              <span>Resume Templates</span>
-            </Link>
-            <Link 
-              to="/cover-letter-templates" 
-              className="flex items-center gap-2 py-2 text-foreground hover:text-primary"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <FileCheck className="h-4 w-4" />
-              <span>Cover Letter</span>
-            </Link>
-            <Link 
-              to="#testimonials" 
-              className="flex items-center gap-2 py-2 text-foreground hover:text-primary"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <Star className="h-4 w-4" />
-              <span>Testimonials</span>
-            </Link>
-            <Link 
-              to="#pricing" 
-              className="flex items-center gap-2 py-2 text-foreground hover:text-primary"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <DollarSign className="h-4 w-4" />
-              <span>Pricing</span>
-            </Link>
-            <Link 
-              to="/about" 
-              className="flex items-center gap-2 py-2 text-foreground hover:text-primary"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <Users className="h-4 w-4" />
-              <span>About</span>
-            </Link>
-            <Link 
-              to="/contact" 
-              className="flex items-center gap-2 py-2 text-foreground hover:text-primary"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              <MessageSquare className="h-4 w-4" />
-              <span>Contact</span>
-            </Link>
-            <div className="pt-3 border-t">
-              <Link 
-                to="/login" 
-                className="block py-2 text-foreground hover:text-primary"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Log in
+          {user ? (
+            <>
+              <Link to="/dashboard" className="text-sm font-medium transition-colors hover:text-primary">
+                Dashboard
               </Link>
-            </div>
-          </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 w-8 p-0">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user.photoURL || ""} alt={user.displayName || "User Avatar"} />
+                      <AvatarFallback>{user.displayName?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Link to="/profile" className="w-full h-full block">
+                      Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                    Logout
+                    <LogOut className="ml-auto h-4 w-4" />
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="text-sm font-medium transition-colors hover:text-primary">
+                Login
+              </Link>
+              <Link to="/register">
+                <Button size="sm">Sign Up</Button>
+              </Link>
+            </>
+          )}
+          <ModeToggle />
         </div>
-      )}
-    </header>
+        
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="sm" className="md:hidden" onClick={toggleMobileMenu}>
+              <Menu className="h-4 w-4" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="sm:w-full md:w-3/4 lg:w-1/2">
+            <SheetHeader>
+              <SheetTitle>Menu</SheetTitle>
+              <SheetDescription>
+                Explore our services and options.
+              </SheetDescription>
+            </SheetHeader>
+            <div className="grid gap-4 py-4">
+              <Link to="/" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+                Home
+              </Link>
+              <Link to="/templates" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+                Templates
+              </Link>
+              {user ? (
+                <>
+                  <Link to="/dashboard" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+                    Dashboard
+                  </Link>
+                  <Link to="/profile" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+                    Profile
+                  </Link>
+                  <Button variant="destructive" size="sm" className="w-full justify-start" onClick={handleLogout}>
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+                    Login
+                  </Link>
+                  <Link to="/register" className="block py-2">
+                    <Button size="sm" className="w-full justify-center" onClick={() => setIsMobileMenuOpen(false)}>Sign Up</Button>
+                  </Link>
+                </>
+              )}
+              <ModeToggle />
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </nav>
   );
 };
 

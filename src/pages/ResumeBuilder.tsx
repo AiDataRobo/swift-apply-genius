@@ -1,5 +1,6 @@
 
-import React from "react";
+import React, { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Info, Pencil, Settings, Link as LinkIcon } from "lucide-react";
@@ -36,6 +37,25 @@ const ResumeBuilderContent: React.FC = () => {
     isSaving,
     isExporting
   } = useResumeContext();
+  
+  const [searchParams] = useSearchParams();
+  
+  // Set template from URL parameter if provided
+  useEffect(() => {
+    const templateParam = searchParams.get('template');
+    if (templateParam) {
+      setTemplateStyle({
+        ...templateStyle,
+        template: templateParam
+      });
+      
+      // Show a toast notification to confirm template selection
+      toast.success(`Template selected: ${templateParam.charAt(0).toUpperCase() + templateParam.slice(1)}`);
+      
+      // Automatically switch to the Design tab to show the template
+      setActiveTab('customize');
+    }
+  }, [searchParams, setTemplateStyle, templateStyle, setActiveTab]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

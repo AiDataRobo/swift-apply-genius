@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowRight, FileText, CalendarDays } from "lucide-react";
+import { ArrowRight, FileText, CalendarDays, Palette } from "lucide-react";
 import { Link } from "react-router-dom";
 import CalBookingModal from "@/components/booking/CalBookingModal";
 
@@ -18,6 +18,17 @@ const HeroCallToAction = () => {
           <FileText className="mr-2 h-5 w-5" />
           Create Your Resume
           <ArrowRight className="ml-2 h-5 w-5" />
+        </Button>
+      </Link>
+      
+      <Link to="/templates">
+        <Button 
+          variant="outline" 
+          size="lg"
+          className="border-primary/20 hover:border-primary/40 w-full sm:w-auto"
+        >
+          <Palette className="mr-2 h-5 w-5 text-primary" />
+          Browse Templates
         </Button>
       </Link>
       
