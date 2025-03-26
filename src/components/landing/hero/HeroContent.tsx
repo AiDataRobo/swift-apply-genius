@@ -35,7 +35,7 @@ const HeroContent: React.FC = () => {
         variants={popIn}
       >
         <span className="text-xs font-medium text-primary mr-2">NEW</span>
-        <span className="text-xs font-medium">Expert Resume Writing Services Now Available!</span>
+        <span className="text-xs font-medium">Free Resume Review Service Now Available!</span>
       </motion.div>
       
       <motion.h1 
@@ -49,7 +49,7 @@ const HeroContent: React.FC = () => {
         className="section-subheading mx-auto lg:mx-0 mb-8"
         variants={fadeInUp}
       >
-        Create an AI-powered resume instantly or let our experts craft a job-winning resume tailored for you.
+        Create an AI-powered resume instantly, or let our experts craft a job-winning resume tailored just for you.
       </motion.p>
       
       <HeroCallToAction />

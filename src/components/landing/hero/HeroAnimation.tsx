@@ -15,8 +15,20 @@ const HeroAnimation: React.FC = () => {
           transition: { duration: 0.6 }
         }
       }}
-      className="order-1 lg:order-2 flex justify-center items-center"
+      className="order-1 lg:order-2 flex justify-center items-center relative"
     >
+      <motion.div 
+        className="absolute -z-10 w-72 h-72 rounded-full bg-primary/10 blur-3xl"
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.4, 0.6, 0.4]
+        }}
+        transition={{ 
+          duration: 8, 
+          repeat: Infinity,
+          repeatType: "reverse" 
+        }}
+      />
       <div className="w-full max-w-md">
         <Lottie 
           animationData={resumeReviewAnimation} 
