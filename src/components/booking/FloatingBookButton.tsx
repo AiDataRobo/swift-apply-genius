@@ -34,8 +34,8 @@ const FloatingBookButton = () => {
       >
         <Button 
           onClick={openBookingModal}
-          className="glass-button rounded-full shadow-lg h-14 w-14 p-0 hover:scale-105 transition-transform"
-          aria-label="Schedule a consultation"
+          className="glass-button bg-purple-600 hover:bg-purple-700 rounded-full shadow-lg h-14 w-14 p-0 hover:scale-105 transition-transform"
+          aria-label="Schedule a mentorship session"
         >
           <CalendarClock className="h-6 w-6" />
         </Button>

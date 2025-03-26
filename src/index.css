@@ -116,7 +116,7 @@
     @apply bg-gradient-to-b from-white to-[#f8fafc];
   }
 
-  .section-book-consultation {
+  .section-mentorship {
     @apply bg-gradient-to-b from-[#f8fafc] to-white;
   }
 

@@ -28,13 +28,13 @@ const HeroCallToAction = () => {
         onClick={openBookingModal}
       >
         <CalendarDays className="mr-2 h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
-        Book a Free Consultation
+        Book a Mentorship Session
       </Button>
 
       <CalBookingModal isOpen={isBookingModalOpen} onClose={closeBookingModal} />
       
       <p className="text-xs text-muted-foreground mt-2 sm:hidden">
-        Talk to a resume expert & get personalized career advice!
+        Get personalized career guidance from our expert mentors!
       </p>
     </div>
   );

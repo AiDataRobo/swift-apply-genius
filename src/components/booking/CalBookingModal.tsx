@@ -33,7 +33,7 @@ const CalBookingModal = ({ isOpen, onClose, calLink = "swiftapply/consultation" 
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <CalendarIcon className="h-5 w-5 text-primary" />
-            <span>Schedule a Free Consultation</span>
+            <span>Schedule a Mentorship Session</span>
           </DialogTitle>
         </DialogHeader>
         <div className="mt-4 h-[600px]">
