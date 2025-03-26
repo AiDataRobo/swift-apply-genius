@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { CalendarIcon } from "lucide-react";
 import Cal, { getCalApi } from "@calcom/embed-react";
@@ -15,7 +15,8 @@ const CalBookingModal = ({ isOpen, onClose, calLink = "swiftapply/consultation" 
   useEffect(() => {
     (async function () {
       const cal = await getCalApi();
-      cal.ns["swiftapply"].on({
+      // Use the correct event listener pattern according to Cal.com API
+      cal.on({
         action: "bookingSuccessful",
         callback: () => {
           console.log("Booking was successful");
@@ -42,8 +43,8 @@ const CalBookingModal = ({ isOpen, onClose, calLink = "swiftapply/consultation" 
             style={{ width: "100%", height: "100%", overflow: "hidden" }}
             config={{
               layout: "month_view",
-              hideEventTypeDetails: false,
-              hideBranding: true,
+              hideEventTypeDetails: "false",
+              hideBranding: "true",
               theme: "light",
             }}
           />
