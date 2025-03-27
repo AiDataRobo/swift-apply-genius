@@ -1,161 +1,172 @@
 
-import React, { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Info, Pencil, Settings, Link as LinkIcon } from "lucide-react";
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
-import { ResumeProvider, useResumeContext } from "@/contexts/ResumeContext";
-import ResumeHeader from "@/components/resume/ResumeHeader";
-import ContentSidebar from "@/components/resume/ContentSidebar";
-import DesignSidebar from "@/components/resume/DesignSidebar";
-import ExportSidebar from "@/components/resume/ExportSidebar";
-import SectionContent from "@/components/resume/SectionContent";
-import ResumePreview from "@/components/resume/ResumePreview";
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ContentSidebar from '@/components/resume/ContentSidebar';
+import DesignSidebar from '@/components/resume/DesignSidebar';
+import ExportSidebar from '@/components/resume/ExportSidebar';
+import ResumePreview from '@/components/resume/ResumePreview';
+import ResumeHeader from '@/components/resume/ResumeHeader';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { useResumeContext } from '@/contexts/ResumeContext';
+import { useNavigate } from 'react-router-dom';
 
-const ResumeBuilderContent: React.FC = () => {
-  const { 
-    activeTab, 
-    setActiveTab, 
-    activeSection, 
-    setActiveSection, 
-    availableSections, 
-    toggleInstructions, 
-    showInstructions,
-    handleSaveResume, 
-    handleDownloadResume, 
-    handleExportDocx,
-    handleCreateShareLink,
-    handleAddCustomSection,
-    handleRemoveSection,
-    templateStyle,
-    setTemplateStyle,
-    isSaving,
-    isExporting
-  } = useResumeContext();
-  
+// Template types
+type TemplateType = 'modern' | 'minimal' | 'professional' | 'creative' | 'technical' | 'executive' | 'ats';
+
+interface Template {
+  id: string;
+  name: string;
+  type: TemplateType;
+  image: string;
+}
+
+const templates: Template[] = [
+  {
+    id: 'modern-1',
+    name: 'Modern Clean',
+    type: 'modern',
+    image: '/placeholder.svg'
+  },
+  {
+    id: 'minimal-1',
+    name: 'Minimal Classic',
+    type: 'minimal',
+    image: '/placeholder.svg'
+  },
+  {
+    id: 'professional-1',
+    name: 'Professional Bold',
+    type: 'professional',
+    image: '/placeholder.svg'
+  },
+  {
+    id: 'creative-1',
+    name: 'Creative Portfolio',
+    type: 'creative',
+    image: '/placeholder.svg'
+  },
+  {
+    id: 'technical-1',
+    name: 'Technical Specs',
+    type: 'technical',
+    image: '/placeholder.svg'
+  }
+];
+
+const ResumeBuilder = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const { resumeState, dispatch } = useResumeContext();
+  const [activeTab, setActiveTab] = useState<string>('content');
+  const [isChangeTemplateDialogOpen, setIsChangeTemplateDialogOpen] = useState<boolean>(false);
   
-  // Set template from URL parameter if provided
+  // Get template from URL or use default
   useEffect(() => {
-    const templateParam = searchParams.get('template');
-    if (templateParam) {
-      setTemplateStyle({
-        ...templateStyle,
-        template: templateParam
-      });
-      
-      // Show a toast notification to confirm template selection
-      toast.success(`Template selected: ${templateParam.charAt(0).toUpperCase() + templateParam.slice(1)}`);
-      
-      // Automatically switch to the Design tab to show the template
-      setActiveTab('customize');
+    const templateId = searchParams.get('template');
+    if (templateId) {
+      const template = templates.find(t => t.id === templateId);
+      if (template) {
+        dispatch({ 
+          type: 'SET_TEMPLATE', 
+          payload: template.type as TemplateType
+        });
+      }
     }
-  }, [searchParams, setTemplateStyle, templateStyle, setActiveTab]);
+  }, [searchParams, dispatch]);
+
+  const handleChangeTemplate = (templateId: string) => {
+    const template = templates.find(t => t.id === templateId);
+    if (template) {
+      dispatch({ 
+        type: 'SET_TEMPLATE', 
+        payload: template.type as TemplateType
+      });
+      setIsChangeTemplateDialogOpen(false);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="h-screen flex flex-col overflow-hidden">
       <ResumeHeader 
-        isSaving={isSaving}
-        isExporting={isExporting}
-        onSave={handleSaveResume}
-        onExport={handleDownloadResume}
+        activeTab={activeTab}
+        onChangeTemplate={() => setIsChangeTemplateDialogOpen(true)}
       />
-
-      <main className="flex-1 flex overflow-hidden">
-        <div className="w-[220px] border-r bg-card p-3 flex flex-col shadow-sm">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-3 w-full mb-4">
-              <TabsTrigger value="content" className="text-xs px-2 py-1">
-                <Pencil className="h-3.5 w-3.5 mr-1" />
-                Content
-              </TabsTrigger>
-              <TabsTrigger value="customize" className="text-xs px-2 py-1">
-                <Settings className="h-3.5 w-3.5 mr-1" />
-                Design
-              </TabsTrigger>
-              <TabsTrigger value="share" className="text-xs px-2 py-1">
-                <LinkIcon className="h-3.5 w-3.5 mr-1" />
-                Export
-              </TabsTrigger>
-            </TabsList>
+      
+      <div className="flex flex-1 overflow-hidden">
+        <div className="bg-background border-r w-80 flex-shrink-0 flex flex-col overflow-hidden">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+            <div className="border-b p-2">
+              <TabsList className="w-full">
+                <TabsTrigger value="content" className="flex-1">Content</TabsTrigger>
+                <TabsTrigger value="design" className="flex-1">Design</TabsTrigger>
+                <TabsTrigger value="export" className="flex-1">Export</TabsTrigger>
+              </TabsList>
+            </div>
+            
+            <div className="flex-1 overflow-auto">
+              <TabsContent value="content" className="p-0 m-0 h-full">
+                <ContentSidebar />
+              </TabsContent>
+              
+              <TabsContent value="design" className="p-0 m-0 h-full">
+                <DesignSidebar />
+              </TabsContent>
+              
+              <TabsContent value="export" className="p-0 m-0 h-full">
+                <ExportSidebar />
+              </TabsContent>
+            </div>
           </Tabs>
-
-          <div className="flex-1 overflow-y-auto">
-            {activeTab === "content" && (
-              <ContentSidebar 
-                activeSection={activeSection}
-                onSectionChange={setActiveSection}
-                availableSections={availableSections}
-                onAddCustomSection={handleAddCustomSection}
-                onRemoveSection={handleRemoveSection}
-              />
-            )}
-
-            {activeTab === "customize" && (
-              <DesignSidebar 
-                templateStyle={templateStyle}
-                onStyleChange={setTemplateStyle}
-              />
-            )}
-
-            {activeTab === "share" && (
-              <ExportSidebar 
-                isExporting={isExporting}
-                onDownloadPdf={handleDownloadResume}
-                onExportDocx={handleExportDocx}
-                onCreateShareLink={handleCreateShareLink}
-              />
-            )}
-          </div>
-
-          <div className="pt-4 mt-2 border-t">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="w-full flex items-center justify-center gap-2 text-xs"
-                  onClick={toggleInstructions}
-                >
-                  <Info className="h-3.5 w-3.5" />
-                  {showInstructions ? "Hide Tips" : "Show Tips"}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                {showInstructions ? "Hide resume building tips" : "Show helpful tips for building your resume"}
-              </TooltipContent>
-            </Tooltip>
-          </div>
         </div>
-
-        <div className="flex-1 flex overflow-hidden">
-          <ResizablePanelGroup direction="horizontal">
-            <ResizablePanel defaultSize={45} minSize={30}>
-              <SectionContent />
-            </ResizablePanel>
-            
-            <ResizableHandle withHandle />
-            
-            <ResizablePanel defaultSize={55}>
-              <ResumePreview />
-            </ResizablePanel>
-          </ResizablePanelGroup>
+        
+        <div className="flex-1 overflow-auto bg-muted/20 flex items-center justify-center p-6">
+          <ResumePreview />
         </div>
-      </main>
+      </div>
+      
+      {/* Template Change Dialog */}
+      <Dialog open={isChangeTemplateDialogOpen} onOpenChange={setIsChangeTemplateDialogOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Change Template</DialogTitle>
+            <DialogDescription>
+              Choose from our professionally designed templates. Your content will remain the same.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+            {templates.map((template) => (
+              <div 
+                key={template.id}
+                className={`border rounded-lg overflow-hidden hover:shadow-md transition-all cursor-pointer ${
+                  resumeState.design.template === template.type ? 'ring-2 ring-primary' : ''
+                }`}
+                onClick={() => handleChangeTemplate(template.id)}
+              >
+                <div className="aspect-[4/5] bg-muted">
+                  <img 
+                    src={template.image} 
+                    alt={template.name}
+                    className="object-cover h-full w-full"
+                  />
+                </div>
+                <div className="p-3">
+                  <h3 className="font-medium text-sm">{template.name}</h3>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="flex justify-end mt-4">
+            <Button variant="outline" onClick={() => setIsChangeTemplateDialogOpen(false)}>
+              Cancel
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
-  );
-};
-
-const ResumeBuilder: React.FC = () => {
-  return (
-    <ResumeProvider>
-      <ResumeBuilderContent />
-    </ResumeProvider>
   );
 };
 
