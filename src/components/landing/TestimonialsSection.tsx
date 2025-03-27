@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Star, ChevronRight, ChevronLeft, CheckCircle } from 'lucide-react';
+import { Star, ChevronRight, ChevronLeft, CheckCircle, BarChart } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 
@@ -35,7 +35,7 @@ const TestimonialsSection = () => {
       position: "Marketing Manager",
       company: "Tech Solutions Inc.",
       image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=256&h=256&auto=format&fit=crop",
-      quote: "Using the AI resume builder completely transformed my job search. I got 3 interviews within a week after updating my resume!",
+      quote: "My job search completely transformed after using the professional resume writing service. I had been applying for months with no responses, but within a week of using my new resume, I had 3 interview requests!",
       rating: 5,
       linkedIn: "https://linkedin.com/"
     },
@@ -45,7 +45,7 @@ const TestimonialsSection = () => {
       position: "Software Engineer",
       company: "Innovate Systems",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=256&h=256&auto=format&fit=crop",
-      quote: "I was struggling with my resume until I worked with their professional resume writer. The result was far beyond my expectations.",
+      quote: "The 7-day interview guarantee package was the best investment in my career. Not only did I get interviews within the promised timeframe, but the career coaching helped me ace them and land a role with a 30% salary increase.",
       rating: 5,
       linkedIn: "https://linkedin.com/"
     },
@@ -55,7 +55,7 @@ const TestimonialsSection = () => {
       position: "HR Specialist",
       company: "Global Enterprises",
       image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=256&h=256&auto=format&fit=crop",
-      quote: "As someone who reviews resumes professionally, I was impressed by how ATS-friendly my new resume was. Landed my dream job within a month!",
+      quote: "As someone who reviews resumes professionally, I was impressed by how ATS-friendly my new resume was. The customization options in the AI builder let me create something that truly represented my personal brand.",
       rating: 4,
       linkedIn: "https://linkedin.com/"
     }
@@ -124,22 +124,22 @@ const TestimonialsSection = () => {
             <span className="text-xs font-medium text-primary">SUCCESS STORIES</span>
           </motion.div>
           <motion.h2 
-            className="section-heading mb-4"
+            className="text-3xl md:text-4xl font-bold mb-4 tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            Real Results from Real People
+            From Struggling to Hired
           </motion.h2>
           <motion.p 
-            className="section-subheading mx-auto"
+            className="text-lg text-muted-foreground max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            See how our tools have helped thousands land their dream jobs
+            See how our career tools and services have transformed job searches for thousands of professionals
           </motion.p>
         </div>
         
@@ -151,7 +151,11 @@ const TestimonialsSection = () => {
           viewport={{ once: true }}
         >
           <div className="bg-white p-6 rounded-xl shadow-sm">
-            <h3 className="text-3xl font-bold text-primary mb-1">500,000+</h3>
+            <h3 className="text-3xl font-bold text-primary mb-1">95%</h3>
+            <p className="text-sm text-muted-foreground">Interview Success Rate</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm">
+            <h3 className="text-3xl font-bold text-primary mb-1">100K+</h3>
             <p className="text-sm text-muted-foreground">Resumes Created</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-sm">
@@ -159,11 +163,7 @@ const TestimonialsSection = () => {
             <p className="text-sm text-muted-foreground">Customer Rating</p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-sm">
-            <h3 className="text-3xl font-bold text-primary mb-1">86%</h3>
-            <p className="text-sm text-muted-foreground">Interview Success Rate</p>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm">
-            <h3 className="text-3xl font-bold text-primary mb-1">120+</h3>
+            <h3 className="text-3xl font-bold text-primary mb-1">35+</h3>
             <p className="text-sm text-muted-foreground">Expert Resume Writers</p>
           </div>
         </motion.div>
@@ -189,7 +189,7 @@ const TestimonialsSection = () => {
               >
                 <div className="flex flex-col">
                   <div className="bg-white border border-gray-200 rounded-t-lg p-4">
-                    <h4 className="font-medium">Before</h4>
+                    <h4 className="font-medium">Before Our Service</h4>
                   </div>
                   <div className="relative aspect-[3/4] w-full bg-white shadow rounded-b-lg overflow-hidden">
                     <img 
@@ -199,7 +199,7 @@ const TestimonialsSection = () => {
                     />
                     <div className="absolute inset-0 bg-red-500/10 flex items-center justify-center">
                       <div className="bg-white/80 px-4 py-2 rounded-lg text-red-600 font-medium text-sm">
-                        Needs Improvement
+                        Below ATS Standards
                       </div>
                     </div>
                   </div>
@@ -207,7 +207,7 @@ const TestimonialsSection = () => {
                 
                 <div className="flex flex-col">
                   <div className="bg-white border border-gray-200 rounded-t-lg p-4">
-                    <h4 className="font-medium">After</h4>
+                    <h4 className="font-medium">After Our Service</h4>
                   </div>
                   <div className="relative aspect-[3/4] w-full bg-white shadow rounded-b-lg overflow-hidden">
                     <img 
@@ -218,7 +218,7 @@ const TestimonialsSection = () => {
                     <div className="absolute inset-0 bg-green-500/10 flex items-center justify-center">
                       <div className="bg-white/80 px-4 py-2 rounded-lg text-green-600 font-medium text-sm">
                         <CheckCircle className="h-4 w-4 inline mr-1" />
-                        Optimized & Professional
+                        ATS-Optimized & Professional
                       </div>
                     </div>
                   </div>
@@ -272,7 +272,7 @@ const TestimonialsSection = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <h3 className="text-2xl font-bold text-center mb-10">What Our Users Say</h3>
+          <h3 className="text-2xl font-bold text-center mb-10">What Our Clients Say</h3>
           
           <div className="relative max-w-4xl mx-auto">
             <AnimatePresence mode="wait">
@@ -284,7 +284,7 @@ const TestimonialsSection = () => {
                 transition={{ duration: 0.3 }}
                 className="bg-white rounded-xl shadow-md p-8 md:p-10"
               >
-                <div className="flex flex-col md:flex-row gap-6 items-center mb-6">
+                <div className="flex flex-col md:flex-row gap-6 items-center md:items-start mb-6">
                   <img 
                     src={testimonials[activeTestimonialIndex].image} 
                     alt={testimonials[activeTestimonialIndex].name} 
@@ -310,7 +310,7 @@ const TestimonialsSection = () => {
                     )}
                   </div>
                 </div>
-                <blockquote className="text-lg italic text-gray-700">
+                <blockquote className="text-lg italic text-gray-700 md:pl-24">
                   "{testimonials[activeTestimonialIndex].quote}"
                 </blockquote>
               </motion.div>
@@ -352,16 +352,16 @@ const TestimonialsSection = () => {
           </div>
         </motion.div>
         
-        {/* Logos */}
+        {/* Company Logos */}
         <motion.div 
           className="mt-16 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <p className="text-sm text-muted-foreground mb-6">Our users have been hired at leading companies worldwide</p>
+          <p className="text-sm text-muted-foreground mb-6">Our users have been hired at top companies worldwide</p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-70">
-            {/* Add company logos here */}
+            {/* Company logos */}
             <div className="h-8">
               <svg className="h-full w-auto" viewBox="0 0 124 34" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M17 34C26.3888 34 34 26.3888 34 17C34 7.61116 26.3888 0 17 0C7.61116 0 0 7.61116 0 17C0 26.3888 7.61116 34 17 34Z" fill="#0A66C2"/>
@@ -369,15 +369,14 @@ const TestimonialsSection = () => {
                 <path d="M14.0626 13.1692H17.8885V14.9088H17.9458C18.4597 13.897 19.8684 12.8122 22.0127 12.8122C26.0282 12.8122 26.8561 15.4938 26.8561 19.0483V27.0213H22.8835V19.9908C22.8835 18.4105 22.8548 16.3551 20.6532 16.3551C18.4229 16.3551 17.991 18.0947 17.991 19.8913V27.0213H14.0626V13.1692Z" fill="white"/>
               </svg>
             </div>
-            <div className="h-8">
-              <svg className="h-full w-auto" viewBox="0 0 132 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M47.9906 15.4429C47.9906 16.0062 47.9033 16.5041 47.7287 16.9365C47.5541 17.3689 47.3142 17.7358 47.0091 18.037C46.704 18.3382 46.3335 18.5675 45.8976 18.7247C45.4618 18.882 44.975 18.9606 44.4373 18.9606C43.8996 18.9606 43.4129 18.882 42.977 18.7247C42.5412 18.5675 42.1706 18.3382 41.8655 18.037C41.5604 17.7358 41.3187 17.3689 41.1404 16.9365C40.9621 16.5041 40.873 16.0062 40.873 15.4429C40.873 14.8797 40.9621 14.3818 41.1404 13.9494C41.3187 13.517 41.5604 13.1501 41.8655 12.8489C42.1706 12.5477 42.5412 12.3183 42.977 12.1611C43.4129 12.0039 43.8996 11.9252 44.4373 11.9252C44.975 11.9252 45.4618 12.0039 45.8976 12.1611C46.3335 12.3183 46.704 12.5477 47.0091 12.8489C47.3142 13.1501 47.5541 13.517 47.7287 13.9494C47.9033 14.3818 47.9906 14.8797 47.9906 15.4429Z" fill="currentColor"/>
-              </svg>
+            <div className="h-8 opacity-70">
+              <span className="text-2xl font-bold">indeed</span>
             </div>
-            <div className="h-8">
-              <svg className="h-full w-auto" viewBox="0 0 132 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M68.4064 20.7893V23.295H63.6429V20.7893H68.4064ZM63.7994 27.9448C63.7994 26.8123 64.002 25.8094 64.407 24.9362C64.8121 24.063 65.4042 23.3895 66.1833 22.9156C66.9624 22.4417 67.8738 22.2049 68.9175 22.2049C69.7877 22.2049 70.5373 22.3598 71.1663 22.6698C71.7952 22.9798 72.2873 23.3596 72.6424 23.8093V22.4898H77.0222V34.8333H72.6424V33.5138C72.2768 33.9634 71.7783 34.3433 71.1468 34.6533C70.5153 34.9632 69.7636 35.1182 68.8915 35.1182C67.859 35.1182 66.9551 34.8851 66.1796 34.419C65.404 33.9528 64.8139 33.283 64.407 32.4098C64.002 31.5366 63.7994 30.5299 63.7994 29.3925V27.9448Z" fill="currentColor"/>
-              </svg>
+            <div className="h-8 opacity-70">
+              <span className="text-xl font-bold">naukri.com</span>
+            </div>
+            <div className="h-5 opacity-70">
+              <span className="text-xl font-bold text-blue-600">Monster</span>
             </div>
           </div>
         </motion.div>

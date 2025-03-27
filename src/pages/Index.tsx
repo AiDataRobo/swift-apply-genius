@@ -3,16 +3,15 @@ import React, { useEffect } from 'react';
 import NavBar from '@/components/landing/NavBar';
 import HeroSection from '@/components/landing/HeroSection';
 import WhyChooseUsSection from '@/components/landing/WhyChooseUsSection';
-import FeaturesSection from '@/components/landing/FeaturesSection';
+import ServicesSection from '@/components/landing/ServicesSection';
 import HowItWorksSection from '@/components/landing/HowItWorksSection';
 import TestimonialsSection from '@/components/landing/TestimonialsSection';
 import PricingSection from '@/components/landing/PricingSection';
 import CTASection from '@/components/landing/CTASection';
 import Footer from '@/components/landing/Footer';
-import MentorshipSection from '@/components/landing/MentorshipSection';
+import FreeConsultationSection from '@/components/landing/FreeConsultationSection';
 import FloatingBookButton from '@/components/booking/FloatingBookButton';
 import { useToast } from "@/hooks/use-toast";
-import { motion } from "framer-motion";
 
 const Index = () => {
   const { toast } = useToast();
@@ -42,8 +41,8 @@ const Index = () => {
     // Welcome toast with improved message
     setTimeout(() => {
       toast({
-        title: "Welcome to SwiftApply",
-        description: "Create your perfect resume in minutes with AI-powered tools",
+        title: "Welcome to JobOnboard",
+        description: "Create your perfect resume in minutes with our AI-powered tools",
         duration: 5000,
       });
     }, 2000);
@@ -80,14 +79,11 @@ const Index = () => {
         <section className="section-hero">
           <HeroSection />
         </section>
-        <section className="section-mentorship">
-          <MentorshipSection />
+        <section className="section-services">
+          <ServicesSection />
         </section>
         <section className="section-why-choose-us">
           <WhyChooseUsSection />
-        </section>
-        <section className="section-features">
-          <FeaturesSection />
         </section>
         <section className="section-how-it-works">
           <HowItWorksSection />
@@ -97,6 +93,9 @@ const Index = () => {
         </section>
         <section className="section-pricing">
           <PricingSection />
+        </section>
+        <section className="section-free-consultation">
+          <FreeConsultationSection />
         </section>
         <section className="section-cta">
           <CTASection />

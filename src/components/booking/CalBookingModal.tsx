@@ -33,7 +33,7 @@ const CalBookingModal = ({ isOpen, onClose, calLink = "swiftapply/consultation" 
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <CalendarIcon className="h-5 w-5 text-primary" />
-            <span>Schedule a Mentorship Session</span>
+            <span>Schedule Your Free Consultation</span>
           </DialogTitle>
         </DialogHeader>
         <div className="mt-4 h-[600px]">
@@ -42,8 +42,8 @@ const CalBookingModal = ({ isOpen, onClose, calLink = "swiftapply/consultation" 
             style={{ width: "100%", height: "100%", overflow: "hidden" }}
             config={{
               layout: "month_view",
-              hideEventTypeDetails: "false",
-              hideBranding: "true",
+              hideEventTypeDetails: false,
+              hideBranding: true,
               theme: "light",
             }}
           />

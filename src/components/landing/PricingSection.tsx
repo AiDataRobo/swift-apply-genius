@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Check, X, Info, CircleDollarSign, FileText, PenTool } from 'lucide-react';
+import { Check, X, Info, CircleDollarSign, FileText, PenTool, BadgeCheck, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -19,19 +19,19 @@ const features = {
     { free: false, pro: true, label: "Remove Branding" },
   ],
   proServices: [
-    { basic: true, standard: true, premium: true, label: "Professional Resume Writing" },
+    { basic: true, standard: true, premium: true, label: "Resume Writing" },
     { basic: true, standard: true, premium: true, label: "ATS Optimization" },
     { basic: true, standard: true, premium: true, label: "1-on-1 Expert Consultation" },
     { basic: false, standard: true, premium: true, label: "Cover Letter Writing" },
     { basic: false, standard: true, premium: true, label: "2 Rounds of Revisions" },
     { basic: false, standard: false, premium: true, label: "LinkedIn Profile Optimization" },
     { basic: false, standard: false, premium: true, label: "Priority Support" },
-    { basic: false, standard: false, premium: true, label: "60-Day Interview Guarantee" },
+    { basic: false, standard: false, premium: true, label: "7-Day Interview Guarantee" },
   ]
 };
 
 const PricingSection = () => {
-  const [pricingType, setPricingType] = useState("ai");
+  const [pricingType, setPricingType] = useState("pro");
   
   return (
     <section id="pricing" className="py-24 bg-slate-50/50">
@@ -43,30 +43,30 @@ const PricingSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-xs font-medium text-primary">PRICING</span>
+            <span className="text-xs font-medium text-primary">PRICING PLANS</span>
           </motion.div>
           <motion.h2 
-            className="section-heading mb-4"
+            className="text-3xl md:text-4xl font-bold mb-4 tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            Find the Perfect Plan for Your Needs
+            Choose the Perfect Plan for Your Career
           </motion.h2>
           <motion.p 
-            className="section-subheading mx-auto"
+            className="text-lg text-muted-foreground max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            Flexible options for every stage of your career journey
+            Flexible options to fit every budget and career stage
           </motion.p>
         </div>
         
         <div className="relative z-10 max-w-5xl mx-auto">
-          <Tabs defaultValue="ai" className="w-full">
+          <Tabs defaultValue="pro" className="w-full">
             <div className="flex justify-center mb-12">
               <TabsList className="grid w-full max-w-md grid-cols-2">
                 <TabsTrigger value="ai" className="relative py-6" onClick={() => setPricingType("ai")}>
@@ -78,7 +78,7 @@ const PricingSection = () => {
                 <TabsTrigger value="pro" className="relative py-6" onClick={() => setPricingType("pro")}>
                   <div className="flex flex-col items-center">
                     <PenTool className="h-5 w-5 mb-1" />
-                    <span>Professional Writing</span>
+                    <span>Professional Services</span>
                   </div>
                 </TabsTrigger>
               </TabsList>
@@ -195,10 +195,10 @@ const PricingSection = () => {
                     <h3 className="text-lg font-bold">Basic Package</h3>
                   </div>
                   
-                  <p className="text-sm text-muted-foreground mb-4">Resume Review & Optimization</p>
+                  <p className="text-sm text-muted-foreground mb-4">Resume Writing & ATS Optimization</p>
                   
                   <div className="flex items-baseline mb-6">
-                    <span className="text-3xl font-bold">$99</span>
+                    <span className="text-3xl font-bold">₹2,999</span>
                     <span className="text-muted-foreground ml-2">one-time</span>
                   </div>
                   
@@ -239,10 +239,10 @@ const PricingSection = () => {
                     <h3 className="text-lg font-bold">Standard Package</h3>
                   </div>
                   
-                  <p className="text-sm text-muted-foreground mb-4">Resume + Cover Letter</p>
+                  <p className="text-sm text-muted-foreground mb-4">Resume + Cover Letter + Revisions</p>
                   
                   <div className="flex items-baseline mb-6">
-                    <span className="text-3xl font-bold">$149</span>
+                    <span className="text-3xl font-bold">₹4,999</span>
                     <span className="text-muted-foreground ml-2">one-time</span>
                   </div>
                   
@@ -274,7 +274,7 @@ const PricingSection = () => {
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="bg-blue-500/10 rounded-full p-2">
-                      <CircleDollarSign className="h-5 w-5 text-blue-500" />
+                      <Shield className="h-5 w-5 text-blue-500" />
                     </div>
                     <h3 className="text-lg font-bold">Premium Package</h3>
                   </div>
@@ -288,13 +288,13 @@ const PricingSection = () => {
                         </p>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p className="text-xs max-w-xs">Includes Resume, Cover Letter & LinkedIn Profile</p>
+                        <p className="text-xs max-w-xs">Includes Resume, Cover Letter, LinkedIn Profile & Interview Guarantee</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                   
                   <div className="flex items-baseline mb-6">
-                    <span className="text-3xl font-bold">$249</span>
+                    <span className="text-3xl font-bold">₹7,999</span>
                     <span className="text-muted-foreground ml-2">one-time</span>
                   </div>
                   
@@ -318,6 +318,18 @@ const PricingSection = () => {
               </div>
             </TabsContent>
           </Tabs>
+          
+          <div className="mt-16 text-center">
+            <p className="text-sm text-muted-foreground mb-4">Need help choosing? Book a free consultation with our experts</p>
+            <Button 
+              variant="outline" 
+              size="lg"
+              onClick={() => document.getElementById('book-consultation')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              <Calendar className="mr-2 h-5 w-5" />
+              Book a Free Consultation
+            </Button>
+          </div>
         </div>
       </div>
     </section>
