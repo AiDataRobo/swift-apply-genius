@@ -1,36 +1,62 @@
+
 import React, { useState } from 'react';
-import { Check, X, Info, CircleDollarSign, FileText, PenTool, BadgeCheck, Shield, CalendarClock, Calendar } from 'lucide-react';
+import { Check, X, Info, CircleDollarSign, FileText, PenTool, BadgeCheck, Shield, CalendarClock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Link } from 'react-router-dom';
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
+// Define features for each service type
 const features = {
-  aiResume: [
-    { free: true, pro: true, label: "ATS-Friendly Templates" },
-    { free: true, pro: true, label: "Basic AI Content Generation" },
-    { free: true, pro: true, label: "Up to 2 Exports (PDF)" },
-    { free: false, pro: true, label: "Unlimited Exports (PDF, DOCX, TXT)" },
-    { free: false, pro: true, label: "Advanced AI Content Optimization" },
-    { free: false, pro: true, label: "Keyword Optimization" },
-    { free: false, pro: true, label: "Premium Templates" },
-    { free: false, pro: true, label: "Remove Branding" },
+  resumeBuilder: [
+    { free: true, premium: true, label: "Access to ATS-Friendly Templates" },
+    { free: true, premium: true, label: "Basic Formatting Options" },
+    { free: true, premium: true, label: "PDF Export" },
+    { free: false, premium: true, label: "All Premium Templates" },
+    { free: false, premium: true, label: "Advanced Design Customization" },
+    { free: false, premium: true, label: "AI Content Suggestions" },
+    { free: false, premium: true, label: "Unlimited Exports (PDF, DOCX)" },
+    { free: false, premium: true, label: "Remove Branding" },
+  ],
+  coverLetter: [
+    { free: true, premium: true, label: "Standard Templates" },
+    { free: true, premium: true, label: "Basic Formatting" },
+    { free: true, premium: true, label: "PDF Export" },
+    { free: false, premium: true, label: "All Premium Templates" },
+    { free: false, premium: true, label: "Advanced Customization" },
+    { free: false, premium: true, label: "AI Content Generation" },
+    { free: false, premium: true, label: "Multiple Export Formats" },
+    { free: false, premium: true, label: "Matching Resume Designs" },
   ],
   proServices: [
     { basic: true, standard: true, premium: true, label: "Resume Writing" },
     { basic: true, standard: true, premium: true, label: "ATS Optimization" },
     { basic: true, standard: true, premium: true, label: "1-on-1 Expert Consultation" },
-    { basic: false, standard: true, premium: true, label: "Cover Letter Writing" },
+    { basic: false, standard: true, premium: true, label: "LinkedIn Profile Optimization" },
     { basic: false, standard: true, premium: true, label: "2 Rounds of Revisions" },
-    { basic: false, standard: false, premium: true, label: "LinkedIn Profile Optimization" },
+    { basic: false, standard: false, premium: true, label: "Cover Letter Writing" },
     { basic: false, standard: false, premium: true, label: "Priority Support" },
     { basic: false, standard: false, premium: true, label: "7-Day Interview Guarantee" },
+  ],
+  interviewGuarantee: [
+    { standard: true, premium: true, label: "Professionally Written Resume" },
+    { standard: true, premium: true, label: "ATS-Optimized Templates" },
+    { standard: true, premium: true, label: "Cover Letter" },
+    { standard: true, premium: true, label: "LinkedIn Makeover" },
+    { standard: true, premium: true, label: "Job Application Assistance" },
+    { standard: true, premium: true, label: "Recruiter Outreach" },
+    { standard: true, premium: true, label: "2 Interview Coaching Sessions" },
+    { standard: true, premium: true, label: "Career Services Platform Access" },
+    { standard: true, premium: true, label: "5 Interview Guarantee" },
+    { standard: false, premium: true, label: "15 Interview Guarantee" },
   ]
 };
 
 const PricingSection = () => {
-  const [pricingType, setPricingType] = useState("pro");
+  const [pricingType, setPricingType] = useState("proServices");
   
   return (
     <section id="pricing" className="py-24 bg-slate-50/50">
@@ -65,26 +91,26 @@ const PricingSection = () => {
         </div>
         
         <div className="relative z-10 max-w-5xl mx-auto">
-          <Tabs defaultValue="pro" className="w-full">
+          <Tabs defaultValue="proServices" className="w-full" value={pricingType} onValueChange={setPricingType}>
             <div className="flex justify-center mb-12">
-              <TabsList className="grid w-full max-w-md grid-cols-2">
-                <TabsTrigger value="ai" className="relative py-6" onClick={() => setPricingType("ai")}>
-                  <div className="flex flex-col items-center">
-                    <FileText className="h-5 w-5 mb-1" />
-                    <span>AI Resume Builder</span>
-                  </div>
+              <TabsList className="grid w-full max-w-3xl grid-cols-4 p-1">
+                <TabsTrigger value="resumeBuilder" className="text-xs md:text-sm py-2">
+                  Resume Builder
                 </TabsTrigger>
-                <TabsTrigger value="pro" className="relative py-6" onClick={() => setPricingType("pro")}>
-                  <div className="flex flex-col items-center">
-                    <PenTool className="h-5 w-5 mb-1" />
-                    <span>Professional Services</span>
-                  </div>
+                <TabsTrigger value="coverLetter" className="text-xs md:text-sm py-2">
+                  Cover Letter
+                </TabsTrigger>
+                <TabsTrigger value="proServices" className="text-xs md:text-sm py-2">
+                  Pro Services
+                </TabsTrigger>
+                <TabsTrigger value="interviewGuarantee" className="text-xs md:text-sm py-2">
+                  Interview Guarantee
                 </TabsTrigger>
               </TabsList>
             </div>
             
-            {/* AI Resume Builder Plans */}
-            <TabsContent value="ai" className="w-full">
+            {/* Resume Builder Plans */}
+            <TabsContent value="resumeBuilder" className="w-full">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Free Plan */}
                 <motion.div 
@@ -101,10 +127,10 @@ const PricingSection = () => {
                     <h3 className="text-xl font-bold">Free Plan</h3>
                   </div>
                   
-                  <p className="text-sm text-muted-foreground mb-6">Perfect for getting started with your job search</p>
+                  <p className="text-sm text-muted-foreground mb-6">Basic access with limited templates</p>
                   
                   <div className="flex items-baseline mb-6">
-                    <span className="text-4xl font-bold">$0</span>
+                    <span className="text-4xl font-bold">₹0</span>
                     <span className="text-muted-foreground ml-2">/forever</span>
                   </div>
                   
@@ -115,7 +141,7 @@ const PricingSection = () => {
                   </Button>
                   
                   <div className="space-y-4">
-                    {features.aiResume.map((feature, index) => (
+                    {features.resumeBuilder.map((feature, index) => (
                       <div key={index} className="flex items-start">
                         {feature.free ? (
                           <Check className="h-5 w-5 text-green-500 shrink-0 mr-3" />
@@ -128,7 +154,7 @@ const PricingSection = () => {
                   </div>
                 </motion.div>
                 
-                {/* Pro Plan */}
+                {/* Premium Plan */}
                 <motion.div 
                   className="bg-white rounded-2xl p-8 shadow-lg border border-primary/20 relative"
                   initial={{ opacity: 0, y: 20 }}
@@ -144,26 +170,119 @@ const PricingSection = () => {
                     <div className="bg-primary/10 rounded-full p-2">
                       <CircleDollarSign className="h-6 w-6 text-primary" />
                     </div>
-                    <h3 className="text-xl font-bold">Pro Plan</h3>
+                    <h3 className="text-xl font-bold">Premium Access</h3>
                   </div>
                   
-                  <p className="text-sm text-muted-foreground mb-6">For serious job seekers looking for the best results</p>
+                  <p className="text-sm text-muted-foreground mb-6">Full access with all templates and customization</p>
                   
                   <div className="flex items-baseline mb-6">
-                    <span className="text-4xl font-bold">$19</span>
+                    <span className="text-4xl font-bold">₹299</span>
                     <span className="text-muted-foreground ml-2">/month</span>
                   </div>
                   
                   <Button className="w-full mb-8" asChild>
                     <Link to="/resume-builder">
-                      Upgrade to Pro
+                      Upgrade to Premium
                     </Link>
                   </Button>
                   
                   <div className="space-y-4">
-                    {features.aiResume.map((feature, index) => (
+                    {features.resumeBuilder.map((feature, index) => (
                       <div key={index} className="flex items-start">
-                        {feature.pro ? (
+                        {feature.premium ? (
+                          <Check className="h-5 w-5 text-green-500 shrink-0 mr-3" />
+                        ) : (
+                          <X className="h-5 w-5 text-gray-300 shrink-0 mr-3" />
+                        )}
+                        <span>{feature.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            </TabsContent>
+            
+            {/* Cover Letter Builder Plans */}
+            <TabsContent value="coverLetter" className="w-full">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Free Plan */}
+                <motion.div 
+                  className="bg-white rounded-2xl p-8 shadow-md border border-gray-100"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="bg-gray-100 rounded-full p-2">
+                      <FileText className="h-6 w-6 text-gray-600" />
+                    </div>
+                    <h3 className="text-xl font-bold">Free Plan</h3>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mb-6">Basic access with standard templates</p>
+                  
+                  <div className="flex items-baseline mb-6">
+                    <span className="text-4xl font-bold">₹0</span>
+                    <span className="text-muted-foreground ml-2">/forever</span>
+                  </div>
+                  
+                  <Button className="w-full mb-8" asChild>
+                    <Link to="/resume-builder">
+                      Get Started Now
+                    </Link>
+                  </Button>
+                  
+                  <div className="space-y-4">
+                    {features.coverLetter.map((feature, index) => (
+                      <div key={index} className="flex items-start">
+                        {feature.free ? (
+                          <Check className="h-5 w-5 text-green-500 shrink-0 mr-3" />
+                        ) : (
+                          <X className="h-5 w-5 text-gray-300 shrink-0 mr-3" />
+                        )}
+                        <span className={!feature.free ? "text-gray-400" : ""}>{feature.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+                
+                {/* Premium Plan */}
+                <motion.div 
+                  className="bg-white rounded-2xl p-8 shadow-lg border border-primary/20 relative"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-primary text-white text-xs py-1 px-3 rounded-full font-medium">
+                    RECOMMENDED
+                  </div>
+                  
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="bg-primary/10 rounded-full p-2">
+                      <CircleDollarSign className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-bold">Premium Access</h3>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mb-6">Advanced templates and customization</p>
+                  
+                  <div className="flex items-baseline mb-6">
+                    <span className="text-4xl font-bold">₹199</span>
+                    <span className="text-muted-foreground ml-2">/month</span>
+                  </div>
+                  
+                  <Button className="w-full mb-8" asChild>
+                    <Link to="/resume-builder">
+                      Upgrade to Premium
+                    </Link>
+                  </Button>
+                  
+                  <div className="space-y-4">
+                    {features.coverLetter.map((feature, index) => (
+                      <div key={index} className="flex items-start">
+                        {feature.premium ? (
                           <Check className="h-5 w-5 text-green-500 shrink-0 mr-3" />
                         ) : (
                           <X className="h-5 w-5 text-gray-300 shrink-0 mr-3" />
@@ -177,7 +296,7 @@ const PricingSection = () => {
             </TabsContent>
             
             {/* Professional Writing Services */}
-            <TabsContent value="pro" className="w-full">
+            <TabsContent value="proServices" className="w-full">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Basic Package */}
                 <motion.div 
@@ -197,7 +316,7 @@ const PricingSection = () => {
                   <p className="text-sm text-muted-foreground mb-4">Resume Writing & ATS Optimization</p>
                   
                   <div className="flex items-baseline mb-6">
-                    <span className="text-3xl font-bold">₹2,999</span>
+                    <span className="text-3xl font-bold">₹1,499</span>
                     <span className="text-muted-foreground ml-2">one-time</span>
                   </div>
                   
@@ -238,10 +357,10 @@ const PricingSection = () => {
                     <h3 className="text-lg font-bold">Standard Package</h3>
                   </div>
                   
-                  <p className="text-sm text-muted-foreground mb-4">Resume + Cover Letter + Revisions</p>
+                  <p className="text-sm text-muted-foreground mb-4">LinkedIn Optimization + Revisions</p>
                   
                   <div className="flex items-baseline mb-6">
-                    <span className="text-3xl font-bold">₹4,999</span>
+                    <span className="text-3xl font-bold">₹2,999</span>
                     <span className="text-muted-foreground ml-2">one-time</span>
                   </div>
                   
@@ -280,7 +399,7 @@ const PricingSection = () => {
                   
                   <TooltipProvider>
                     <Tooltip>
-                      <TooltipTrigger>
+                      <TooltipTrigger asChild>
                         <p className="text-sm text-muted-foreground mb-4 flex items-center">
                           Complete Career Package
                           <Info className="h-3 w-3 ml-1" />
@@ -293,7 +412,7 @@ const PricingSection = () => {
                   </TooltipProvider>
                   
                   <div className="flex items-baseline mb-6">
-                    <span className="text-3xl font-bold">₹7,999</span>
+                    <span className="text-3xl font-bold">₹4,499</span>
                     <span className="text-muted-foreground ml-2">one-time</span>
                   </div>
                   
@@ -310,6 +429,95 @@ const PricingSection = () => {
                           <X className="h-4 w-4 text-gray-300 shrink-0 mr-2" />
                         )}
                         <span className="text-sm">{feature.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            </TabsContent>
+            
+            {/* Interview Guarantee Package */}
+            <TabsContent value="interviewGuarantee" className="w-full">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Standard Package */}
+                <motion.div 
+                  className="bg-white rounded-2xl p-8 shadow-md border border-gray-100"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="bg-blue-100 rounded-full p-2">
+                      <BadgeCheck className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <h3 className="text-xl font-bold">Standard Package</h3>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mb-6">Comprehensive career support with 5 interview guarantee</p>
+                  
+                  <div className="flex items-baseline mb-6">
+                    <span className="text-4xl font-bold">₹7,999</span>
+                    <span className="text-muted-foreground ml-2">one-time</span>
+                  </div>
+                  
+                  <Button variant="outline" className="w-full mb-8">
+                    Get Started
+                  </Button>
+                  
+                  <div className="space-y-4">
+                    {features.interviewGuarantee.map((feature, index) => (
+                      <div key={index} className="flex items-start">
+                        {feature.standard ? (
+                          <Check className="h-5 w-5 text-green-500 shrink-0 mr-3" />
+                        ) : (
+                          <X className="h-5 w-5 text-gray-300 shrink-0 mr-3" />
+                        )}
+                        <span className={!feature.standard ? "text-gray-400" : ""}>{feature.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+                
+                {/* Premium Package */}
+                <motion.div 
+                  className="bg-white rounded-2xl p-8 shadow-lg border border-primary/20 relative"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <div className="absolute top-0 right-8 transform -translate-y-1/2 bg-primary text-white text-xs py-1 px-3 rounded-full font-medium">
+                    ULTIMATE
+                  </div>
+                  
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="bg-primary/10 rounded-full p-2">
+                      <Shield className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-bold">Premium Package</h3>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mb-6">Elite career package with 15 interview guarantee</p>
+                  
+                  <div className="flex items-baseline mb-6">
+                    <span className="text-4xl font-bold">₹14,999</span>
+                    <span className="text-muted-foreground ml-2">one-time</span>
+                  </div>
+                  
+                  <Button className="w-full mb-8">
+                    Get Started
+                  </Button>
+                  
+                  <div className="space-y-4">
+                    {features.interviewGuarantee.map((feature, index) => (
+                      <div key={index} className="flex items-start">
+                        {feature.premium ? (
+                          <Check className="h-5 w-5 text-green-500 shrink-0 mr-3" />
+                        ) : (
+                          <X className="h-5 w-5 text-gray-300 shrink-0 mr-3" />
+                        )}
+                        <span>{feature.label}</span>
                       </div>
                     ))}
                   </div>
