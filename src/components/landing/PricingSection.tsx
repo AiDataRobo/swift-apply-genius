@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Check, X, Info, CircleDollarSign, FileText, PenTool, BadgeCheck, Shield, CalendarClock } from 'lucide-react';
+import { Check, X, Info, CircleDollarSign, FileText, PenTool, BadgeCheck, Shield, CalendarClock, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

@@ -1,207 +1,151 @@
 
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useResumeContext } from '@/contexts/ResumeContext';
+import ResumeHeader from '@/components/resume/ResumeHeader';
 import ContentSidebar from '@/components/resume/ContentSidebar';
 import DesignSidebar from '@/components/resume/DesignSidebar';
 import ExportSidebar from '@/components/resume/ExportSidebar';
 import ResumePreview from '@/components/resume/ResumePreview';
-import ResumeHeader from '@/components/resume/ResumeHeader';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { useResumeContext } from '@/contexts/ResumeContext';
-import { useNavigate } from 'react-router-dom';
 
-// Template types
-type TemplateType = 'modern' | 'minimal' | 'professional' | 'creative' | 'technical' | 'executive' | 'ats';
-
-interface Template {
-  id: string;
-  name: string;
-  type: TemplateType;
-  image: string;
-}
-
-const templates: Template[] = [
-  {
-    id: 'modern-1',
-    name: 'Modern Clean',
-    type: 'modern',
-    image: '/placeholder.svg'
-  },
-  {
-    id: 'minimal-1',
-    name: 'Minimal Classic',
-    type: 'minimal',
-    image: '/placeholder.svg'
-  },
-  {
-    id: 'professional-1',
-    name: 'Professional Bold',
-    type: 'professional',
-    image: '/placeholder.svg'
-  },
-  {
-    id: 'creative-1',
-    name: 'Creative Portfolio',
-    type: 'creative',
-    image: '/placeholder.svg'
-  },
-  {
-    id: 'technical-1',
-    name: 'Technical Specs',
-    type: 'technical',
-    image: '/placeholder.svg'
-  }
+// Define sections
+const resumeSections = [
+  'Profile',
+  'Experience',
+  'Education',
+  'Skills',
+  'Projects',
+  'Certifications',
+  'Languages',
+  'Interests'
 ];
 
 const ResumeBuilder = () => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const resumeContext = useResumeContext();
-  const [activeTab, setActiveTab] = useState<string>('content');
-  const [isChangeTemplateDialogOpen, setIsChangeTemplateDialogOpen] = useState<boolean>(false);
+  // Use the resume context
+  const { dispatch, template, setTemplate } = useResumeContext();
   
-  // Mocked properties for components while we wait for context implementation
-  const [mockTemplateStyle, setMockTemplateStyle] = useState({ 
-    fontFamily: 'Arial',
-    fontSize: '12pt',
-    lineHeight: '1.5',
+  // State for active tab and section
+  const [activeTab, setActiveTab] = useState('content');
+  const [activeSection, setActiveSection] = useState('Profile');
+  const [isExporting, setIsExporting] = useState(false);
+  
+  // Template style state
+  const [templateStyle, setTemplateStyle] = useState({
+    fontFamily: 'Inter',
+    fontSize: 'medium',
+    lineHeight: 'normal',
     color: '#333333',
     backgroundColor: '#ffffff',
     spacing: 'normal',
     margins: 'normal'
   });
   
-  const [mockIsExporting, setMockIsExporting] = useState(false);
-  const [mockAvailableSections, setMockAvailableSections] = useState([
-    'profile', 'skills', 'experience', 'education', 'projects'
-  ]);
-  const [mockActiveSection, setMockActiveSection] = useState('profile');
-  
-  // For resume header
-  const handleSaveResume = () => {
-    console.log('Saving resume...');
+  // Handle template change
+  const handleTemplateChange = () => {
+    // Open template selection modal or change view
+    console.log('Change template requested');
   };
   
-  const handleExportResume = () => {
-    console.log('Exporting resume...');
-  };
-  
-  // Get template from URL or use default
-  useEffect(() => {
-    const templateId = searchParams.get('template');
-    if (templateId) {
-      const template = templates.find(t => t.id === templateId);
-      if (template && resumeContext.setTemplate) {
-        resumeContext.setTemplate(template.type);
-      }
-    }
-  }, [searchParams, resumeContext]);
-
-  const handleChangeTemplate = (templateId: string) => {
-    const template = templates.find(t => t.id === templateId);
-    if (template && resumeContext.setTemplate) {
-      resumeContext.setTemplate(template.type);
-      setIsChangeTemplateDialogOpen(false);
+  // Handle downloading as PDF
+  const handleDownloadPdf = async () => {
+    setIsExporting(true);
+    try {
+      // PDF export logic would go here
+      console.log('Exporting as PDF');
+      // Simulating export delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+    } catch (error) {
+      console.error('Error exporting PDF:', error);
+    } finally {
+      setIsExporting(false);
     }
   };
-
+  
+  // Handle exporting as DOCX
+  const handleExportDocx = async () => {
+    setIsExporting(true);
+    try {
+      // DOCX export logic would go here
+      console.log('Exporting as DOCX');
+      // Simulating export delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+    } catch (error) {
+      console.error('Error exporting DOCX:', error);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+  
+  // Handle creating share link
+  const handleCreateShareLink = () => {
+    console.log('Creating share link');
+    // Share link creation logic would go here
+  };
+  
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div className="flex flex-col h-screen">
       <ResumeHeader 
-        isSaving={false}
-        isExporting={mockIsExporting}
-        onSave={handleSaveResume}
-        onExport={handleExportResume}
+        activeTab={activeTab} 
+        onChangeTemplate={handleTemplateChange} 
       />
       
       <div className="flex flex-1 overflow-hidden">
-        <div className="bg-background border-r w-80 flex-shrink-0 flex flex-col overflow-hidden">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-            <div className="border-b p-2">
-              <TabsList className="w-full">
-                <TabsTrigger value="content" className="flex-1">Content</TabsTrigger>
-                <TabsTrigger value="design" className="flex-1">Design</TabsTrigger>
-                <TabsTrigger value="export" className="flex-1">Export</TabsTrigger>
-              </TabsList>
-            </div>
-            
-            <div className="flex-1 overflow-auto">
-              <TabsContent value="content" className="p-0 m-0 h-full">
-                <ContentSidebar 
-                  activeSection={mockActiveSection}
-                  onSectionChange={setMockActiveSection}
-                  availableSections={mockAvailableSections}
-                  onAddCustomSection={(name) => console.log('Adding custom section:', name)}
-                  onRemoveSection={(name) => console.log('Removing section:', name)}
-                />
-              </TabsContent>
-              
-              <TabsContent value="design" className="p-0 m-0 h-full">
-                <DesignSidebar 
-                  templateStyle={mockTemplateStyle}
-                  onStyleChange={(style) => setMockTemplateStyle(style)}
-                />
-              </TabsContent>
-              
-              <TabsContent value="export" className="p-0 m-0 h-full">
-                <ExportSidebar 
-                  isExporting={mockIsExporting}
-                  onDownloadPdf={() => console.log('Downloading PDF...')}
-                  onExportDocx={() => console.log('Exporting DOCX...')}
-                  onCreateShareLink={() => console.log('Creating share link...')}
-                />
-              </TabsContent>
-            </div>
-          </Tabs>
+        {/* Sidebar based on active tab */}
+        <div className="w-64 h-full">
+          {activeTab === 'content' && (
+            <ContentSidebar 
+              activeSection={activeSection}
+              onSectionChange={setActiveSection}
+              availableSections={resumeSections}
+            />
+          )}
+          
+          {activeTab === 'design' && (
+            <DesignSidebar 
+              templateStyle={templateStyle}
+              onStyleChange={setTemplateStyle}
+            />
+          )}
+          
+          {activeTab === 'export' && (
+            <ExportSidebar 
+              isExporting={isExporting}
+              onDownloadPdf={handleDownloadPdf}
+              onExportDocx={handleExportDocx}
+              onCreateShareLink={handleCreateShareLink}
+            />
+          )}
         </div>
         
-        <div className="flex-1 overflow-auto bg-muted/20 flex items-center justify-center p-6">
-          <ResumePreview />
+        {/* Resume preview */}
+        <div className="flex-1 overflow-auto bg-gray-100 p-8">
+          <ResumePreview 
+            template={template || 'modern'}
+            style={templateStyle}
+          />
         </div>
       </div>
       
-      {/* Template Change Dialog */}
-      <Dialog open={isChangeTemplateDialogOpen} onOpenChange={setIsChangeTemplateDialogOpen}>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>Change Template</DialogTitle>
-            <DialogDescription>
-              Choose from our professionally designed templates. Your content will remain the same.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-            {templates.map((template) => (
-              <div 
-                key={template.id}
-                className={`border rounded-lg overflow-hidden hover:shadow-md transition-all cursor-pointer ${
-                  resumeContext.template === template.type ? 'ring-2 ring-primary' : ''
-                }`}
-                onClick={() => handleChangeTemplate(template.id)}
-              >
-                <div className="aspect-[4/5] bg-muted">
-                  <img 
-                    src={template.image} 
-                    alt={template.name}
-                    className="object-cover h-full w-full"
-                  />
-                </div>
-                <div className="p-3">
-                  <h3 className="font-medium text-sm">{template.name}</h3>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="flex justify-end mt-4">
-            <Button variant="outline" onClick={() => setIsChangeTemplateDialogOpen(false)}>
-              Cancel
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* Tab navigation */}
+      <div className="border-t p-2 flex justify-center space-x-4">
+        <button 
+          className={`px-4 py-2 rounded ${activeTab === 'content' ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'}`}
+          onClick={() => setActiveTab('content')}
+        >
+          Content
+        </button>
+        <button 
+          className={`px-4 py-2 rounded ${activeTab === 'design' ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'}`}
+          onClick={() => setActiveTab('design')}
+        >
+          Design
+        </button>
+        <button 
+          className={`px-4 py-2 rounded ${activeTab === 'export' ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'}`}
+          onClick={() => setActiveTab('export')}
+        >
+          Export
+        </button>
+      </div>
     </div>
   );
 };
