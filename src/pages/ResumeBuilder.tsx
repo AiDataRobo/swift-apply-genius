@@ -6,6 +6,7 @@ import ContentSidebar from '@/components/resume/ContentSidebar';
 import DesignSidebar from '@/components/resume/DesignSidebar';
 import ExportSidebar from '@/components/resume/ExportSidebar';
 import ResumePreview from '@/components/resume/ResumePreview';
+import SectionContent from '@/components/resume/SectionContent';
 
 // Define sections
 const resumeSections = [
@@ -21,23 +22,21 @@ const resumeSections = [
 
 const ResumeBuilder = () => {
   // Use the resume context
-  const { dispatch, template, setTemplate } = useResumeContext();
+  const { 
+    resumeState, 
+    dispatch, 
+    template, 
+    setTemplate,
+    templateStyle,
+    sectionOrder,
+    activeSection,
+    setActiveSection,
+    isExporting,
+    handleDownloadResume
+  } = useResumeContext();
   
-  // State for active tab and section
+  // State for active tab
   const [activeTab, setActiveTab] = useState('content');
-  const [activeSection, setActiveSection] = useState('Profile');
-  const [isExporting, setIsExporting] = useState(false);
-  
-  // Template style state
-  const [templateStyle, setTemplateStyle] = useState({
-    fontFamily: 'Inter',
-    fontSize: 'medium',
-    lineHeight: 'normal',
-    color: '#333333',
-    backgroundColor: '#ffffff',
-    spacing: 'normal',
-    margins: 'normal'
-  });
   
   // Handle template change
   const handleTemplateChange = () => {
@@ -45,24 +44,8 @@ const ResumeBuilder = () => {
     console.log('Change template requested');
   };
   
-  // Handle downloading as PDF
-  const handleDownloadPdf = async () => {
-    setIsExporting(true);
-    try {
-      // PDF export logic would go here
-      console.log('Exporting as PDF');
-      // Simulating export delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-    } catch (error) {
-      console.error('Error exporting PDF:', error);
-    } finally {
-      setIsExporting(false);
-    }
-  };
-  
   // Handle exporting as DOCX
   const handleExportDocx = async () => {
-    setIsExporting(true);
     try {
       // DOCX export logic would go here
       console.log('Exporting as DOCX');
@@ -70,8 +53,6 @@ const ResumeBuilder = () => {
       await new Promise(resolve => setTimeout(resolve, 1500));
     } catch (error) {
       console.error('Error exporting DOCX:', error);
-    } finally {
-      setIsExporting(false);
     }
   };
   
@@ -84,7 +65,6 @@ const ResumeBuilder = () => {
   return (
     <div className="flex flex-col h-screen">
       <ResumeHeader 
-        activeTab={activeTab} 
         onChangeTemplate={handleTemplateChange} 
       />
       
@@ -102,26 +82,23 @@ const ResumeBuilder = () => {
           {activeTab === 'design' && (
             <DesignSidebar 
               templateStyle={templateStyle}
-              onStyleChange={setTemplateStyle}
+              onStyleChange={(style) => console.log('Style changed:', style)}
             />
           )}
           
           {activeTab === 'export' && (
             <ExportSidebar 
               isExporting={isExporting}
-              onDownloadPdf={handleDownloadPdf}
+              onDownloadPdf={handleDownloadResume}
               onExportDocx={handleExportDocx}
               onCreateShareLink={handleCreateShareLink}
             />
           )}
         </div>
         
-        {/* Resume preview */}
-        <div className="flex-1 overflow-auto bg-gray-100 p-8">
-          <ResumePreview 
-            template={template || 'modern'}
-            style={templateStyle}
-          />
+        {/* Resume content area */}
+        <div className="flex-1 overflow-auto bg-gray-100">
+          <ResumePreview />
         </div>
       </div>
       
