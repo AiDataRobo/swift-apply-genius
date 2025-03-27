@@ -58,31 +58,51 @@ const templates: Template[] = [
 const ResumeBuilder = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { resumeState, dispatch } = useResumeContext();
+  const resumeContext = useResumeContext();
   const [activeTab, setActiveTab] = useState<string>('content');
   const [isChangeTemplateDialogOpen, setIsChangeTemplateDialogOpen] = useState<boolean>(false);
+  
+  // Mocked properties for components while we wait for context implementation
+  const [mockTemplateStyle, setMockTemplateStyle] = useState({ 
+    fontFamily: 'Arial',
+    fontSize: '12pt',
+    lineHeight: '1.5',
+    color: '#333333',
+    backgroundColor: '#ffffff',
+    spacing: 'normal',
+    margins: 'normal'
+  });
+  
+  const [mockIsExporting, setMockIsExporting] = useState(false);
+  const [mockAvailableSections, setMockAvailableSections] = useState([
+    'profile', 'skills', 'experience', 'education', 'projects'
+  ]);
+  const [mockActiveSection, setMockActiveSection] = useState('profile');
+  
+  // For resume header
+  const handleSaveResume = () => {
+    console.log('Saving resume...');
+  };
+  
+  const handleExportResume = () => {
+    console.log('Exporting resume...');
+  };
   
   // Get template from URL or use default
   useEffect(() => {
     const templateId = searchParams.get('template');
     if (templateId) {
       const template = templates.find(t => t.id === templateId);
-      if (template) {
-        dispatch({ 
-          type: 'SET_TEMPLATE', 
-          payload: template.type as TemplateType
-        });
+      if (template && resumeContext.setTemplate) {
+        resumeContext.setTemplate(template.type);
       }
     }
-  }, [searchParams, dispatch]);
+  }, [searchParams, resumeContext]);
 
   const handleChangeTemplate = (templateId: string) => {
     const template = templates.find(t => t.id === templateId);
-    if (template) {
-      dispatch({ 
-        type: 'SET_TEMPLATE', 
-        payload: template.type as TemplateType
-      });
+    if (template && resumeContext.setTemplate) {
+      resumeContext.setTemplate(template.type);
       setIsChangeTemplateDialogOpen(false);
     }
   };
@@ -90,8 +110,10 @@ const ResumeBuilder = () => {
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <ResumeHeader 
-        activeTab={activeTab}
-        onChangeTemplate={() => setIsChangeTemplateDialogOpen(true)}
+        isSaving={false}
+        isExporting={mockIsExporting}
+        onSave={handleSaveResume}
+        onExport={handleExportResume}
       />
       
       <div className="flex flex-1 overflow-hidden">
@@ -107,15 +129,29 @@ const ResumeBuilder = () => {
             
             <div className="flex-1 overflow-auto">
               <TabsContent value="content" className="p-0 m-0 h-full">
-                <ContentSidebar />
+                <ContentSidebar 
+                  activeSection={mockActiveSection}
+                  onSectionChange={setMockActiveSection}
+                  availableSections={mockAvailableSections}
+                  onAddCustomSection={(name) => console.log('Adding custom section:', name)}
+                  onRemoveSection={(name) => console.log('Removing section:', name)}
+                />
               </TabsContent>
               
               <TabsContent value="design" className="p-0 m-0 h-full">
-                <DesignSidebar />
+                <DesignSidebar 
+                  templateStyle={mockTemplateStyle}
+                  onStyleChange={(style) => setMockTemplateStyle(style)}
+                />
               </TabsContent>
               
               <TabsContent value="export" className="p-0 m-0 h-full">
-                <ExportSidebar />
+                <ExportSidebar 
+                  isExporting={mockIsExporting}
+                  onDownloadPdf={() => console.log('Downloading PDF...')}
+                  onExportDocx={() => console.log('Exporting DOCX...')}
+                  onCreateShareLink={() => console.log('Creating share link...')}
+                />
               </TabsContent>
             </div>
           </Tabs>
@@ -141,7 +177,7 @@ const ResumeBuilder = () => {
               <div 
                 key={template.id}
                 className={`border rounded-lg overflow-hidden hover:shadow-md transition-all cursor-pointer ${
-                  resumeState.design.template === template.type ? 'ring-2 ring-primary' : ''
+                  resumeContext.template === template.type ? 'ring-2 ring-primary' : ''
                 }`}
                 onClick={() => handleChangeTemplate(template.id)}
               >

@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Check, X, Info, CircleDollarSign, FileText, PenTool, BadgeCheck, Shield } from 'lucide-react';
+import { Check, X, Info, CircleDollarSign, FileText, PenTool, BadgeCheck, Shield, CalendarClock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -326,7 +325,7 @@ const PricingSection = () => {
               size="lg"
               onClick={() => document.getElementById('book-consultation')?.scrollIntoView({ behavior: 'smooth' })}
             >
-              <Calendar className="mr-2 h-5 w-5" />
+              <CalendarClock className="mr-2 h-5 w-5" />
               Book a Free Consultation
             </Button>
           </div>

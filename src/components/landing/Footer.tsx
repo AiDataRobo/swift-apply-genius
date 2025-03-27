@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ModeToggle } from "@/components/ModeToggle";
+import { ModeToggle } from "@/components/ui/mode-toggle";
 import { 
   Facebook, 
   Twitter, 
