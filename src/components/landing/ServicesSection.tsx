@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FileText, PenTool, CheckCircle, Star, Calendar, BadgeCheck } from 'lucide-react';
+import { FileText, PenTool, CheckCircle, BadgeCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -74,11 +74,18 @@ const ServicesSection = () => {
               ))}
             </ul>
             
-            <Button className="w-full" asChild>
-              <Link to="/resume-builder">
-                Build Your Resume
-              </Link>
-            </Button>
+            <div className="space-y-3">
+              <Button className="w-full" asChild>
+                <Link to="/resume-builder">
+                  Build Your Resume
+                </Link>
+              </Button>
+              <Button variant="outline" className="w-full" asChild>
+                <Link to="/cover-letter-services">
+                  Cover Letter Services
+                </Link>
+              </Button>
+            </div>
           </motion.div>
           
           {/* Professional Writing Services */}
@@ -113,9 +120,16 @@ const ServicesSection = () => {
               ))}
             </ul>
             
-            <Button className="w-full">
-              Get Professional Help
-            </Button>
+            <div className="space-y-3">
+              <Button className="w-full" asChild>
+                <Link to="/resume-writing-services">
+                  Get Professional Help
+                </Link>
+              </Button>
+              <Button variant="outline" className="w-full">
+                Starting at ₹1,499
+              </Button>
+            </div>
           </motion.div>
           
           {/* Interview Guarantee Package */}
@@ -138,7 +152,7 @@ const ServicesSection = () => {
             </p>
             
             <ul className="mb-6 space-y-2">
-              {["7-day interview guarantee", "LinkedIn profile optimization", "Priority support", "Career coaching session"].map((feature, index) => (
+              {["5-15 interview guarantee", "LinkedIn profile optimization", "Priority support", "Career coaching session"].map((feature, index) => (
                 <li key={index} className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mr-2" />
                   <span className="text-sm">{feature}</span>
@@ -146,9 +160,16 @@ const ServicesSection = () => {
               ))}
             </ul>
             
-            <Button className="w-full" variant="secondary">
-              Get Interview Guarantee
-            </Button>
+            <div className="space-y-3">
+              <Button className="w-full" variant="secondary" asChild>
+                <Link to="/interview-guarantee-package">
+                  Get Interview Guarantee
+                </Link>
+              </Button>
+              <Button variant="outline" className="w-full">
+                Starting at ₹7,999
+              </Button>
+            </div>
           </motion.div>
         </div>
         

@@ -46,8 +46,9 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-6">Services</h3>
             <ul className="space-y-3">
               <li><Link to="/resume-builder" className="text-slate-400 hover:text-white transition-colors">Resume Builder</Link></li>
-              <li><Link to="/resume-builder" className="text-slate-400 hover:text-white transition-colors">Cover Letter Builder</Link></li>
-              <li><Link to="#" className="text-slate-400 hover:text-white transition-colors">Professional Writing Services</Link></li>
+              <li><Link to="/cover-letter-services" className="text-slate-400 hover:text-white transition-colors">Cover Letter Builder</Link></li>
+              <li><Link to="/resume-writing-services" className="text-slate-400 hover:text-white transition-colors">Professional Writing Services</Link></li>
+              <li><Link to="/interview-guarantee-package" className="text-slate-400 hover:text-white transition-colors">Interview Guarantee Package</Link></li>
               <li><Link to="#" className="text-slate-400 hover:text-white transition-colors">LinkedIn Profile Optimization</Link></li>
               <li><Link to="#" className="text-slate-400 hover:text-white transition-colors">Career Coaching</Link></li>
             </ul>

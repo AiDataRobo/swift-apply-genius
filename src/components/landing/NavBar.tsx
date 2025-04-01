@@ -7,14 +7,15 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, Menu } from "lucide-react";
+import { LogOut, Menu, ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator
+  DropdownMenuSeparator,
+  DropdownMenuGroup
 } from "@/components/ui/dropdown-menu";
 import {
   Sheet,
@@ -25,6 +26,14 @@ import {
   SheetDescription,
   SheetClose
 } from "@/components/ui/sheet";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger
+} from "@/components/ui/navigation-menu";
 
 const NavBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -57,16 +66,50 @@ const NavBar = () => {
     <nav className={`${isScrolled ? 'bg-background/80 backdrop-blur-md shadow-sm' : 'bg-transparent'} fixed top-0 left-0 right-0 z-50 transition-all duration-300`}>
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
         <Link to="/" className="flex items-center font-semibold">
-          ResumeBuilder
+          <span className="text-xl font-bold">JobOnboard</span>
         </Link>
         
         <div className="hidden md:flex items-center gap-6">
           <Link to="/" className="text-sm font-medium transition-colors hover:text-primary">
             Home
           </Link>
+          
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="text-sm font-medium">Services</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="grid w-[500px] gap-3 p-4 md:grid-cols-2">
+                    <Link to="/resume-builder" className="block p-3 space-y-1 rounded-md hover:bg-slate-100">
+                      <div className="font-medium">Resume Builder</div>
+                      <div className="text-xs text-muted-foreground">Build your resume with AI tools</div>
+                    </Link>
+                    <Link to="/cover-letter-services" className="block p-3 space-y-1 rounded-md hover:bg-slate-100">
+                      <div className="font-medium">Cover Letter Services</div>
+                      <div className="text-xs text-muted-foreground">Professional cover letters</div>
+                    </Link>
+                    <Link to="/resume-writing-services" className="block p-3 space-y-1 rounded-md hover:bg-slate-100">
+                      <div className="font-medium">Professional Writing</div>
+                      <div className="text-xs text-muted-foreground">Expert resume writing services</div>
+                    </Link>
+                    <Link to="/interview-guarantee-package" className="block p-3 space-y-1 rounded-md hover:bg-slate-100">
+                      <div className="font-medium">Interview Guarantee</div>
+                      <div className="text-xs text-muted-foreground">Get interviews or money back</div>
+                    </Link>
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+          
           <Link to="/templates" className="text-sm font-medium transition-colors hover:text-primary">
             Templates
           </Link>
+          
+          <Link to="/about" className="text-sm font-medium transition-colors hover:text-primary">
+            About
+          </Link>
+          
           {user ? (
             <>
               <Link to="/dashboard" className="text-sm font-medium transition-colors hover:text-primary">
@@ -101,7 +144,7 @@ const NavBar = () => {
               <Link to="/login" className="text-sm font-medium transition-colors hover:text-primary">
                 Login
               </Link>
-              <Link to="/register">
+              <Link to="/signup">
                 <Button size="sm">Sign Up</Button>
               </Link>
             </>
@@ -126,9 +169,33 @@ const NavBar = () => {
               <Link to="/" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
                 Home
               </Link>
+              
+              <div className="space-y-2">
+                <p className="text-sm font-medium py-2">Services</p>
+                <div className="pl-4 border-l space-y-2">
+                  <Link to="/resume-builder" className="text-sm text-muted-foreground hover:text-primary block py-1" onClick={() => setIsMobileMenuOpen(false)}>
+                    Resume Builder
+                  </Link>
+                  <Link to="/cover-letter-services" className="text-sm text-muted-foreground hover:text-primary block py-1" onClick={() => setIsMobileMenuOpen(false)}>
+                    Cover Letter Services
+                  </Link>
+                  <Link to="/resume-writing-services" className="text-sm text-muted-foreground hover:text-primary block py-1" onClick={() => setIsMobileMenuOpen(false)}>
+                    Professional Writing
+                  </Link>
+                  <Link to="/interview-guarantee-package" className="text-sm text-muted-foreground hover:text-primary block py-1" onClick={() => setIsMobileMenuOpen(false)}>
+                    Interview Guarantee
+                  </Link>
+                </div>
+              </div>
+              
               <Link to="/templates" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
                 Templates
               </Link>
+              
+              <Link to="/about" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+                About
+              </Link>
+              
               {user ? (
                 <>
                   <Link to="/dashboard" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
@@ -146,7 +213,7 @@ const NavBar = () => {
                   <Link to="/login" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
                     Login
                   </Link>
-                  <Link to="/register" className="block py-2">
+                  <Link to="/signup" className="block py-2">
                     <Button size="sm" className="w-full justify-center" onClick={() => setIsMobileMenuOpen(false)}>Sign Up</Button>
                   </Link>
                 </>

@@ -19,6 +19,9 @@ import About from './pages/About';
 import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import NotFound from './pages/NotFound';
+import ResumeWritingServices from './pages/ResumeWritingServices';
+import CoverLetterServices from './pages/CoverLetterServices';
+import InterviewGuaranteePackage from './pages/InterviewGuaranteePackage';
 
 function App() {
   // Create a client instance
@@ -45,6 +48,12 @@ function App() {
                   <Route path="/about" element={<About />} />
                   <Route path="/terms" element={<TermsOfService />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
+                  
+                  {/* New service pages */}
+                  <Route path="/resume-writing-services" element={<ResumeWritingServices />} />
+                  <Route path="/cover-letter-services" element={<CoverLetterServices />} />
+                  <Route path="/interview-guarantee-package" element={<InterviewGuaranteePackage />} />
+                  
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
