@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useToast } from "@/hooks/use-toast";
 import SocialLoginButtons from '@/components/auth/SocialLoginButtons';
 import PasswordInput from '@/components/auth/PasswordInput';
+import { motion } from 'framer-motion';
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -62,9 +63,19 @@ const LogIn = () => {
   };
 
   return (
-    <AuthPageLayout title="Welcome back" subtitle="Log in to your account to continue">
+    <AuthPageLayout 
+      title="Welcome back" 
+      subtitle="Log in to your account to continue" 
+      isLogin={true}
+    >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <motion.form 
+          onSubmit={form.handleSubmit(onSubmit)} 
+          className="space-y-4"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <FormField
             control={form.control}
             name="email"
@@ -76,7 +87,13 @@ const LogIn = () => {
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                       <Mail className="h-4 w-4" />
                     </span>
-                    <Input id="email" type="email" className="pl-10" placeholder="you@example.com" {...field} />
+                    <Input 
+                      id="email" 
+                      type="email" 
+                      className="pl-10 transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20" 
+                      placeholder="you@example.com" 
+                      {...field} 
+                    />
                   </div>
                 </FormControl>
                 <FormMessage />
@@ -91,9 +108,11 @@ const LogIn = () => {
               <FormItem>
                 <div className="flex items-center justify-between">
                   <FormLabel htmlFor="password">Password</FormLabel>
-                  <Link to="/forgot-password" className="text-xs text-primary hover:underline">
-                    Forgot password?
-                  </Link>
+                  <motion.div whileHover={{ scale: 1.05 }}>
+                    <Link to="/forgot-password" className="text-xs text-primary hover:underline">
+                      Forgot password?
+                    </Link>
+                  </motion.div>
                 </div>
                 <FormControl>
                   <div className="relative">
@@ -101,7 +120,7 @@ const LogIn = () => {
                       <Lock className="h-4 w-4" />
                     </span>
                     <PasswordInput 
-                      className="pl-10" 
+                      className="pl-10 transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20" 
                       placeholder="Enter your password"
                       id="password"
                       {...field} 
@@ -133,38 +152,35 @@ const LogIn = () => {
             )}
           />
           
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
+          <Button 
+            type="submit" 
+            className="w-full mt-4" 
+            disabled={isSubmitting}
+          >
             {isSubmitting ? (
               <span className="flex items-center">
                 <span className="mr-2">Logging in</span>
                 <span className="animate-spin rounded-full h-4 w-4 border-2 border-b-transparent border-white"></span>
               </span>
             ) : (
-              "Log in"
+              "Login to My Account"
             )}
           </Button>
-        </form>
+        </motion.form>
       </Form>
       
       <div className="mt-6">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-2 bg-white text-muted-foreground">Or continue with</span>
-          </div>
-        </div>
-        
-        <SocialLoginButtons />
+        <SocialLoginButtons showText={true} />
       </div>
       
       <div className="mt-6 text-center text-sm">
         <p>
           Don't have an account?{" "}
-          <Link to="/signup" className="text-primary hover:underline">
-            Sign up
-          </Link>
+          <motion.span whileHover={{ scale: 1.05 }} className="inline-block">
+            <Link to="/signup" className="text-primary hover:underline">
+              Sign up
+            </Link>
+          </motion.span>
         </p>
       </div>
     </AuthPageLayout>
