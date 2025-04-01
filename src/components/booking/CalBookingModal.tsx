@@ -16,9 +16,7 @@ const CalBookingModal = ({ isOpen, onClose, calLink = "swiftapply/consultation" 
     (async function () {
       const cal = await getCalApi();
       // Using the proper way to listen for Cal.com events
-      // The type definition might be outdated, but this is the documented API
-      // @ts-ignore - Ignoring type error as the Cal.com API documentation shows this is the correct usage
-      cal.on('bookingSuccessful', () => {
+      cal?.on?.('bookingSuccessful', () => {
         console.log("Booking was successful");
         setTimeout(() => {
           onClose();
@@ -42,8 +40,8 @@ const CalBookingModal = ({ isOpen, onClose, calLink = "swiftapply/consultation" 
             style={{ width: "100%", height: "100%", overflow: "hidden" }}
             config={{
               layout: "month_view",
-              hideEventTypeDetails: false,
-              hideBranding: true,
+              hideEventTypeDetails: "false",
+              hideBranding: "true",
               theme: "light",
             }}
           />
