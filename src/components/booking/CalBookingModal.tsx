@@ -42,8 +42,8 @@ const CalBookingModal = ({ isOpen, onClose, calLink = "swiftapply/consultation" 
             style={{ width: "100%", height: "100%", overflow: "hidden" }}
             config={{
               layout: "month_view",
-              hideEventTypeDetails: "false",
-              hideBranding: "true",
+              hideEventTypeDetails: false,
+              hideBranding: true,
               theme: "light",
             }}
           />

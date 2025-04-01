@@ -22,7 +22,7 @@ const HeroCallToAction = () => {
         <Link to="/resume-builder" className="block">
           <Button size="lg" className="glass-button w-full sm:w-auto py-6 px-8 h-auto text-base">
             <FileText className="mr-2 h-5 w-5" />
-            Build Your Resume
+            Create Your Resume
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Button>
         </Link>

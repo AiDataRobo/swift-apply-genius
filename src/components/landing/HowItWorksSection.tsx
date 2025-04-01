@@ -1,110 +1,208 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Sparkles, Download, Upload, MessageSquare, CheckSquare } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { FileText, Sparkles, Upload, CheckSquare, Award, Star, MessageSquare, FileCheck } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import CalBookingModal from "@/components/booking/CalBookingModal";
+import Lottie from 'lottie-react';
+import resumeReviewAnimation from '@/assets/animations/resume-review.json';
 
-interface StepProps {
-  number: string;
+// Service card interface
+interface ServiceCardProps {
   icon: React.ReactNode;
+  lottieAnimation?: any;
   title: string;
   description: string;
+  features: string[];
+  ctaText: string;
+  ctaLink: string;
   delay: number;
-  bgClass?: string;
+  popular?: boolean;
+  onClick?: () => void;
 }
 
-const Step = ({ number, icon, title, description, delay, bgClass = "bg-white" }: StepProps) => {
+const ServiceCard = ({ 
+  icon, 
+  lottieAnimation, 
+  title, 
+  description, 
+  features, 
+  ctaText, 
+  ctaLink, 
+  delay, 
+  popular = false,
+  onClick 
+}: ServiceCardProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <motion.div 
-      className="relative"
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: delay }}
+      transition={{ duration: 0.5, delay: delay * 0.1 + 0.1 }}
       viewport={{ once: true }}
+      className="relative h-full"
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
     >
-      <div className={`${bgClass} rounded-2xl p-6 shadow-md border border-gray-100 h-full`}>
-        <div className="absolute -top-3 -left-3 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">
-          {number}
-        </div>
-        <div className="pt-4">
-          <div className="flex justify-center mb-4">
-            <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary">
-              {icon}
+      <Card className={`h-full overflow-hidden transition-all duration-300 hover:shadow-lg ${popular ? 'border-primary/30 ring-1 ring-primary/20' : 'border-gray-200'}`}>
+        {popular && (
+          <div className="absolute top-0 right-0">
+            <div className="bg-primary text-white text-xs font-semibold px-3 py-1 rounded-bl-lg">
+              POPULAR
             </div>
           </div>
-          <h3 className="text-lg font-bold mb-2 text-center">{title}</h3>
-          <p className="text-muted-foreground text-center text-sm">{description}</p>
-        </div>
-      </div>
+        )}
+        
+        <CardHeader className="pb-4">
+          <div className="flex justify-center mb-4">
+            {lottieAnimation ? (
+              <div className="w-16 h-16 flex items-center justify-center">
+                <Lottie
+                  animationData={lottieAnimation}
+                  loop={isHovered}
+                  className="w-full h-full"
+                />
+              </div>
+            ) : (
+              <div className={`w-16 h-16 rounded-full ${popular ? 'bg-primary/10' : 'bg-slate-100'} flex items-center justify-center transition-transform duration-300 ${isHovered ? 'scale-110' : ''}`}>
+                {icon}
+              </div>
+            )}
+          </div>
+          <CardTitle className="text-center text-xl">{title}</CardTitle>
+          <CardDescription className="text-center text-sm">{description}</CardDescription>
+        </CardHeader>
+        
+        <CardContent className="px-6 pb-4">
+          <ul className="space-y-2">
+            {features.map((feature, index) => (
+              <li key={index} className="flex items-start text-sm">
+                <CheckSquare className="h-4 w-4 text-green-500 mt-0.5 mr-2 shrink-0" />
+                <span>{feature}</span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+        
+        <CardFooter className="pt-2 pb-6 px-6">
+          {onClick ? (
+            <Button 
+              onClick={onClick} 
+              className="w-full" 
+              variant={popular ? "default" : "outline"}
+            >
+              {ctaText}
+            </Button>
+          ) : (
+            <Button 
+              asChild 
+              className="w-full" 
+              variant={popular ? "default" : "outline"}
+            >
+              <Link to={ctaLink}>{ctaText}</Link>
+            </Button>
+          )}
+        </CardFooter>
+      </Card>
     </motion.div>
   );
 };
 
 const HowItWorksSection = () => {
-  const aiSteps = [
-    {
-      number: "1",
-      icon: <FileText className="h-6 w-6" />,
-      title: "Enter Details & Choose Template",
-      description: "Add your information and select from our professional templates",
-      delay: 0.1,
-      bgClass: "bg-gradient-to-br from-white to-blue-50/40"
-    },
-    {
-      number: "2",
-      icon: <Sparkles className="h-6 w-6" />,
-      title: "AI Generates Your Resume",
-      description: "Our AI creates a tailored, ATS-optimized resume",
-      delay: 0.2,
-      bgClass: "bg-gradient-to-br from-white to-purple-50/40"
-    },
-    {
-      number: "3",
-      icon: <Download className="h-6 w-6" />,
-      title: "Customize & Download",
-      description: "Make final adjustments and download your resume in one click",
-      delay: 0.3,
-      bgClass: "bg-gradient-to-br from-white to-green-50/40"
-    }
-  ];
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
-  const proSteps = [
+  const openReviewModal = () => setIsReviewModalOpen(true);
+  const closeReviewModal = () => setIsReviewModalOpen(false);
+
+  const serviceCards = [
     {
-      number: "1",
-      icon: <Upload className="h-6 w-6" />,
-      title: "Upload Your Resume",
-      description: "Share your current resume for a free expert review",
-      delay: 0.3,
-      bgClass: "bg-gradient-to-br from-white to-amber-50/40"
+      icon: <FileText className="h-8 w-8 text-primary" />,
+      title: "Resume Builder",
+      description: "Create an ATS-optimized resume in minutes",
+      features: [
+        "AI-powered content generation",
+        "Multiple professional templates",
+        "ATS-friendly layouts",
+        "Custom sections & formats"
+      ],
+      ctaText: "Start Building for Free",
+      ctaLink: "/resume-builder",
+      delay: 1
     },
     {
-      number: "2",
-      icon: <CheckSquare className="h-6 w-6" />,
-      title: "Get Improvement Suggestions",
-      description: "Receive personalized feedback from our experts",
-      delay: 0.4,
-      bgClass: "bg-gradient-to-br from-white to-red-50/40"
+      icon: <FileCheck className="h-8 w-8 text-blue-500" />,
+      title: "Cover Letter Builder",
+      description: "Complement your resume with a matching cover letter",
+      features: [
+        "AI generates customized content",
+        "Job-specific formatting",
+        "Adjustable tone & style",
+        "Matching templates"
+      ],
+      ctaText: "Generate Your Cover Letter",
+      ctaLink: "/cover-letter-services",
+      delay: 2
     },
     {
-      number: "3",
-      icon: <MessageSquare className="h-6 w-6" />,
-      title: "Work With a Certified Writer",
-      description: "Collaborate with a resume professional to perfect your document",
-      delay: 0.5,
-      bgClass: "bg-gradient-to-br from-white to-teal-50/40"
+      icon: <Sparkles className="h-8 w-8 text-amber-500" />,
+      title: "Professional Resume Writing",
+      description: "Expert writers craft your perfect resume",
+      features: [
+        "Written by industry experts",
+        "ATS optimization",
+        "LinkedIn profile option",
+        "Multiple revision rounds"
+      ],
+      ctaText: "Get a Professional Resume",
+      ctaLink: "/resume-writing-services",
+      delay: 3,
+      popular: true
     },
     {
-      number: "4",
-      icon: <FileText className="h-6 w-6" />,
-      title: "Receive Your Polished Resume",
-      description: "Get your job-winning resume ready for applications",
-      delay: 0.6,
-      bgClass: "bg-gradient-to-br from-white to-indigo-50/40"
+      icon: <Award className="h-8 w-8 text-green-500" />,
+      title: "Interview Guarantee Package",
+      description: "Comprehensive job search solution with guarantees",
+      features: [
+        "Guaranteed 5-15 interviews",
+        "Resume, cover letter & LinkedIn",
+        "Job application assistance",
+        "Interview coaching sessions"
+      ],
+      ctaText: "Boost My Job Search",
+      ctaLink: "/interview-guarantee-package",
+      delay: 4
+    },
+    {
+      icon: <Upload className="h-8 w-8 text-violet-500" />,
+      lottieAnimation: resumeReviewAnimation,
+      title: "Free Resume Review",
+      description: "Get feedback on your existing resume",
+      features: [
+        "AI & expert analysis",
+        "ATS score assessment",
+        "Actionable improvement tips",
+        "No obligation review"
+      ],
+      ctaText: "Upload for Free Review",
+      ctaLink: "#",
+      onClick: () => setIsReviewModalOpen(true),
+      delay: 5
     }
   ];
 
   return (
-    <section id="how-it-works" className="py-24 relative">
-      <div className="container max-w-7xl mx-auto px-6">
+    <section id="how-it-works" className="py-24 bg-gradient-to-b from-white to-slate-50 relative overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white to-transparent z-10"></div>
+      
+      {/* Decorative elements */}
+      <div className="absolute -top-32 -right-32 w-64 h-64 bg-blue-500/5 rounded-full blur-2xl"></div>
+      <div className="absolute bottom-32 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-2xl"></div>
+      
+      <div className="container max-w-7xl mx-auto px-6 relative z-20">
         <div className="text-center mb-16">
           <motion.div 
             className="inline-flex items-center px-4 py-2 bg-primary/5 rounded-full mb-4"
@@ -112,86 +210,82 @@ const HowItWorksSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-xs font-medium text-primary">HOW IT WORKS</span>
+            <span className="text-xs font-medium text-primary">OUR SERVICES</span>
           </motion.div>
+          
           <motion.h2 
-            className="section-heading mb-4"
+            className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            Simple Process, Exceptional Results
+            How JobOnboard Works
           </motion.h2>
+          
           <motion.p 
-            className="section-subheading mx-auto"
+            className="text-lg text-muted-foreground max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            Choose the path that works best for your needs
+            Choose the service that best suits your needs and take the next step in your career journey
           </motion.p>
         </div>
 
-        <div className="space-y-16">
-          {/* AI Resume Maker */}
-          <div>
-            <motion.h3 
-              className="text-2xl font-bold mb-8 flex items-center justify-center"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <Sparkles className="h-6 w-6 text-primary mr-2" /> 
-              AI Resume Maker
-            </motion.h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {aiSteps.map((step, index) => (
-                <Step 
-                  key={`ai-step-${index}`}
-                  number={step.number}
-                  icon={step.icon}
-                  title={step.title}
-                  description={step.description}
-                  delay={step.delay}
-                  bgClass={step.bgClass}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Professional Writing Services */}
-          <div>
-            <motion.h3 
-              className="text-2xl font-bold mb-8 flex items-center justify-center"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <FileText className="h-6 w-6 text-blue-500 mr-2" /> 
-              Professional Writing Services
-            </motion.h3>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              {proSteps.map((step, index) => (
-                <Step 
-                  key={`pro-step-${index}`}
-                  number={step.number}
-                  icon={step.icon}
-                  title={step.title}
-                  description={step.description}
-                  delay={step.delay}
-                  bgClass={step.bgClass}
-                />
-              ))}
-            </div>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {serviceCards.map((card, index) => (
+            <ServiceCard
+              key={index}
+              icon={card.icon}
+              lottieAnimation={card.lottieAnimation}
+              title={card.title}
+              description={card.description}
+              features={card.features}
+              ctaText={card.ctaText}
+              ctaLink={card.ctaLink}
+              delay={card.delay}
+              popular={card.popular}
+              onClick={card.onClick}
+            />
+          ))}
+        </div>
+        
+        <div className="mt-16 flex flex-col md:flex-row justify-center gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <Button size="lg" className="w-full md:w-auto" asChild>
+              <Link to="/resume-builder">
+                <FileText className="mr-2 h-5 w-5" />
+                Start Building for Free
+              </Link>
+            </Button>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
+            viewport={{ once: true }}
+          >
+            <Button size="lg" variant="outline" className="w-full md:w-auto" onClick={openReviewModal}>
+              <Star className="mr-2 h-5 w-5 text-amber-500" />
+              Get a Free Resume Review
+            </Button>
+          </motion.div>
         </div>
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute -bottom-32 -right-32 w-64 h-64 bg-blue-500/5 rounded-full blur-2xl" />
-      <div className="absolute top-32 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
+      <CalBookingModal 
+        isOpen={isReviewModalOpen} 
+        onClose={closeReviewModal} 
+        calLink="swiftapply/resume-review"
+      />
     </section>
   );
 };
