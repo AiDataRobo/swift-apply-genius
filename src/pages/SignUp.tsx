@@ -3,9 +3,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
@@ -17,15 +15,13 @@ import {
 } from '@/components/ui/form';
 import SocialLoginButtons from '@/components/auth/SocialLoginButtons';
 import AuthPageLayout from '@/components/layout/AuthPageLayout';
-import PasswordStrengthIndicator from '@/components/auth/PasswordStrengthIndicator';
 import { signUpFormSchema, type SignUpFormData } from '@/schemas/auth';
 import { toast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import PhoneInput from '@/components/auth/PhoneInput';
+import PasswordInput from '@/components/auth/PasswordInput';
 
 const SignUp = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [step, setStep] = useState(1);
   const navigate = useNavigate();
   
@@ -40,9 +36,6 @@ const SignUp = () => {
       terms: false,
     },
   });
-
-  const togglePasswordVisibility = () => setShowPassword(!showPassword);
-  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
 
   const handleNextStep = () => {
     const { fullName, email, phoneNumber } = form.getValues();
@@ -129,12 +122,11 @@ const SignUp = () => {
                     <FormLabel>Full Name</FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <Input 
+                        <input 
                           placeholder="Enter your full name" 
-                          className="transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20" 
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20" 
                           {...field} 
                         />
-                        {field.value && <Check className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-green-500" />}
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -150,15 +142,12 @@ const SignUp = () => {
                     <FormLabel>Email</FormLabel>
                     <FormControl>
                       <div className="relative">
-                        <Input 
+                        <input 
                           type="email" 
                           placeholder="Enter your email" 
-                          className="transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20" 
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20" 
                           {...field} 
                         />
-                        {field.value && !form.formState.errors.email && (
-                          <Check className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-green-500" />
-                        )}
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -204,28 +193,14 @@ const SignUp = () => {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <div className="relative">
-                        <Input 
-                          type={showPassword ? "text" : "password"} 
-                          placeholder="Create a password" 
-                          className="transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20"
-                          {...field} 
-                        />
-                        <button
-                          type="button"
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                          onClick={togglePasswordVisibility}
-                        >
-                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                        </button>
-                      </div>
+                      <PasswordInput
+                        control={form.control}
+                        name="password"
+                        placeholder="Create a password"
+                        className="transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20"
+                        showStrengthIndicator={true}
+                      />
                     </FormControl>
-                    
-                    {/* Password strength indicator */}
-                    {password.length > 0 && (
-                      <PasswordStrengthIndicator password={password} />
-                    )}
-                    
                     <FormMessage />
                   </FormItem>
                 )}
@@ -238,21 +213,12 @@ const SignUp = () => {
                   <FormItem>
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
-                      <div className="relative">
-                        <Input 
-                          type={showConfirmPassword ? "text" : "password"} 
-                          placeholder="Confirm your password" 
-                          className="transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20"
-                          {...field} 
-                        />
-                        <button
-                          type="button"
-                          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                          onClick={toggleConfirmPasswordVisibility}
-                        >
-                          {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                        </button>
-                      </div>
+                      <PasswordInput
+                        control={form.control}
+                        name="confirmPassword"
+                        placeholder="Confirm your password"
+                        className="transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -306,7 +272,7 @@ const SignUp = () => {
       </Form>
       
       <div className="mt-6">
-        <SocialLoginButtons />
+        <SocialLoginButtons showText={true} />
       </div>
       
       <div className="mt-6 text-center">
