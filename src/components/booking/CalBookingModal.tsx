@@ -15,8 +15,9 @@ const CalBookingModal = ({ isOpen, onClose, calLink = "swiftapply/consultation" 
   useEffect(() => {
     (async function () {
       const cal = await getCalApi();
-      // Using the proper way to listen for Cal.com events
-      cal?.on?.('bookingSuccessful', () => {
+      // Since the TypeScript definitions don't correctly include the 'on' method,
+      // we need to use type assertion to tell TypeScript it exists
+      (cal as any)?.on?.('bookingSuccessful', () => {
         console.log("Booking was successful");
         setTimeout(() => {
           onClose();
