@@ -1,10 +1,9 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   ArrowRight, Code, Shield, Database, Cloud, Laptop, Layout, 
   Check, Briefcase, GraduationCap, DollarSign, TrendingUp, HelpCircle, 
-  LineChart, Users, ChartBar, BarChart4, PieChart, Lightbulb, Award, Network
+  LineChart, Users, ChartBar, BarChart4, PieChart, Lightbulb, Award
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -919,4 +918,3 @@ const ITCareerPaths = () => {
 };
 
 export default ITCareerPaths;
-
