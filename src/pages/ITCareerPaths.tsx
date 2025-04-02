@@ -145,7 +145,7 @@ const careerPaths = [
         skills: ['Database Design', 'Data Modeling', 'Enterprise Architecture', 'Data Governance'],
         salary: '$115,000 - $170,000',
         certifications: ['Certified Data Management Professional (CDMP)', 'IBM Certified Data Architect'],
-        description: 'Design and manage the organization's data infrastructure and strategy.'
+        description: 'Design and manage the organization\'s data infrastructure and strategy.'
       }
     ]
   },
