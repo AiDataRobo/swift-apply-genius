@@ -1,9 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  ArrowRight, Code, Shield, Database, Cloud, Laptop, Layout, 
-  Check, Briefcase, GraduationCap, DollarSign, TrendingUp, HelpCircle, 
-  LineChart, Users, ChartBar, BarChart4, PieChart, Lightbulb, Award
+  ArrowRight, 
+  Code, 
+  Shield, 
+  Database, 
+  Cloud, 
+  Laptop, 
+  Layout, 
+  Check, 
+  Briefcase, 
+  GraduationCap, 
+  DollarSign, 
+  TrendingUp, 
+  HelpCircle, 
+  LineChart, 
+  Users, 
+  ChartBar, 
+  BarChart4, 
+  PieChart, 
+  Lightbulb, 
+  Award
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -306,7 +323,7 @@ const careerPaths = [
         skills: ['Relationship Building', 'Product Knowledge', 'Upselling', 'Customer Onboarding'],
         salary: '$65,000 - $110,000',
         certifications: ['Certified Customer Success Manager', 'Customer Experience Specialist'],
-        description: 'Ensure customers achieve desired outcomes while using your company's products or services.'
+        description: 'Ensure customers achieve desired outcomes while using your company\'s products or services.'
       },
       {
         title: 'Marketing Manager',
