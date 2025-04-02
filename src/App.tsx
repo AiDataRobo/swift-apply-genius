@@ -22,6 +22,7 @@ import NotFound from './pages/NotFound';
 import ResumeWritingServices from './pages/ResumeWritingServices';
 import CoverLetterServices from './pages/CoverLetterServices';
 import InterviewGuaranteePackage from './pages/InterviewGuaranteePackage';
+import ITCareerPaths from './pages/ITCareerPaths';
 
 function App() {
   // Create a client instance
@@ -53,6 +54,7 @@ function App() {
                   <Route path="/resume-writing-services" element={<ResumeWritingServices />} />
                   <Route path="/cover-letter-services" element={<CoverLetterServices />} />
                   <Route path="/interview-guarantee-package" element={<InterviewGuaranteePackage />} />
+                  <Route path="/it-career-paths" element={<ITCareerPaths />} />
                   
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />

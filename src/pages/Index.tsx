@@ -12,6 +12,7 @@ import Footer from '@/components/landing/Footer';
 import FreeConsultationSection from '@/components/landing/FreeConsultationSection';
 import FloatingBookButton from '@/components/booking/FloatingBookButton';
 import { useToast } from "@/hooks/use-toast";
+import ExploreITCareerPathsSection from '@/components/landing/ExploreITCareerPathsSection';
 
 const Index = () => {
   const { toast } = useToast();
@@ -87,6 +88,9 @@ const Index = () => {
         </section>
         <section className="section-how-it-works">
           <HowItWorksSection />
+        </section>
+        <section id="it-career-paths" className="section-it-career-paths bg-gradient-to-b from-white to-slate-50">
+          <ExploreITCareerPathsSection />
         </section>
         <section className="section-testimonials">
           <TestimonialsSection />
