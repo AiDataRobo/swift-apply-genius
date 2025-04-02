@@ -107,7 +107,17 @@ const DocumentManager = () => {
   );
 };
 
-const DocumentCard = ({ document }) => {
+interface DocumentCardProps {
+  document: {
+    id: number;
+    type: string;
+    title: string;
+    lastUpdated: string;
+    tags: string[];
+  }
+}
+
+const DocumentCard = ({ document }: DocumentCardProps) => {
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow">
       <div className="bg-primary/5 p-4 flex items-center justify-between">

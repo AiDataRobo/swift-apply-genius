@@ -62,6 +62,30 @@ const NavBar = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  // Get user's name initials for avatar fallback
+  const getUserInitials = () => {
+    if (!user) return "U";
+    
+    // Try to get name from user_metadata
+    const fullName = user.user_metadata?.full_name;
+    if (fullName && typeof fullName === 'string') {
+      return fullName.charAt(0).toUpperCase();
+    }
+    
+    // Fallback to email
+    return user.email?.charAt(0).toUpperCase() || "U";
+  };
+  
+  // Get avatar URL if available from user metadata
+  const getAvatarUrl = () => {
+    return user?.user_metadata?.avatar_url || "";
+  };
+  
+  // Get display name from user metadata or email
+  const getDisplayName = () => {
+    return user?.user_metadata?.full_name || user?.email || "User";
+  };
+
   return (
     <nav className={`${isScrolled ? 'bg-background/80 backdrop-blur-md shadow-sm' : 'bg-transparent'} fixed top-0 left-0 right-0 z-50 transition-all duration-300`}>
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
@@ -119,8 +143,8 @@ const NavBar = () => {
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="h-8 w-8 p-0">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.photoURL || ""} alt={user.displayName || "User Avatar"} />
-                      <AvatarFallback>{user.displayName?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
+                      <AvatarImage src={getAvatarUrl()} alt={getDisplayName()} />
+                      <AvatarFallback>{getUserInitials()}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>

@@ -67,19 +67,19 @@ const Dashboard = () => {
               </TabsList>
               
               <TabsContent value="documents" className="space-y-8">
-                <DocumentManager isPremium={mockUser.isPremium} />
+                <DocumentManager />
               </TabsContent>
               
               <TabsContent value="ai-assistant" className="space-y-8">
-                <AIAssistantPanel isPremium={mockUser.isPremium} />
+                <AIAssistantPanel />
               </TabsContent>
               
               <TabsContent value="job-tracker" className="space-y-8">
-                <JobTracker isPremium={mockUser.isPremium} />
+                <JobTracker />
               </TabsContent>
               
               <TabsContent value="templates" className="space-y-8">
-                <TemplateLibrary isPremium={mockUser.isPremium} />
+                <TemplateLibrary />
               </TabsContent>
               
               <TabsContent value="settings" className="space-y-8">
@@ -90,7 +90,7 @@ const Dashboard = () => {
           
           {!mockUser.isPremium && (
             <div className="mt-12">
-              <PremiumFeatures />
+              <PremiumFeatures user={mockUser} />
             </div>
           )}
         </div>
