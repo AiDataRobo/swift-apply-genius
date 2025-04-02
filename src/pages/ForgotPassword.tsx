@@ -12,52 +12,29 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
-
-const formSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { forgotPasswordSchema, type ForgotPasswordData } from '@/schemas/auth';
+import { useAuth } from '@/contexts/AuthContext';
 
 const ForgotPassword = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { resetPassword, isLoading } = useAuth();
   const [isEmailSent, setIsEmailSent] = useState(false);
   
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<ForgotPasswordData>({
+    resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
       email: "",
     },
   });
 
-  const onSubmit = async (data: FormValues) => {
-    setIsSubmitting(true);
-    
+  const onSubmit = async (data: ForgotPasswordData) => {
     try {
-      // In a real app, this would call your authentication API
-      console.log("Reset password for:", data.email);
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await resetPassword(data.email);
       setIsEmailSent(true);
-      
-      toast({
-        title: "Password reset email sent",
-        description: "Please check your inbox for further instructions",
-        duration: 5000,
-      });
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to send reset email. Please try again.",
-        variant: "destructive",
-        duration: 5000,
-      });
-    } finally {
-      setIsSubmitting(false);
+      // Error is handled by the AuthContext
+      console.error('Password reset error:', error);
     }
   };
 
@@ -105,9 +82,9 @@ const ForgotPassword = () => {
               <Button 
                 type="submit" 
                 className="w-full" 
-                disabled={isSubmitting}
+                disabled={isLoading}
               >
-                {isSubmitting ? (
+                {isLoading ? (
                   <span className="flex items-center">
                     <span className="mr-2">Sending...</span>
                     <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full"></span>
@@ -133,7 +110,10 @@ const ForgotPassword = () => {
                 type="button" 
                 variant="outline" 
                 className="w-full"
-                onClick={() => form.reset()}
+                onClick={() => {
+                  form.reset();
+                  setIsEmailSent(false);
+                }}
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Try another email

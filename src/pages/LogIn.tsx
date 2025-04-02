@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -13,22 +12,16 @@ import { useToast } from "@/hooks/use-toast";
 import SocialLoginButtons from '@/components/auth/SocialLoginButtons';
 import PasswordInput from '@/components/auth/PasswordInput';
 import { motion } from 'framer-motion';
-
-const formSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  rememberMe: z.boolean().optional(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { loginFormSchema, type LoginFormData } from '@/schemas/auth';
+import { useAuth } from '@/contexts/AuthContext';
 
 const LogIn = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login, isLoading } = useAuth();
   
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<LoginFormData>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -36,29 +29,13 @@ const LogIn = () => {
     },
   });
 
-  const onSubmit = async (data: FormValues) => {
-    setIsSubmitting(true);
-    console.log(data);
-    
+  const onSubmit = async (data: LoginFormData) => {
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // This would be a real API call in a production app
-      toast({
-        title: "Welcome back!",
-        description: "You've successfully logged in.",
-      });
-      
+      await login(data.email, data.password);
       navigate('/dashboard');
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Invalid email or password. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
+      // Error is handled by the AuthContext
+      console.error('Login submission error:', error);
     }
   };
 
@@ -155,9 +132,9 @@ const LogIn = () => {
           <Button 
             type="submit" 
             className="w-full mt-4" 
-            disabled={isSubmitting}
+            disabled={isLoading}
           >
-            {isSubmitting ? (
+            {isLoading ? (
               <span className="flex items-center">
                 <span className="mr-2">Logging in</span>
                 <span className="animate-spin rounded-full h-4 w-4 border-2 border-b-transparent border-white"></span>

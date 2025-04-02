@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -16,13 +15,15 @@ import {
 import SocialLoginButtons from '@/components/auth/SocialLoginButtons';
 import AuthPageLayout from '@/components/layout/AuthPageLayout';
 import { signUpFormSchema, type SignUpFormData } from '@/schemas/auth';
-import { toast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { motion } from 'framer-motion';
 import PhoneInput from '@/components/auth/PhoneInput';
 import PasswordInput from '@/components/auth/PasswordInput';
+import { useAuth } from '@/contexts/AuthContext';
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const { register, isLoading } = useAuth();
   
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpFormSchema),
@@ -38,22 +39,10 @@ const SignUp = () => {
 
   const onSubmit = async (data: SignUpFormData) => {
     try {
-      console.log(data);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      toast({
-        title: "Account created successfully!",
-        description: "Welcome to SwiftApply. Let's build your professional toolkit.",
-      });
-      
+      await register(data.email, data.password, data.fullName, data.phoneNumber);
       navigate('/dashboard');
     } catch (error) {
-      toast({
-        title: "Error creating account",
-        description: "Please try again later.",
-        variant: "destructive",
-      });
+      console.error("Registration error:", error);
     }
   };
 
@@ -190,8 +179,8 @@ const SignUp = () => {
               )}
             />
             
-            <Button type="submit" className="w-full">
-              {form.formState.isSubmitting ? (
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? (
                 <span className="flex items-center">
                   <span className="mr-2">Signing up</span>
                   <span className="animate-spin rounded-full h-4 w-4 border-2 border-b-transparent border-white"></span>
