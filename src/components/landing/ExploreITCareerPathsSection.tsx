@@ -1,11 +1,15 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Code, Shield, Database, Cloud, Laptop, Layout } from 'lucide-react';
+import { 
+  ArrowRight, Code, Shield, Database, Cloud, Laptop, Layout,
+  ChartBar, BarChart4, Users, Lightbulb 
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card';
+import ITCareerLottie from './ITCareerLottie';
 
 const careerPaths = [
   {
@@ -14,7 +18,8 @@ const careerPaths = [
     description: 'Frontend, Backend, Full Stack, Mobile Development',
     icon: <Code className="h-8 w-8 text-indigo-600" />,
     bgColor: 'bg-indigo-50',
-    iconColor: 'text-indigo-600'
+    iconColor: 'text-indigo-600',
+    animation: '/animations/software-development.json'
   },
   {
     id: 'cybersecurity',
@@ -22,7 +27,8 @@ const careerPaths = [
     description: 'Ethical Hacking, Security Analyst, Incident Response',
     icon: <Shield className="h-8 w-8 text-red-600" />,
     bgColor: 'bg-red-50',
-    iconColor: 'text-red-600'
+    iconColor: 'text-red-600',
+    animation: '/animations/cybersecurity.json'
   },
   {
     id: 'data-science',
@@ -30,7 +36,8 @@ const careerPaths = [
     description: 'Machine Learning, Data Analyst, AI Engineer',
     icon: <Database className="h-8 w-8 text-purple-600" />,
     bgColor: 'bg-purple-50',
-    iconColor: 'text-purple-600'
+    iconColor: 'text-purple-600',
+    animation: '/animations/data-science.json'
   },
   {
     id: 'cloud-devops',
@@ -38,7 +45,8 @@ const careerPaths = [
     description: 'AWS, Azure, DevOps Engineer',
     icon: <Cloud className="h-8 w-8 text-blue-600" />,
     bgColor: 'bg-blue-50',
-    iconColor: 'text-blue-600'
+    iconColor: 'text-blue-600',
+    animation: '/animations/cloud-computing.json'
   },
   {
     id: 'it-support',
@@ -46,7 +54,8 @@ const careerPaths = [
     description: 'Network Engineer, System Administrator',
     icon: <Laptop className="h-8 w-8 text-green-600" />,
     bgColor: 'bg-green-50',
-    iconColor: 'text-green-600'
+    iconColor: 'text-green-600',
+    animation: '/animations/it-support.json'
   },
   {
     id: 'product-design',
@@ -54,7 +63,35 @@ const careerPaths = [
     description: 'Product Manager, UX Designer',
     icon: <Layout className="h-8 w-8 text-amber-600" />,
     bgColor: 'bg-amber-50',
-    iconColor: 'text-amber-600'
+    iconColor: 'text-amber-600',
+    animation: '/animations/product-design.json'
+  },
+  {
+    id: 'project-management',
+    title: 'Project Management',
+    description: 'Project Manager, Program Manager, Scrum Master',
+    icon: <ChartBar className="h-8 w-8 text-blue-600" />,
+    bgColor: 'bg-blue-50',
+    iconColor: 'text-blue-600',
+    animation: '/animations/project-management.json'
+  },
+  {
+    id: 'business-analysis',
+    title: 'Business & Data Analysis',
+    description: 'Business Analyst, Data Analyst, BI Specialist',
+    icon: <BarChart4 className="h-8 w-8 text-teal-600" />,
+    bgColor: 'bg-teal-50',
+    iconColor: 'text-teal-600',
+    animation: '/animations/business-analysis.json'
+  },
+  {
+    id: 'customer-success',
+    title: 'Customer Success & Marketing',
+    description: 'CSM, Marketing Manager, Digital Marketing',
+    icon: <Users className="h-8 w-8 text-pink-600" />,
+    bgColor: 'bg-pink-50',
+    iconColor: 'text-pink-600',
+    animation: '/animations/customer-success.json'
   }
 ];
 
@@ -92,7 +129,7 @@ const ExploreITCareerPathsSection = () => {
       </div>
 
       <motion.div 
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        className="grid grid-cols-1 md:grid-cols-3 gap-8"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -104,8 +141,15 @@ const ExploreITCareerPathsSection = () => {
               <HoverCardTrigger asChild>
                 <Card className="overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-2 cursor-pointer h-full">
                   <CardContent className="p-6 flex flex-col h-full">
-                    <div className={`${path.bgColor} w-16 h-16 rounded-2xl flex items-center justify-center mb-6`}>
-                      {path.icon}
+                    <div className="flex justify-between items-start mb-4">
+                      <div className={`${path.bgColor} w-16 h-16 rounded-2xl flex items-center justify-center mb-2`}>
+                        {path.icon}
+                      </div>
+                      {path.animation && (
+                        <div className="w-12 h-12">
+                          <ITCareerLottie animationPath={path.animation} width={48} height={48} />
+                        </div>
+                      )}
                     </div>
                     <h3 className="text-xl font-semibold mb-2">{path.title}</h3>
                     <p className="text-muted-foreground mb-6 flex-grow">{path.description}</p>
@@ -128,6 +172,9 @@ const ExploreITCareerPathsSection = () => {
                       {path.id === 'cloud-devops' && 'AWS, Azure, Docker, Kubernetes, CI/CD'}
                       {path.id === 'it-support' && 'Networking, System Administration, Troubleshooting'}
                       {path.id === 'product-design' && 'UI/UX Design, Figma, User Research, Prototyping'}
+                      {path.id === 'project-management' && 'Agile, JIRA, MS Project, Stakeholder Management'}
+                      {path.id === 'business-analysis' && 'SQL, Process Modeling, Requirements Gathering, Excel'}
+                      {path.id === 'customer-success' && 'CRM, Communication, Retention Strategies, Upselling'}
                     </p>
                   </div>
                 </div>
@@ -141,7 +188,7 @@ const ExploreITCareerPathsSection = () => {
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-2xl max-w-3xl mx-auto">
           <h3 className="text-xl font-semibold mb-3">Not sure which career fits you?</h3>
           <p className="text-muted-foreground mb-6">Take our AI-powered career quiz and discover the IT path that matches your skills and interests.</p>
-          <Link to="/it-career-paths">
+          <Link to="/it-career-paths#career-quiz">
             <Button size="lg" className="glass-button">
               Take the Career Quiz
             </Button>

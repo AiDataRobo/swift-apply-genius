@@ -1,15 +1,18 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   ArrowRight, Code, Shield, Database, Cloud, Laptop, Layout, 
-  Check, Briefcase, GraduationCap, DollarSign, TrendingUp, HelpCircle 
+  Check, Briefcase, GraduationCap, DollarSign, TrendingUp, HelpCircle, 
+  LineChart, Users, ChartBar, BarChart4, PieChart, Lightbulb, Award, Network
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import ContentPageLayout from '@/components/layout/ContentPageLayout';
+import ITCareerLottie from '@/components/landing/ITCareerLottie';
 
 // Career path data structure
 const careerPaths = [
@@ -20,6 +23,7 @@ const careerPaths = [
     icon: <Code className="h-8 w-8" />,
     bgColor: 'bg-indigo-50',
     iconColor: 'text-indigo-600',
+    animation: '/animations/software-development.json',
     roles: [
       {
         title: 'Frontend Developer',
@@ -58,6 +62,7 @@ const careerPaths = [
     icon: <Shield className="h-8 w-8" />,
     bgColor: 'bg-red-50',
     iconColor: 'text-red-600',
+    animation: '/animations/cybersecurity.json',
     roles: [
       {
         title: 'Security Analyst',
@@ -89,6 +94,7 @@ const careerPaths = [
     icon: <Database className="h-8 w-8" />,
     bgColor: 'bg-purple-50',
     iconColor: 'text-purple-600',
+    animation: '/animations/data-science.json',
     roles: [
       {
         title: 'Data Analyst',
@@ -110,6 +116,20 @@ const careerPaths = [
         salary: '$110,000 - $180,000',
         certifications: ['Microsoft Certified: Azure AI Engineer', 'TensorFlow Developer Certificate'],
         description: 'Design and implement AI systems that can perform tasks that typically require human intelligence.'
+      },
+      {
+        title: 'Data Engineer',
+        skills: ['ETL Pipelines', 'SQL/NoSQL', 'Big Data Technologies (Hadoop, Spark)', 'Cloud Services'],
+        salary: '$90,000 - $150,000', 
+        certifications: ['Google Cloud Professional Data Engineer', 'AWS Certified Data Analytics'],
+        description: 'Build and maintain data pipelines and infrastructure for data scientists and analysts.'
+      },
+      {
+        title: 'Data Architect',
+        skills: ['Database Design', 'Data Modeling', 'Enterprise Architecture', 'Data Governance'],
+        salary: '$115,000 - $170,000',
+        certifications: ['Certified Data Management Professional (CDMP)', 'IBM Certified Data Architect'],
+        description: 'Design and manage the organization's data infrastructure and strategy.'
       }
     ]
   },
@@ -120,6 +140,7 @@ const careerPaths = [
     icon: <Cloud className="h-8 w-8" />,
     bgColor: 'bg-blue-50',
     iconColor: 'text-blue-600',
+    animation: '/animations/cloud-computing.json',
     roles: [
       {
         title: 'Cloud Engineer',
@@ -151,6 +172,7 @@ const careerPaths = [
     icon: <Laptop className="h-8 w-8" />,
     bgColor: 'bg-green-50',
     iconColor: 'text-green-600',
+    animation: '/animations/it-support.json',
     roles: [
       {
         title: 'IT Support Specialist',
@@ -182,6 +204,7 @@ const careerPaths = [
     icon: <Layout className="h-8 w-8" />,
     bgColor: 'bg-amber-50',
     iconColor: 'text-amber-600',
+    animation: '/animations/product-design.json',
     roles: [
       {
         title: 'UX Designer',
@@ -203,6 +226,134 @@ const careerPaths = [
         salary: '$90,000 - $150,000',
         certifications: ['Certified Scrum Product Owner', 'Product Management Certification'],
         description: 'Lead the development and launch of products from conception to market.'
+      }
+    ]
+  },
+  {
+    id: 'project-management',
+    title: 'Project Management',
+    description: 'Plan, execute, and complete projects on time and within budget.',
+    icon: <ChartBar className="h-8 w-8" />,
+    bgColor: 'bg-blue-50',
+    iconColor: 'text-blue-600',
+    animation: '/animations/project-management.json',
+    roles: [
+      {
+        title: 'Project Manager',
+        skills: ['Project Planning', 'Risk Management', 'Stakeholder Communication', 'Agile/Scrum'],
+        salary: '$85,000 - $140,000',
+        certifications: ['Project Management Professional (PMP)', 'Certified ScrumMaster (CSM)'],
+        description: 'Oversee projects from initiation to completion, ensuring they meet objectives within constraints.'
+      },
+      {
+        title: 'Program Manager',
+        skills: ['Strategic Planning', 'Portfolio Management', 'Resource Allocation', 'Change Management'],
+        salary: '$110,000 - $170,000',
+        certifications: ['Program Management Professional (PgMP)', 'PRINCE2 Practitioner'],
+        description: 'Manage multiple related projects to achieve strategic objectives and business benefits.'
+      },
+      {
+        title: 'Scrum Master',
+        skills: ['Agile Methodologies', 'Team Facilitation', 'Sprint Planning', 'Impediment Removal'],
+        salary: '$80,000 - $130,000',
+        certifications: ['Professional Scrum Master (PSM)', 'SAFe Scrum Master'],
+        description: 'Facilitate and coach teams in implementing Scrum practices and principles.'
+      }
+    ]
+  },
+  {
+    id: 'business-analysis',
+    title: 'Business & Data Analysis',
+    description: 'Analyze business processes and data to drive improvements and inform decisions.',
+    icon: <BarChart4 className="h-8 w-8" />,
+    bgColor: 'bg-teal-50',
+    iconColor: 'text-teal-600',
+    animation: '/animations/business-analysis.json',
+    roles: [
+      {
+        title: 'Business Analyst',
+        skills: ['Requirements Gathering', 'Process Mapping', 'Data Analysis', 'System Implementation'],
+        salary: '$70,000 - $115,000',
+        certifications: ['Certified Business Analysis Professional (CBAP)', 'PMI Professional in Business Analysis'],
+        description: 'Bridge the gap between business needs and technical solutions through analysis and requirements definition.'
+      },
+      {
+        title: 'Data Analyst',
+        skills: ['SQL', 'Data Visualization', 'Statistical Analysis', 'Reporting'],
+        salary: '$65,000 - $100,000',
+        certifications: ['Certified Analytics Professional (CAP)', 'Microsoft Power BI Data Analyst'],
+        description: 'Collect, clean, and interpret data sets to answer questions and solve business problems.'
+      },
+      {
+        title: 'Business Intelligence Analyst',
+        skills: ['BI Tools', 'Data Warehousing', 'ETL Processes', 'Dashboard Creation'],
+        salary: '$75,000 - $120,000',
+        certifications: ['Certified Business Intelligence Professional', 'Tableau Desktop Specialist'],
+        description: 'Transform raw data into meaningful insights through reports and visualizations for decision-makers.'
+      }
+    ]
+  },
+  {
+    id: 'customer-success',
+    title: 'Customer Success & Marketing',
+    description: 'Drive customer satisfaction, retention, and growth through relationship management.',
+    icon: <Users className="h-8 w-8" />,
+    bgColor: 'bg-pink-50',
+    iconColor: 'text-pink-600',
+    animation: '/animations/customer-success.json',
+    roles: [
+      {
+        title: 'Customer Success Manager',
+        skills: ['Relationship Building', 'Product Knowledge', 'Upselling', 'Customer Onboarding'],
+        salary: '$65,000 - $110,000',
+        certifications: ['Certified Customer Success Manager', 'Customer Experience Specialist'],
+        description: 'Ensure customers achieve desired outcomes while using your company's products or services.'
+      },
+      {
+        title: 'Marketing Manager',
+        skills: ['Marketing Strategy', 'Campaign Management', 'Analytics', 'Content Creation'],
+        salary: '$70,000 - $130,000',
+        certifications: ['Professional Certified Marketer', 'Digital Marketing Certification'],
+        description: 'Develop and implement marketing strategies to promote products, services, or brands.'
+      },
+      {
+        title: 'Digital Marketing Specialist',
+        skills: ['SEO/SEM', 'Social Media', 'Email Marketing', 'Conversion Optimization'],
+        salary: '$60,000 - $95,000',
+        certifications: ['Google Ads Certification', 'HubSpot Inbound Marketing'],
+        description: 'Plan and execute digital marketing campaigns across various online channels.'
+      }
+    ]
+  },
+  {
+    id: 'product-management',
+    title: 'Product Management',
+    description: 'Define product vision, strategy, and roadmap to deliver successful products.',
+    icon: <Lightbulb className="h-8 w-8" />,
+    bgColor: 'bg-orange-50',
+    iconColor: 'text-orange-600',
+    animation: '/animations/product-management.json',
+    roles: [
+      {
+        title: 'Product Manager',
+        skills: ['Product Strategy', 'User Stories', 'Prioritization', 'Cross-functional Leadership'],
+        salary: '$90,000 - $160,000',
+        certifications: ['Certified Product Manager', 'Scrum Product Owner Certification'],
+        description: 'Guide the success of a product throughout its lifecycle from concept to launch and beyond.'
+      },
+      {
+        title: 'Product Owner',
+        skills: ['Backlog Management', 'User Requirements', 'Agile Development', 'Stakeholder Management'],
+        salary: '$85,000 - $140,000',
+        certifications: ['Certified Scrum Product Owner (CSPO)', 'SAFe Product Owner/Product Manager'],
+        description: 'Represent customer needs and define requirements for agile development teams.'
+      },
+      {
+        title: 'Technical Product Manager',
+        skills: ['Technical Background', 'API Knowledge', 'Systems Integration', 'Product Development'],
+        salary: '$100,000 - $170,000',
+        certifications: ['Technical Product Management Certification', 'Agile Certified Practitioner'],
+        description: 'Manage products with significant technical components, bridging engineering and business needs.'
       }
     ]
   }
@@ -242,7 +393,10 @@ const quizQuestions = [
       { value: 'security', label: 'Protecting systems from threats' },
       { value: 'data', label: 'Analyzing data and finding patterns' },
       { value: 'infrastructure', label: 'Managing IT systems and cloud services' },
-      { value: 'design', label: 'Creating user interfaces and experiences' }
+      { value: 'design', label: 'Creating user interfaces and experiences' },
+      { value: 'management', label: 'Managing projects and coordinating teams' },
+      { value: 'business', label: 'Analyzing business processes and requirements' },
+      { value: 'customer', label: 'Helping customers succeed with technology' }
     ]
   },
   {
@@ -274,24 +428,44 @@ const ITCareerPaths = () => {
   const [showQuiz, setShowQuiz] = useState(false);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [recommendation, setRecommendation] = useState<string | null>(null);
-
+  
+  // State for career category display
+  const [activeCategory, setActiveCategory] = useState('all');
+  
+  // Scroll to category ref
+  const categoryRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  
   // Handle quiz submission
   const handleQuizSubmit = () => {
-    // Simple recommendation logic based on answers
+    // Enhanced recommendation logic based on answers
+    let recommendedPath = 'software-development'; // Default
+    
     if (answers.q1 === 'software') {
-      setRecommendation('software-development');
+      recommendedPath = 'software-development';
     } else if (answers.q1 === 'security') {
-      setRecommendation('cybersecurity');
+      recommendedPath = 'cybersecurity';
     } else if (answers.q1 === 'data') {
-      setRecommendation('data-science');
+      recommendedPath = 'data-science';
     } else if (answers.q1 === 'infrastructure') {
-      setRecommendation('cloud-devops');
+      recommendedPath = 'cloud-devops';
     } else if (answers.q1 === 'design') {
-      setRecommendation('product-design');
-    } else {
-      // Default or fallback recommendation
-      setRecommendation('software-development');
+      recommendedPath = 'product-design';
+    } else if (answers.q1 === 'management') {
+      recommendedPath = 'project-management';
+    } else if (answers.q1 === 'business') {
+      recommendedPath = 'business-analysis';
+    } else if (answers.q1 === 'customer') {
+      recommendedPath = 'customer-success';
     }
+    
+    // Adjust based on problem-solving style
+    if (answers.q2 === 'analytical' && (answers.q1 === 'data' || answers.q1 === 'business')) {
+      recommendedPath = 'data-science';
+    } else if (answers.q2 === 'strategic' && answers.q1 === 'management') {
+      recommendedPath = 'product-management';
+    }
+    
+    setRecommendation(recommendedPath);
   };
 
   // Reset quiz
@@ -300,23 +474,57 @@ const ITCareerPaths = () => {
     setRecommendation(null);
   };
 
+  // Scroll to section
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <ContentPageLayout 
       title="IT Career Paths Guide" 
       subtitle="Explore different IT careers, required skills, salary insights, and growth opportunities."
     >
-      {/* Hero Section */}
+      {/* Hero Section with Navigation */}
       <section className="mb-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
               Discover Your Ideal <span className="text-primary">IT Career Path</span>
             </h1>
-            <p className="text-lg text-muted-foreground mb-8">
+            <p className="text-lg text-muted-foreground mb-6">
               The tech industry offers diverse and rewarding career opportunities. 
               Explore various paths to find the one that matches your skills, interests, 
               and career goals.
             </p>
+            
+            {/* Quick Navigation */}
+            <div className="mb-8 flex flex-wrap gap-3">
+              <Button 
+                variant="outline" size="sm" 
+                onClick={() => scrollToSection('career-paths')}
+                className="rounded-full"
+              >
+                Browse Careers
+              </Button>
+              <Button 
+                variant="outline" size="sm" 
+                onClick={() => scrollToSection('career-quiz')}
+                className="rounded-full"
+              >
+                Take Career Quiz
+              </Button>
+              <Button 
+                variant="outline" size="sm" 
+                onClick={() => scrollToSection('faq')}
+                className="rounded-full"
+              >
+                FAQ
+              </Button>
+            </div>
+            
             <div className="flex flex-wrap gap-4">
               <Button 
                 size="lg" 
@@ -328,7 +536,7 @@ const ITCareerPaths = () => {
               <Button 
                 variant="outline" 
                 size="lg"
-                onClick={() => window.scrollTo({ top: document.getElementById('career-paths')?.offsetTop - 100, behavior: 'smooth' })}
+                onClick={() => scrollToSection('career-paths')}
               >
                 Browse All Careers
               </Button>
@@ -345,7 +553,31 @@ const ITCareerPaths = () => {
         </div>
       </section>
 
-      {/* Career Paths Section */}
+      {/* Career Categories - Quick Filter */}
+      <section className="mb-10">
+        <div className="flex flex-wrap justify-center gap-3">
+          <Button 
+            variant={activeCategory === 'all' ? "default" : "outline"} 
+            onClick={() => setActiveCategory('all')}
+            className="rounded-full text-sm"
+          >
+            All Categories
+          </Button>
+          {careerPaths.map((path) => (
+            <Button 
+              key={path.id}
+              variant={activeCategory === path.id ? "default" : "outline"} 
+              onClick={() => setActiveCategory(path.id)}
+              className="rounded-full text-sm"
+            >
+              <span className={`mr-2 ${path.iconColor}`}>{path.icon}</span>
+              {path.title}
+            </Button>
+          ))}
+        </div>
+      </section>
+
+      {/* Career Paths Section - Enhanced with Grid */}
       <section id="career-paths" className="mb-20">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Explore IT Career Paths</h2>
@@ -355,12 +587,69 @@ const ITCareerPaths = () => {
           </p>
         </div>
 
+        {/* Grid View for Career Paths */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {careerPaths
+            .filter(path => activeCategory === 'all' || activeCategory === path.id)
+            .map((path) => (
+              <Card 
+                key={path.id}
+                className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 h-full overflow-hidden"
+                ref={el => categoryRefs.current[path.id] = el}
+              >
+                <CardContent className="p-6 flex flex-col h-full">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className={`${path.bgColor} p-3 rounded-lg`}>
+                      <span className={path.iconColor}>{path.icon}</span>
+                    </div>
+                    <h3 className="text-xl font-semibold">{path.title}</h3>
+                  </div>
+                  
+                  <p className="text-muted-foreground mb-4 flex-grow">{path.description}</p>
+                  
+                  <div className="mb-4">
+                    <h4 className="text-sm font-medium mb-2">Popular Roles:</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {path.roles.slice(0, 3).map((role, idx) => (
+                        <span 
+                          key={idx} 
+                          className="text-xs bg-slate-100 px-2 py-1 rounded-full"
+                        >
+                          {role.title}
+                        </span>
+                      ))}
+                      {path.roles.length > 3 && (
+                        <span className="text-xs bg-slate-100 px-2 py-1 rounded-full">
+                          +{path.roles.length - 3} more
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="mt-auto w-full justify-between"
+                    onClick={() => {
+                      document.getElementById(path.id)?.scrollIntoView({ behavior: 'smooth' });
+                      const tabTrigger = document.querySelector(`[data-state="inactive"][value="${path.id}"]`) as HTMLElement;
+                      if (tabTrigger) tabTrigger.click();
+                    }}
+                  >
+                    Explore Career Path <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+        </div>
+
+        {/* Detailed Career Information Tabs */}
         <Tabs defaultValue="software-development" className="w-full">
-          <TabsList className="flex flex-wrap justify-center mb-8 gap-2">
+          <TabsList className="flex flex-wrap justify-center mb-8 gap-2 bg-slate-100 p-1 rounded-lg">
             {careerPaths.map((path) => (
               <TabsTrigger 
                 key={path.id} 
                 value={path.id}
+                id={path.id}
                 className="px-4 py-2 rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
                 <span className="flex items-center gap-2">
@@ -396,6 +685,10 @@ const ITCareerPaths = () => {
                           {path.id === 'cloud-devops' && 'Projected 25% growth over the next decade'}
                           {path.id === 'it-support' && 'Projected 15% growth over the next decade'}
                           {path.id === 'product-design' && 'Projected 20% growth over the next decade'}
+                          {path.id === 'project-management' && 'Projected 18% growth over the next decade'}
+                          {path.id === 'business-analysis' && 'Projected 24% growth over the next decade'}
+                          {path.id === 'customer-success' && 'Projected 16% growth over the next decade'}
+                          {path.id === 'product-management' && 'Projected 21% growth over the next decade'}
                         </p>
                       </div>
                     </div>
@@ -412,6 +705,10 @@ const ITCareerPaths = () => {
                           {path.id === 'cloud-devops' && '$90,000 - $180,000 with experience'}
                           {path.id === 'it-support' && '$45,000 - $120,000 varying by position'}
                           {path.id === 'product-design' && '$70,000 - $150,000 based on role'}
+                          {path.id === 'project-management' && '$80,000 - $170,000 based on experience'}
+                          {path.id === 'business-analysis' && '$65,000 - $120,000 depending on specialization'}
+                          {path.id === 'customer-success' && '$60,000 - $130,000 based on industry'}
+                          {path.id === 'product-management' && '$85,000 - $170,000 depending on company size'}
                         </p>
                       </div>
                     </div>
@@ -424,7 +721,7 @@ const ITCareerPaths = () => {
                 
                 <div className="bg-slate-50 rounded-xl p-6">
                   <h4 className="font-semibold text-lg mb-4">Key Roles</h4>
-                  <div className="space-y-4">
+                  <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2 scrollbar-thin">
                     {path.roles.map((role, index) => (
                       <div key={index} className="bg-white rounded-lg p-4 shadow-sm">
                         <h5 className="font-semibold mb-2">{role.title}</h5>
@@ -469,7 +766,7 @@ const ITCareerPaths = () => {
         </Tabs>
       </section>
 
-      {/* Career Quiz Section */}
+      {/* Career Quiz Section - Enhanced UI */}
       <section id="career-quiz" className="mb-20 bg-slate-50 rounded-xl p-8">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-3">Find Your IT Career Match</h2>
@@ -566,7 +863,7 @@ const ITCareerPaths = () => {
         )}
       </section>
 
-      {/* FAQ Section */}
+      {/* FAQ Section - Enhanced UI */}
       <section id="faq" className="mb-20">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
@@ -622,3 +919,4 @@ const ITCareerPaths = () => {
 };
 
 export default ITCareerPaths;
+
