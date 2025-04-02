@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Menu, Moon, Sun, User, LogOut, FileText, Briefcase, Layout, Settings, Star } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface DashboardHeaderProps {
   user: {
@@ -17,6 +18,8 @@ interface DashboardHeaderProps {
 const DashboardHeader = ({ user }: DashboardHeaderProps) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const { toast } = useToast();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -24,6 +27,15 @@ const DashboardHeader = ({ user }: DashboardHeaderProps) => {
       title: `${isDarkMode ? 'Light' : 'Dark'} mode activated`,
       duration: 2000,
     });
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   return (
@@ -125,7 +137,11 @@ const DashboardHeader = ({ user }: DashboardHeaderProps) => {
                       Settings
                     </Link>
                   </Button>
-                  <Button variant="ghost" className="w-full justify-start text-destructive">
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start text-destructive"
+                    onClick={handleLogout}
+                  >
                     <LogOut className="mr-2 h-4 w-4" />
                     Log out
                   </Button>

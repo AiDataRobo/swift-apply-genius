@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,8 +18,13 @@ import { useAuth } from '@/contexts/AuthContext';
 const ForgotPassword = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { resetPassword, isLoading } = useAuth();
+  const { resetPassword, isLoading, user } = useAuth();
   const [isEmailSent, setIsEmailSent] = useState(false);
+  
+  // If user is already logged in, redirect to dashboard
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
   
   const form = useForm<ForgotPasswordData>({
     resolver: zodResolver(forgotPasswordSchema),

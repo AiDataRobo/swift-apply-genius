@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock } from "lucide-react";
-import AuthPageLayout from '@/components/layout/AuthPageLayout';
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useToast } from "@/hooks/use-toast";
+
+import { useState } from 'react';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Mail, Lock } from 'lucide-react';
 import SocialLoginButtons from '@/components/auth/SocialLoginButtons';
-import PasswordInput from '@/components/auth/PasswordInput';
-import { motion } from 'framer-motion';
+import AuthPageLayout from '@/components/layout/AuthPageLayout';
 import { loginFormSchema, type LoginFormData } from '@/schemas/auth';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/AuthContext';
 
 const LogIn = () => {
-  const { toast } = useToast();
   const navigate = useNavigate();
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, user } = useAuth();
   
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
@@ -29,46 +34,55 @@ const LogIn = () => {
     },
   });
 
+  // If user is already logged in, redirect to dashboard
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   const onSubmit = async (data: LoginFormData) => {
     try {
       await login(data.email, data.password);
       navigate('/dashboard');
     } catch (error) {
-      // Error is handled by the AuthContext
-      console.error('Login submission error:', error);
+      console.error("Login error:", error);
+      // Error is handled in the AuthContext
     }
+  };
+
+  const formVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
   };
 
   return (
     <AuthPageLayout 
       title="Welcome back" 
-      subtitle="Log in to your account to continue" 
+      subtitle="Log in to your account to continue"
       isLogin={true}
     >
       <Form {...form}>
         <motion.form 
           onSubmit={form.handleSubmit(onSubmit)} 
           className="space-y-4"
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          variants={formVariants}
+          initial="hidden"
+          animate="visible"
         >
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor="email">Email</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                       <Mail className="h-4 w-4" />
                     </span>
                     <Input 
-                      id="email" 
                       type="email" 
                       className="pl-10 transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20" 
-                      placeholder="you@example.com" 
+                      placeholder="you@example.com"
                       {...field} 
                     />
                   </div>
@@ -83,24 +97,25 @@ const LogIn = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <div className="flex items-center justify-between">
-                  <FormLabel htmlFor="password">Password</FormLabel>
-                  <motion.div whileHover={{ scale: 1.05 }}>
-                    <Link to="/forgot-password" className="text-xs text-primary hover:underline">
-                      Forgot password?
-                    </Link>
-                  </motion.div>
+                <div className="flex justify-between items-center">
+                  <FormLabel>Password</FormLabel>
+                  <Link 
+                    to="/forgot-password" 
+                    className="text-xs text-primary hover:underline"
+                  >
+                    Forgot password?
+                  </Link>
                 </div>
                 <FormControl>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                       <Lock className="h-4 w-4" />
                     </span>
-                    <PasswordInput 
+                    <Input 
+                      type="password" 
                       className="pl-10 transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20" 
                       placeholder="Enter your password"
-                      id="password"
-                      {...field} 
+                      {...field}
                     />
                   </div>
                 </FormControl>
@@ -113,25 +128,25 @@ const LogIn = () => {
             control={form.control}
             name="rememberMe"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 py-2">
                 <FormControl>
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                    checked={field.value}
-                    onChange={field.onChange}
+                  <Checkbox 
+                    checked={field.value} 
+                    onCheckedChange={field.onChange}
                   />
                 </FormControl>
-                <label htmlFor="rememberMe" className="text-sm font-medium leading-none cursor-pointer">
-                  Remember me
-                </label>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-normal">
+                    Remember me for 30 days
+                  </FormLabel>
+                </div>
               </FormItem>
             )}
           />
           
           <Button 
             type="submit" 
-            className="w-full mt-4" 
+            className="w-full" 
             disabled={isLoading}
           >
             {isLoading ? (
@@ -140,7 +155,7 @@ const LogIn = () => {
                 <span className="animate-spin rounded-full h-4 w-4 border-2 border-b-transparent border-white"></span>
               </span>
             ) : (
-              "Login to My Account"
+              "Log In"
             )}
           </Button>
         </motion.form>
@@ -150,14 +165,12 @@ const LogIn = () => {
         <SocialLoginButtons showText={true} />
       </div>
       
-      <div className="mt-6 text-center text-sm">
-        <p>
-          Don't have an account?{" "}
-          <motion.span whileHover={{ scale: 1.05 }} className="inline-block">
-            <Link to="/signup" className="text-primary hover:underline">
-              Sign up
-            </Link>
-          </motion.span>
+      <div className="mt-6 text-center">
+        <p className="text-sm text-muted-foreground">
+          Don't have an account?{' '}
+          <Link to="/signup" className="font-medium text-primary hover:underline">
+            Sign up for free
+          </Link>
         </p>
       </div>
     </AuthPageLayout>

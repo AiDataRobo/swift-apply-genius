@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,8 @@ import { User, Mail, Key, Download, Trash2, Share2, Bell, Shield, CreditCard, Lo
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Switch } from '@/components/ui/switch';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 interface UserSettingsProps {
   user: {
@@ -19,14 +21,50 @@ interface UserSettingsProps {
 
 const UserSettings = ({ user }: UserSettingsProps) => {
   const { toast } = useToast();
+  const { user: authUser, logout } = useAuth();
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
+  const [loading, setLoading] = useState(false);
   
-  const handleSaveProfile = () => {
-    toast({
-      title: "Profile Updated",
-      description: "Your profile information has been updated successfully.",
-    });
+  useEffect(() => {
+    if (authUser) {
+      setName(authUser.user_metadata?.full_name || "");
+      setEmail(authUser.email || "");
+    }
+  }, [authUser]);
+  
+  const handleSaveProfile = async () => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.updateUser({
+        email: email,
+        data: { full_name: name }
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Profile Updated",
+        description: "Your profile information has been updated successfully.",
+      });
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast({
+        title: "Update Failed",
+        description: error instanceof Error ? error.message : "There was an error updating your profile",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
   
   const handleExportData = () => {
@@ -106,8 +144,13 @@ const UserSettings = ({ user }: UserSettingsProps) => {
                 </div>
                 
                 <div className="pt-4">
-                  <Button onClick={handleSaveProfile}>
-                    Save Changes
+                  <Button onClick={handleSaveProfile} disabled={loading}>
+                    {loading ? (
+                      <span className="flex items-center">
+                        <span className="mr-2">Saving...</span>
+                        <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full"></span>
+                      </span>
+                    ) : "Save Changes"}
                   </Button>
                 </div>
               </div>
@@ -123,7 +166,7 @@ const UserSettings = ({ user }: UserSettingsProps) => {
               <p className="text-sm text-muted-foreground mb-4">
                 Sign out from your account on this device.
               </p>
-              <Button variant="destructive">
+              <Button variant="destructive" onClick={handleLogout}>
                 Sign Out
               </Button>
             </CardContent>

@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { useToast } from "@/hooks/use-toast";
+import { Navigate } from 'react-router-dom';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import WelcomeSection from '@/components/dashboard/WelcomeSection';
 import DocumentManager from '@/components/dashboard/DocumentManager';
@@ -9,56 +10,90 @@ import JobTracker from '@/components/dashboard/JobTracker';
 import TemplateLibrary from '@/components/dashboard/TemplateLibrary';
 import UserSettings from '@/components/dashboard/UserSettings';
 import PremiumFeatures from '@/components/dashboard/PremiumFeatures';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Dashboard = () => {
-  const { toast } = useToast();
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("documents");
-  const user = { name: "Sarah", email: "sarah@example.com", isPremium: false };
+  const { user, isLoading } = useAuth();
+  // Default to documents tab
+  const [activeTab, setActiveTab] = useState('documents');
+
+  // Parse URL query parameters to get tab
+  React.useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const tabParam = queryParams.get('tab');
+    if (tabParam) {
+      setActiveTab(tabParam);
+    }
+  }, []);
+
+  // While checking auth status, show loading state
+  if (isLoading) {
+    return <div className="flex h-screen items-center justify-center">
+      <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
+    </div>;
+  }
+
+  // If not logged in, redirect to login
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Mock user data - in a real app, this would come from user context
+  const mockUser = {
+    name: user?.user_metadata?.full_name || "User",
+    email: user?.email || "",
+    isPremium: false
+  };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <DashboardHeader user={user} />
+    <div className="flex flex-col min-h-screen bg-background">
+      <DashboardHeader user={mockUser} />
       
-      <main className="flex-1 container mx-auto px-4 py-6 md:px-6 lg:px-8">
-        <WelcomeSection user={user} />
-        
-        <Tabs defaultValue="documents" className="mt-8" onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 w-full mb-6">
-            <TabsTrigger value="documents" className="text-sm">Documents</TabsTrigger>
-            <TabsTrigger value="ai-assistant" className="text-sm">AI Assistant</TabsTrigger>
-            <TabsTrigger value="job-tracker" className="text-sm">Job Tracker</TabsTrigger>
-            <TabsTrigger value="templates" className="text-sm">Templates</TabsTrigger>
-            <TabsTrigger value="settings" className="text-sm">Settings</TabsTrigger>
-            <TabsTrigger value="premium" className="text-sm">Premium</TabsTrigger>
-          </TabsList>
+      <main className="flex-grow p-4 md:p-8">
+        <div className="container mx-auto">
+          <WelcomeSection user={mockUser} />
           
-          <TabsContent value="documents" className="space-y-6">
-            <DocumentManager />
-          </TabsContent>
+          <div className="mt-8">
+            <Tabs 
+              defaultValue={activeTab} 
+              onValueChange={setActiveTab}
+              className="space-y-8"
+            >
+              <TabsList className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <TabsTrigger value="documents">My Documents</TabsTrigger>
+                <TabsTrigger value="ai-assistant">AI Assistant</TabsTrigger>
+                <TabsTrigger value="job-tracker">Job Tracker</TabsTrigger>
+                <TabsTrigger value="templates">Templates</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="documents" className="space-y-8">
+                <DocumentManager isPremium={mockUser.isPremium} />
+              </TabsContent>
+              
+              <TabsContent value="ai-assistant" className="space-y-8">
+                <AIAssistantPanel isPremium={mockUser.isPremium} />
+              </TabsContent>
+              
+              <TabsContent value="job-tracker" className="space-y-8">
+                <JobTracker isPremium={mockUser.isPremium} />
+              </TabsContent>
+              
+              <TabsContent value="templates" className="space-y-8">
+                <TemplateLibrary isPremium={mockUser.isPremium} />
+              </TabsContent>
+              
+              <TabsContent value="settings" className="space-y-8">
+                <UserSettings user={mockUser} />
+              </TabsContent>
+            </Tabs>
+          </div>
           
-          <TabsContent value="ai-assistant" className="space-y-6">
-            <AIAssistantPanel />
-          </TabsContent>
-          
-          <TabsContent value="job-tracker" className="space-y-6">
-            <JobTracker />
-          </TabsContent>
-          
-          <TabsContent value="templates" className="space-y-6">
-            <TemplateLibrary />
-          </TabsContent>
-          
-          <TabsContent value="settings" className="space-y-6">
-            <UserSettings user={user} />
-          </TabsContent>
-          
-          <TabsContent value="premium" className="space-y-6">
-            <PremiumFeatures user={user} />
-          </TabsContent>
-        </Tabs>
+          {!mockUser.isPremium && (
+            <div className="mt-12">
+              <PremiumFeatures />
+            </div>
+          )}
+        </div>
       </main>
     </div>
   );
