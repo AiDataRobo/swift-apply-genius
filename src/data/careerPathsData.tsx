@@ -538,7 +538,7 @@ export const careerPathsData = [
       }
     ],
     
-    careerInsight: 'Data science isn't a monolithic field—professionals typically specialize in areas like machine learning engineering, computer vision, NLP, business analytics, or research. Your career path can emphasize engineering, science, or business aspects depending on your strengths and interests.',
+    careerInsight: "Data science isn't a monolithic field—professionals typically specialize in areas like machine learning engineering, computer vision, NLP, business analytics, or research. Your career path can emphasize engineering, science, or business aspects depending on your strengths and interests.",
     
     onlineCourses: [
       {
@@ -792,3 +792,4 @@ export const careerPathsData = [
         title: 'Kubernetes: Up and Running',
         author: 'Brendan Burns, Joe Beda, and Kelsey Hightower'
       }
+    ],
