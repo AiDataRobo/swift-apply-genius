@@ -793,3 +793,567 @@ export const careerPathsData = [
         author: 'Brendan Burns, Joe Beda, and Kelsey Hightower'
       }
     ],
+    
+    communities: [
+      {
+        name: 'DevOps Stack Exchange',
+        description: 'Q&A platform for DevOps professionals',
+        url: 'https://devops.stackexchange.com/'
+      },
+      {
+        name: 'Reddit - r/devops',
+        description: 'Community for DevOps discussions',
+        url: 'https://www.reddit.com/r/devops/'
+      },
+      {
+        name: 'Kubernetes Slack',
+        description: 'Slack community for Kubernetes users',
+        url: 'https://kubernetes.slack.com/'
+      },
+      {
+        name: 'AWS, Azure, and GCP Community forums',
+        description: 'Official forums for major cloud providers',
+        url: 'https://aws.amazon.com/forums/'
+      }
+    ],
+    
+    relatedPaths: ['software-development', 'cybersecurity', 'it-support'],
+    
+    roles: [
+      {
+        title: 'Cloud Engineer',
+        skills: ['AWS/Azure/GCP', 'Cloud Architecture', 'IaaS, PaaS, SaaS'],
+        salary: '$90,000 - $140,000',
+        certifications: ['AWS Certified Solutions Architect', 'Microsoft Certified: Azure Solutions Architect'],
+        description: 'Design and implement cloud-based solutions for organizations.'
+      },
+      {
+        title: 'DevOps Engineer',
+        skills: ['CI/CD', 'Docker', 'Kubernetes', 'Terraform', 'Automation'],
+        salary: '$100,000 - $160,000',
+        certifications: ['AWS Certified DevOps Engineer', 'Docker Certified Associate'],
+        description: 'Bridge software development and IT operations to improve deployment frequency and reliability.'
+      },
+      {
+        title: 'Site Reliability Engineer',
+        skills: ['Monitoring', 'Incident Response', 'System Design', 'Performance Optimization'],
+        salary: '$120,000 - $180,000',
+        certifications: ['Google Professional Cloud DevOps Engineer', 'Kubernetes Administrator (CKA)'],
+        description: 'Focus on availability, latency, performance, and capacity of software systems.'
+      },
+      {
+        title: 'Cloud Solutions Architect',
+        skills: ['Multi-cloud Strategy', 'Solution Design', 'Migration Planning', 'Cost Optimization'],
+        salary: '$110,000 - $175,000',
+        certifications: ['AWS Solutions Architect Professional', 'Google Professional Cloud Architect'],
+        description: 'Design and plan cloud architecture solutions that meet business requirements.'
+      }
+    ]
+  },
+  {
+    id: 'it-support',
+    title: 'IT Support',
+    description: 'Provide technical assistance and support for computer systems and networks.',
+    longDescription: "IT support professionals help organizations maintain and improve their computer systems and networks. They troubleshoot hardware and software issues, manage user accounts, and ensure systems are running smoothly.",
+    icon: <Laptop className="h-8 w-8 text-green-600" />,
+    bgColor: 'bg-green-50',
+    iconColor: 'text-green-600',
+    animation: '/animations/it-support.json',
+    growthPotential: 'Projected 15% growth over the next decade',
+    salaryRange: '$60,000 - $120,000 depending on experience and role',
+    keySkills: ['Troubleshooting', 'Problem Solving', 'User Support', 'Network Management', 'System Administration'],
+    educationRequirements: "Bachelor's degree in Computer Science, IT, or related field",
+    jobOutlook: 'Good job prospects, with opportunities for advancement',
+    topCertifications: 'Microsoft Certified: IT Pro, CompTIA A+, CompTIA Network+',
+    learningResources: 'Microsoft Virtual Academy, CompTIA courses, online tutorials',
+    
+    technicalSkills: [
+      'Troubleshooting hardware and software issues',
+      'Managing user accounts and permissions',
+      'Network management and configuration',
+      'System administration and maintenance',
+      'Operating system support (Windows, macOS, Linux)',
+      'Backup and recovery strategies',
+      'Remote support and troubleshooting',
+      'IT security basics'
+    ],
+    
+    softSkills: [
+      'Problem-solving and analytical thinking',
+      'Attention to detail',
+      'Communication skills',
+      'Teamwork and collaboration',
+      'Time management',
+      'Adaptability',
+      'Continuous learning'
+    ],
+    
+    technologies: [
+      'Windows', 'macOS', 'Linux', 'Network protocols (TCP/IP, DNS)',
+      'Operating system support (Windows, macOS, Linux)',
+      'Backup and recovery strategies',
+      'Remote support and troubleshooting',
+      'IT security basics'
+    ],
+    
+    skillTip: 'IT support professionals need strong technical skills and excellent problem-solving abilities. Stay updated with the latest technologies and tools.',
+    
+    formalEducation: 'A bachelor's degree in Computer Science, IT, or related field is typically required for IT support roles.',
+    
+    certifications: [
+      {
+        name: 'Microsoft Certified: IT Pro',
+        description: 'Demonstrates proficiency in IT support and troubleshooting'
+      },
+      {
+        name: 'CompTIA A+',
+        description: 'Certifies knowledge of hardware and software basics'
+      },
+      {
+        name: 'CompTIA Network+',
+        description: 'Validates skills in network administration and troubleshooting'
+      }
+    ],
+    
+    alternativeLearning: 'Alternative paths to enter IT support:',
+    alternativePaths: [
+      'Self-study with online courses and certifications',
+      'Internships and apprenticeships in IT support roles',
+      'Transitioning from other IT roles (system administrator, network engineer)',
+      'Building personal projects and contributing to open-source projects'
+    ],
+    
+    careerProgression: [
+      {
+        level: 'Entry Level: Junior IT Support',
+        timeframe: '0-2 years experience',
+        description: 'Assist with basic troubleshooting and user support. Handle routine maintenance tasks.',
+        roles: 'Junior IT Support Specialist, Help Desk Operator'
+      },
+      {
+        level: 'Mid Level: IT Support Specialist',
+        timeframe: '2-5 years experience',
+        description: 'Provide advanced troubleshooting, manage user accounts, and perform system maintenance.',
+        roles: 'IT Support Specialist, Help Desk Manager'
+      },
+      {
+        level: 'Senior Level: Senior IT Support',
+        timeframe: '5-8 years experience',
+        description: 'Lead IT support teams, manage complex systems, and provide strategic advice.',
+        roles: 'Senior IT Support Specialist, IT Manager'
+      },
+      {
+        level: 'Expert Level: IT Director',
+        timeframe: '8+ years experience',
+        description: 'Set IT strategy, oversee IT operations, and manage IT teams.',
+        roles: 'IT Director, Chief Information Officer (CIO)'
+      }
+    ],
+    
+    careerInsight: 'IT support professionals play a crucial role in maintaining and improving computer systems and networks. They need strong technical skills, excellent problem-solving abilities, and excellent communication skills.',
+    
+    onlineCourses: [
+      {
+        name: 'Microsoft Virtual Academy - IT Pro',
+        url: 'https://www.microsoftvirtualacademy.com/'
+      },
+      {
+        name: 'CompTIA A+',
+        url: 'https://www.comptia.org/certifications/a'
+      },
+      {
+        name: 'CompTIA Network+',
+        url: 'https://www.comptia.org/certifications/network'
+      }
+    ],
+    
+    books: [
+      {
+        title: 'Microsoft Windows Server 2019 Administrator',
+        author: 'Microsoft Press'
+      },
+      {
+        title: 'CompTIA Network+ Certification Guide',
+        author: 'CompTIA'
+      },
+      {
+        title: 'Troubleshooting Windows Server 2019',
+        author: 'Microsoft Press'
+      }
+    ],
+    
+    communities: [
+      {
+        name: 'Microsoft IT Pro Community',
+        description: 'Community for IT professionals',
+        url: 'https://www.microsoft.com/en-us/itpro'
+      },
+      {
+        name: 'CompTIA Community',
+        description: 'Community for IT professionals',
+        url: 'https://www.comptia.org/community'
+      },
+      {
+        name: 'Reddit - r/itpro',
+        description: 'Community for IT professionals',
+        url: 'https://www.reddit.com/r/itpro/'
+      }
+    ],
+    
+    relatedPaths: ['software-development', 'cybersecurity', 'it-support', 'cloud-devops'],
+    
+    roles: [
+      {
+        title: 'IT Support Specialist',
+        skills: ['Troubleshooting', 'User Support', 'Network Management', 'System Administration'],
+        salary: '$60,000 - $100,000',
+        certifications: ['Microsoft Certified: IT Pro', 'CompTIA A+', 'CompTIA Network+'],
+        description: 'Provide technical assistance and support for computer systems and networks.'
+      },
+      {
+        title: 'Help Desk Operator',
+        skills: ['Troubleshooting', 'User Support', 'Network Management', 'System Administration'],
+        salary: '$50,000 - $80,000',
+        certifications: ['Microsoft Certified: IT Pro', 'CompTIA A+', 'CompTIA Network+'],
+        description: 'Assist with basic troubleshooting and user support. Handle routine maintenance tasks.'
+      },
+      {
+        title: 'IT Manager',
+        skills: ['IT Strategy', 'Team Leadership', 'Project Management'],
+        salary: '$80,000 - $150,000',
+        certifications: ['Microsoft Certified: IT Pro', 'CompTIA A+', 'CompTIA Network+'],
+        description: 'Oversee IT operations, manage IT teams, and provide strategic advice.'
+      }
+    ]
+  },
+  {
+    id: 'product-design',
+    title: 'Product Design',
+    description: 'Design and develop user-friendly products and services.',
+    longDescription: "Product design professionals create and improve products and services that meet user needs and drive business success. They work closely with stakeholders to understand user requirements, design solutions, and ensure products are user-friendly and effective.",
+    icon: <Layout className="h-8 w-8 text-yellow-600" />,
+    bgColor: 'bg-yellow-50',
+    iconColor: 'text-yellow-600',
+    animation: '/animations/product-design.json',
+    growthPotential: 'Projected 20% growth over the next decade',
+    salaryRange: '$70,000 - $150,000 depending on experience and role',
+    keySkills: ['User Research', 'Design Thinking', 'Prototyping', 'User Experience', 'Visual Design'],
+    educationRequirements: "Bachelor's degree in Product Design, Interaction Design, or related field",
+    jobOutlook: 'Good job prospects, with opportunities for advancement',
+    topCertifications: 'Product Design Certification, UX/UI Design Certification',
+    learningResources: 'Product Design courses, UX/UI Design courses, online tutorials',
+    
+    technicalSkills: [
+      'User research methods (surveys, interviews, usability testing)',
+      'Design thinking methodologies (ideation, prototyping, testing)',
+      'Prototyping tools (Sketch, Figma, Adobe XD)',
+      'User experience design principles',
+      'Visual design principles (color theory, typography, layout)',
+      'User interface design (wireframes, mockups, prototypes)',
+      'Product development process',
+      'Design documentation and communication'
+    ],
+    
+    softSkills: [
+      'Problem-solving and analytical thinking',
+      'Attention to detail',
+      'Communication skills',
+      'Teamwork and collaboration',
+      'Time management',
+      'Adaptability',
+      'Continuous learning'
+    ],
+    
+    technologies: [
+      'Sketch', 'Figma', 'Adobe XD',
+      'User research methods (surveys, interviews, usability testing)',
+      'Design thinking methodologies (ideation, prototyping, testing)',
+      'Prototyping tools (Sketch, Figma, Adobe XD)',
+      'User experience design principles',
+      'Visual design principles (color theory, typography, layout)',
+      'User interface design (wireframes, mockups, prototypes)',
+      'Product development process',
+      'Design documentation and communication'
+    ],
+    
+    skillTip: 'Product design professionals need strong technical skills and excellent problem-solving abilities. Stay updated with the latest design tools and methodologies.',
+    
+    formalEducation: 'A bachelor's degree in Product Design, Interaction Design, or related field is typically required for product design roles.',
+    
+    certifications: [
+      {
+        name: 'Product Design Certification',
+        description: 'Validates skills in product design and development'
+      },
+      {
+        name: 'UX/UI Design Certification',
+        description: 'Demonstrates proficiency in UX/UI design and prototyping'
+      }
+    ],
+    
+    alternativeLearning: 'Alternative paths to enter product design:',
+    alternativePaths: [
+      'Self-study with online courses and certifications',
+      'Internships and apprenticeships in product design roles',
+      'Transitioning from other design roles (graphic design, web design)',
+      'Building personal projects and contributing to open-source projects'
+    ],
+    
+    careerProgression: [
+      {
+        level: 'Entry Level: Junior Product Designer',
+        timeframe: '0-2 years experience',
+        description: 'Assist with user research, design, and prototyping. Handle basic user experience tasks.',
+        roles: 'Junior Product Designer, UX/UI Designer'
+      },
+      {
+        level: 'Mid Level: Product Designer',
+        timeframe: '2-5 years experience',
+        description: 'Lead user research, design, and prototyping. Develop user-friendly solutions.',
+        roles: 'Product Designer, UX/UI Designer, Product Manager'
+      },
+      {
+        level: 'Senior Level: Senior Product Designer',
+        timeframe: '5-8 years experience',
+        description: 'Lead product development teams, manage complex projects, and provide strategic advice.',
+        roles: 'Senior Product Designer, Product Manager, UX/UI Designer'
+      },
+      {
+        level: 'Expert Level: Product Director',
+        timeframe: '8+ years experience',
+        description: 'Set product strategy, oversee product development, and manage product teams.',
+        roles: 'Product Director, Chief Product Officer (CPO)'
+      }
+    ],
+    
+    careerInsight: 'Product design professionals create and improve products and services that meet user needs and drive business success. They need strong technical skills, excellent problem-solving abilities, and excellent communication skills.',
+    
+    onlineCourses: [
+      {
+        name: 'Product Design courses',
+        url: 'https://www.productdesignschool.com/'
+      },
+      {
+        name: 'UX/UI Design courses',
+        url: 'https://www.udemy.com/'
+      }
+    ],
+    
+    books: [
+      {
+        title: 'Designing for Interaction',
+        author: 'Don Norman'
+      },
+      {
+        title: 'The Design of Everyday Things',
+        author: 'Don Norman'
+      },
+      {
+        title: 'The Lean Startup',
+        author: 'Eric Ries'
+      }
+    ],
+    
+    communities: [
+      {
+        name: 'Product Design Community',
+        description: 'Community for product design professionals',
+        url: 'https://www.productdesigncommunity.com/'
+      },
+      {
+        name: 'UX/UI Design Community',
+        description: 'Community for UX/UI design professionals',
+        url: 'https://www.udemy.com/'
+      },
+      {
+        name: 'Reddit - r/ux',
+        description: 'Community for UX/UI design',
+        url: 'https://www.reddit.com/r/ux/'
+      }
+    ],
+    
+    relatedPaths: ['software-development', 'cybersecurity', 'it-support', 'cloud-devops'],
+    
+    roles: [
+      {
+        title: 'Product Designer',
+        skills: ['User Research', 'Design Thinking', 'Prototyping', 'User Experience', 'Visual Design'],
+        salary: '$70,000 - $120,000',
+        certifications: ['Product Design Certification', 'UX/UI Design Certification'],
+        description: 'Design and develop user-friendly products and services.'
+      },
+      {
+        title: 'UX/UI Designer',
+        skills: ['User Research', 'Design Thinking', 'Prototyping', 'User Experience', 'Visual Design'],
+        salary: '$60,000 - $100,000',
+        certifications: ['Product Design Certification', 'UX/UI Design Certification'],
+        description: 'Create user-friendly interfaces and prototypes.'
+      },
+      {
+        title: 'Product Manager',
+        skills: ['Product Strategy', 'Project Management', 'Team Leadership'],
+        salary: '$80,000 - $150,000',
+        certifications: ['Product Design Certification', 'UX/UI Design Certification'],
+        description: 'Oversee product development, manage teams, and drive business success.'
+      }
+    ]
+  },
+  {
+    id: 'customer-success',
+    title: 'Customer Success',
+    description: 'Provide support and guidance to customers to ensure satisfaction.',
+    longDescription: "Customer success professionals work closely with customers to ensure they are satisfied with their products or services. They provide support, troubleshoot issues, and help customers achieve their goals.",
+    icon: <ChartBar className="h-8 w-8 text-pink-600" />,
+    bgColor: 'bg-pink-50',
+    iconColor: 'text-pink-600',
+    animation: '/animations/customer-success.json',
+    growthPotential: 'Projected 18% growth over the next decade',
+    salaryRange: '$70,000 - $150,000 depending on experience and role',
+    keySkills: ['Customer Support', 'Problem Solving', 'Communication', 'Teamwork', 'Customer Engagement'],
+    educationRequirements: "Bachelor's degree in Customer Service, Business Administration, or related field",
+    jobOutlook: 'Good job prospects, with opportunities for advancement',
+    topCertifications: 'Customer Success Certification',
+    learningResources: 'Customer Success courses, online tutorials',
+    
+    technicalSkills: [
+      'Customer support methods (phone, email, chat)',
+      'Problem-solving and troubleshooting skills',
+      'Communication skills (written and verbal)',
+      'Teamwork and collaboration',
+      'Customer engagement strategies',
+      'Customer satisfaction metrics',
+      'Customer retention strategies',
+      'Customer feedback analysis'
+    ],
+    
+    softSkills: [
+      'Problem-solving and analytical thinking',
+      'Attention to detail',
+      'Communication skills',
+      'Teamwork and collaboration',
+      'Time management',
+      'Adaptability',
+      'Continuous learning'
+    ],
+    
+    technologies: [
+      'Customer support methods (phone, email, chat)',
+      'Problem-solving and troubleshooting skills',
+      'Communication skills (written and verbal)',
+      'Teamwork and collaboration',
+      'Customer engagement strategies',
+      'Customer satisfaction metrics',
+      'Customer retention strategies',
+      'Customer feedback analysis'
+    ],
+    
+    skillTip: 'Customer success professionals need strong technical skills and excellent problem-solving abilities. Stay updated with the latest customer support tools and methodologies.',
+    
+    formalEducation: 'A bachelor's degree in Customer Service, Business Administration, or related field is typically required for customer success roles.',
+    
+    certifications: [
+      {
+        name: 'Customer Success Certification',
+        description: 'Validates skills in customer support and management'
+      }
+    ],
+    
+    alternativeLearning: 'Alternative paths to enter customer success:',
+    alternativePaths: [
+      'Self-study with online courses and certifications',
+      'Internships and apprenticeships in customer success roles',
+      'Transitioning from other customer service roles (sales, support)',
+      'Building personal projects and contributing to open-source projects'
+    ],
+    
+    careerProgression: [
+      {
+        level: 'Entry Level: Junior Customer Success',
+        timeframe: '0-2 years experience',
+        description: 'Assist with customer support and troubleshooting. Handle basic customer engagement tasks.',
+        roles: 'Junior Customer Success Specialist, Customer Support Representative'
+      },
+      {
+        level: 'Mid Level: Customer Success Specialist',
+        timeframe: '2-5 years experience',
+        description: 'Provide advanced customer support, troubleshoot issues, and manage customer relationships.',
+        roles: 'Customer Success Specialist, Customer Support Manager'
+      },
+      {
+        level: 'Senior Level: Senior Customer Success',
+        timeframe: '5-8 years experience',
+        description: 'Lead customer success teams, manage complex customer relationships, and provide strategic advice.',
+        roles: 'Senior Customer Success Specialist, Customer Support Manager, Customer Success Director'
+      },
+      {
+        level: 'Expert Level: Customer Success Director',
+        timeframe: '8+ years experience',
+        description: 'Set customer success strategy, oversee customer success teams, and manage customer relationships.',
+        roles: 'Customer Success Director, Chief Customer Officer (CCO)'
+      }
+    ],
+    
+    careerInsight: 'Customer success professionals work closely with customers to ensure they are satisfied with their products or services. They need strong technical skills, excellent problem-solving abilities, and excellent communication skills.',
+    
+    onlineCourses: [
+      {
+        name: 'Customer Success courses',
+        url: 'https://www.customer-success-school.com/'
+      }
+    ],
+    
+    books: [
+      {
+        title: 'The Customer Success Handbook',
+        author: 'John R. Kotter'
+      },
+      {
+        title: 'The Customer Success Model',
+        author: 'John R. Kotter'
+      },
+      {
+        title: 'The Customer Success Strategy',
+        author: 'John R. Kotter'
+      }
+    ],
+    
+    communities: [
+      {
+        name: 'Customer Success Community',
+        description: 'Community for customer success professionals',
+        url: 'https://www.customer-success-community.com/'
+      },
+      {
+        name: 'Reddit - r/customer_success',
+        description: 'Community for customer success',
+        url: 'https://www.reddit.com/r/customer_success/'
+      }
+    ],
+    
+    relatedPaths: ['software-development', 'cybersecurity', 'it-support', 'cloud-devops'],
+    
+    roles: [
+      {
+        title: 'Customer Success Specialist',
+        skills: ['Customer Support', 'Problem Solving', 'Communication', 'Teamwork', 'Customer Engagement'],
+        salary: '$70,000 - $120,000',
+        certifications: ['Customer Success Certification'],
+        description: 'Provide support and guidance to customers to ensure satisfaction.'
+      },
+      {
+        title: 'Customer Support Representative',
+        skills: ['Customer Support', 'Problem Solving', 'Communication', 'Teamwork', 'Customer Engagement'],
+        salary: '$60,000 - $100,000',
+        certifications: ['Customer Success Certification'],
+        description: 'Assist with customer support and troubleshooting. Handle basic customer engagement tasks.'
+      },
+      {
+        title: 'Customer Support Manager',
+        skills: ['Customer Strategy', 'Project Management', 'Team Leadership'],
+        salary: '$80,000 - $150,000',
+        certifications: ['Customer Success Certification'],
+        description: 'Oversee customer support teams, manage customer relationships, and drive business success.'
+      }
+    ]
+  }
+];
