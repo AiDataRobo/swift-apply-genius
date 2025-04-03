@@ -62,6 +62,7 @@ const PasswordInput = <
               type="button"
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
               onClick={togglePasswordVisibility}
+              tabIndex={-1} // Prevent this button from affecting form tab order
             >
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
             </button>
@@ -91,6 +92,7 @@ const PasswordInput = <
         type="button"
         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
         onClick={togglePasswordVisibility}
+        tabIndex={-1} // Prevent this button from affecting form tab order
       >
         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
       </button>

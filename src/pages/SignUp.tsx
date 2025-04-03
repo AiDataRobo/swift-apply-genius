@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -20,10 +21,12 @@ import { motion } from 'framer-motion';
 import PhoneInput from '@/components/auth/PhoneInput';
 import PasswordInput from '@/components/auth/PasswordInput';
 import { useAuth } from '@/contexts/AuthContext';
+import { LockIcon, UserIcon, MailIcon, PhoneIcon } from 'lucide-react';
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const { register, isLoading } = useAuth();
+  const { register: registerUser, isLoading } = useAuth();
+  const { toast } = useToast();
   
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpFormSchema),
@@ -35,14 +38,20 @@ const SignUp = () => {
       confirmPassword: "",
       terms: false,
     },
+    mode: "onChange" // Enable validation as the user types
   });
 
   const onSubmit = async (data: SignUpFormData) => {
     try {
-      await register(data.email, data.password, data.fullName, data.phoneNumber);
+      await registerUser(data.email, data.password, data.fullName, data.phoneNumber);
       navigate('/dashboard');
     } catch (error) {
       console.error("Registration error:", error);
+      toast({
+        title: "Registration failed",
+        description: error instanceof Error ? error.message : "An error occurred during registration",
+        variant: "destructive",
+      });
     }
   };
 
@@ -72,9 +81,10 @@ const SignUp = () => {
                   <FormLabel>Full Name</FormLabel>
                   <FormControl>
                     <div className="relative">
+                      <UserIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
                       <input 
                         placeholder="Enter your full name" 
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20" 
+                        className="flex h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20" 
                         {...field} 
                       />
                     </div>
@@ -92,10 +102,11 @@ const SignUp = () => {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <div className="relative">
+                      <MailIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 h-4 w-4" />
                       <input 
                         type="email" 
                         placeholder="Enter your email" 
-                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20" 
+                        className="flex h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20" 
                         {...field} 
                       />
                     </div>
@@ -123,19 +134,14 @@ const SignUp = () => {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <PasswordInput
-                      control={form.control}
-                      name="password"
-                      placeholder="Create a password"
-                      className="transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20"
-                      showStrengthIndicator={true}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <PasswordInput
+                  control={form.control}
+                  name="password"
+                  label="Password"
+                  placeholder="Create a password"
+                  className="pl-10"
+                  showStrengthIndicator={true}
+                />
               )}
             />
             
@@ -143,18 +149,13 @@ const SignUp = () => {
               control={form.control}
               name="confirmPassword"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
-                  <FormControl>
-                    <PasswordInput
-                      control={form.control}
-                      name="confirmPassword"
-                      placeholder="Confirm your password"
-                      className="transition-all duration-200 focus:ring-2 focus:ring-offset-0 focus:ring-primary/20"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <PasswordInput
+                  control={form.control}
+                  name="confirmPassword"
+                  label="Confirm Password"
+                  placeholder="Confirm your password"
+                  className="pl-10"
+                />
               )}
             />
             
