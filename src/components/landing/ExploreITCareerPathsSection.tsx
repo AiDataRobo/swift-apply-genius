@@ -1,99 +1,13 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  ArrowRight, Code, Shield, Database, Cloud, Laptop, Layout,
-  ChartBar, BarChart4, Users, Lightbulb 
-} from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card';
 import ITCareerLottie from './ITCareerLottie';
-
-const careerPaths = [
-  {
-    id: 'software-development',
-    title: 'Software Development',
-    description: 'Frontend, Backend, Full Stack, Mobile Development',
-    icon: <Code className="h-8 w-8 text-indigo-600" />,
-    bgColor: 'bg-indigo-50',
-    iconColor: 'text-indigo-600',
-    animation: '/animations/software-development.json'
-  },
-  {
-    id: 'cybersecurity',
-    title: 'Cybersecurity',
-    description: 'Ethical Hacking, Security Analyst, Incident Response',
-    icon: <Shield className="h-8 w-8 text-red-600" />,
-    bgColor: 'bg-red-50',
-    iconColor: 'text-red-600',
-    animation: '/animations/cybersecurity.json'
-  },
-  {
-    id: 'data-science',
-    title: 'Data Science & AI',
-    description: 'Machine Learning, Data Analyst, AI Engineer',
-    icon: <Database className="h-8 w-8 text-purple-600" />,
-    bgColor: 'bg-purple-50',
-    iconColor: 'text-purple-600',
-    animation: '/animations/data-science.json'
-  },
-  {
-    id: 'cloud-devops',
-    title: 'Cloud Computing & DevOps',
-    description: 'AWS, Azure, DevOps Engineer',
-    icon: <Cloud className="h-8 w-8 text-blue-600" />,
-    bgColor: 'bg-blue-50',
-    iconColor: 'text-blue-600',
-    animation: '/animations/cloud-computing.json'
-  },
-  {
-    id: 'it-support',
-    title: 'IT Support & Networking',
-    description: 'Network Engineer, System Administrator',
-    icon: <Laptop className="h-8 w-8 text-green-600" />,
-    bgColor: 'bg-green-50',
-    iconColor: 'text-green-600',
-    animation: '/animations/it-support.json'
-  },
-  {
-    id: 'product-design',
-    title: 'Product & UI/UX Design',
-    description: 'Product Manager, UX Designer',
-    icon: <Layout className="h-8 w-8 text-amber-600" />,
-    bgColor: 'bg-amber-50',
-    iconColor: 'text-amber-600',
-    animation: '/animations/product-design.json'
-  },
-  {
-    id: 'project-management',
-    title: 'Project Management',
-    description: 'Project Manager, Program Manager, Scrum Master',
-    icon: <ChartBar className="h-8 w-8 text-blue-600" />,
-    bgColor: 'bg-blue-50',
-    iconColor: 'text-blue-600',
-    animation: '/animations/project-management.json'
-  },
-  {
-    id: 'business-analysis',
-    title: 'Business & Data Analysis',
-    description: 'Business Analyst, Data Analyst, BI Specialist',
-    icon: <BarChart4 className="h-8 w-8 text-teal-600" />,
-    bgColor: 'bg-teal-50',
-    iconColor: 'text-teal-600',
-    animation: '/animations/business-analysis.json'
-  },
-  {
-    id: 'customer-success',
-    title: 'Customer Success & Marketing',
-    description: 'CSM, Marketing Manager, Digital Marketing',
-    icon: <Users className="h-8 w-8 text-pink-600" />,
-    bgColor: 'bg-pink-50',
-    iconColor: 'text-pink-600',
-    animation: '/animations/customer-success.json'
-  }
-];
+import { careerPathsData } from '@/data/careerPathsData';
 
 const ExploreITCareerPathsSection = () => {
   // Animation variants
@@ -135,7 +49,7 @@ const ExploreITCareerPathsSection = () => {
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
       >
-        {careerPaths.map((path) => (
+        {careerPathsData.map((path) => (
           <motion.div key={path.id} variants={itemVariants}>
             <HoverCard>
               <HoverCardTrigger asChild>
@@ -153,8 +67,31 @@ const ExploreITCareerPathsSection = () => {
                     </div>
                     <h3 className="text-xl font-semibold mb-2">{path.title}</h3>
                     <p className="text-muted-foreground mb-6 flex-grow">{path.description}</p>
-                    <Link to={`/it-career-paths#${path.id}`} className="inline-flex items-center text-primary font-medium hover:underline">
-                      Learn More <ArrowRight className="ml-2 h-4 w-4" />
+                    <div className="mb-4">
+                      <h4 className="text-sm font-medium mb-2">Popular Roles:</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {path.roles.slice(0, 3).map((role, idx) => (
+                          <span 
+                            key={idx} 
+                            className="text-xs bg-slate-100 px-2 py-1 rounded-full"
+                          >
+                            {role.title}
+                          </span>
+                        ))}
+                        {path.roles.length > 3 && (
+                          <span className="text-xs bg-slate-100 px-2 py-1 rounded-full">
+                            +{path.roles.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <Link to={`/career-path/${path.id}`} className="mt-auto">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-between"
+                      >
+                        Explore Career Path <ArrowRight className="h-4 w-4" />
+                      </Button>
                     </Link>
                   </CardContent>
                 </Card>
@@ -166,15 +103,7 @@ const ExploreITCareerPathsSection = () => {
                   <div className="mt-2">
                     <span className="text-xs font-semibold text-primary">Popular skills:</span>
                     <p className="text-xs text-muted-foreground mt-1">
-                      {path.id === 'software-development' && 'JavaScript, React, Python, Node.js'}
-                      {path.id === 'cybersecurity' && 'Network Security, Penetration Testing, Security Analysis'}
-                      {path.id === 'data-science' && 'Python, R, SQL, Machine Learning, Statistical Analysis'}
-                      {path.id === 'cloud-devops' && 'AWS, Azure, Docker, Kubernetes, CI/CD'}
-                      {path.id === 'it-support' && 'Networking, System Administration, Troubleshooting'}
-                      {path.id === 'product-design' && 'UI/UX Design, Figma, User Research, Prototyping'}
-                      {path.id === 'project-management' && 'Agile, JIRA, MS Project, Stakeholder Management'}
-                      {path.id === 'business-analysis' && 'SQL, Process Modeling, Requirements Gathering, Excel'}
-                      {path.id === 'customer-success' && 'CRM, Communication, Retention Strategies, Upselling'}
+                      {path.keySkills && path.keySkills.slice(0, 4).join(', ')}
                     </p>
                   </div>
                 </div>
