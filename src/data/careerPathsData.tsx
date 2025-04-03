@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { 
   ArrowRight, Code, Shield, Database, Cloud, Laptop, 
@@ -473,4 +474,25 @@ export const careerPathsData = [
         skills: ['Relationship Building', 'Product Knowledge', 'Upselling', 'Customer Onboarding'],
         salary: '$65,000 - $110,000',
         certifications: ['Certified Customer Success Manager', 'Customer Experience Specialist'],
-        description: 'Ensure customers achieve desired
+        description: 'Ensure customers achieve desired outcomes and find continuous value from products or services.'
+      },
+      {
+        title: 'Marketing Manager',
+        skills: ['Marketing Strategy', 'Campaign Management', 'Analytics', 'Brand Development'],
+        salary: '$70,000 - $120,000',
+        certifications: ['Digital Marketing Certified Associate', 'HubSpot Inbound Certification'],
+        description: 'Develop and execute marketing strategies to promote products, services, and company brand.'
+      },
+      {
+        title: 'Customer Experience Specialist',
+        skills: ['User Journey Mapping', 'Voice of Customer', 'Service Design', 'Metrics Analysis'],
+        salary: '$60,000 - $95,000',
+        certifications: ['Customer Experience Specialist', 'Service Design Certification'],
+        description: 'Design and optimize customer experience across all touchpoints throughout the customer journey.'
+      }
+    ],
+    careerInsight: 'Customer success roles are evolving from reactive support to proactive partnership. The most successful professionals combine product expertise with business acumen and can demonstrate the ROI of customer retention and expansion.',
+    onlineCoursesList: ['HubSpot Academy', 'Gainsight', 'Customer Success Association'],
+    booksList: ['The Effortless Experience', 'Customer Success', 'Marketing 4.0'],
+  }
+];
