@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 export interface UserWithProfile {
   id: string;
@@ -50,14 +50,16 @@ export const adminService = {
   
   async getUsers(): Promise<UserWithProfile[]> {
     try {
-      // Get users from auth.users
-      const { data: users, error: usersError } = await supabase.rpc('get_users_with_profiles');
+      // Fetch users from auth.users (using a Supabase Function since we can't query auth directly)
+      const { data: authUsers, error: authError } = await supabase.functions.invoke('admin-helpers', {
+        body: { action: 'get_users_with_profiles' }
+      });
       
-      if (usersError) {
-        console.error('Error fetching users:', usersError);
+      if (authError) {
+        console.error('Error fetching users:', authError);
         return [];
       }
-
+      
       // Get subscriptions to determine user plans
       const { data: subscriptions, error: subsError } = await supabase
         .from('subscriptions')
@@ -73,7 +75,7 @@ export const adminService = {
       }
 
       // Map subscriptions to users
-      const usersWithPlans = users.map(user => {
+      const usersWithPlans = (authUsers || []).map(user => {
         const subscription = subscriptions?.find(sub => sub.user_id === user.id);
         
         return {
@@ -160,8 +162,7 @@ export const adminService = {
       // Get transaction total revenue
       const { data: transactions, error: transactionError } = await supabase
         .from('transactions')
-        .select('amount')
-        .eq('status', 'completed');
+        .select('amount');
         
       if (transactionError) {
         console.error('Error fetching transactions:', transactionError);
@@ -170,8 +171,11 @@ export const adminService = {
       const totalRevenue = transactions?.reduce((sum, t) => sum + parseFloat(t.amount as any), 0) || 0;
       
       // Recent signups - last 5 users
-      const { data: recentUsers, error: recentError } = await supabase.rpc('get_recent_signups', {
-        limit_count: 5
+      const { data: recentUsers, error: recentError } = await supabase.functions.invoke('admin-helpers', {
+        body: { 
+          action: 'get_recent_signups',
+          data: { limit: 5 }
+        }
       });
         
       if (recentError) {
@@ -210,13 +214,18 @@ export const adminService = {
       console.log(`Updating user ${userId} to status: ${status}`);
       
       // Log the activity for audit trail
-      await supabase.rpc('log_activity', {
-        user_id: userId,
-        action: `user_status_update`,
-        details: JSON.stringify({ new_status: status })
+      await supabase.functions.invoke('admin-helpers', {
+        body: { 
+          action: 'log_activity',
+          data: {
+            user_id: userId,
+            action: `user_status_update`,
+            details: { new_status: status }
+          }
+        }
       });
       
-      toast({
+      useToast().toast({
         title: "User status updated",
         description: `User has been marked as ${status}`,
       });
@@ -225,7 +234,7 @@ export const adminService = {
     } catch (error) {
       console.error('Error updating user status:', error);
       
-      toast({
+      useToast().toast({
         title: "Error updating user",
         description: "There was a problem changing the user status",
         variant: "destructive"

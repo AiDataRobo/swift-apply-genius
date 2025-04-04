@@ -19,9 +19,9 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
     );
     
-    const url = new URL(req.url);
-    const action = url.searchParams.get('action');
-    const { data } = await req.json();
+    const body = await req.json();
+    const action = body.action;
+    const data = body.data || {};
     
     if (action === 'get_users_with_profiles') {
       // Get users and join with profiles
@@ -83,6 +83,29 @@ serve(async (req) => {
       }));
       
       return new Response(JSON.stringify(recentUsers), {
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      });
+    }
+    
+    else if (action === 'log_activity') {
+      if (!data.user_id || !data.action) {
+        return new Response(JSON.stringify({ error: 'Missing required parameters' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        });
+      }
+      
+      const { data: result, error } = await supabaseClient.rpc('log_activity', {
+        user_id: data.user_id,
+        action: data.action,
+        details: data.details || {}
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      return new Response(JSON.stringify({ success: true, id: result }), {
         headers: { 'Content-Type': 'application/json', ...corsHeaders },
       });
     }

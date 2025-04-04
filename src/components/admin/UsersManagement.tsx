@@ -234,7 +234,7 @@ const UsersManagement = () => {
                   <div className="mt-2 space-y-2">
                     <div>
                       <span className="text-sm text-muted-foreground">Plan:</span>
-                      <p>{userDetails.subscription?.plans.name || 'Basic (Free)'}</p>
+                      <p>{userDetails.subscription?.plans?.name || 'Basic (Free)'}</p>
                     </div>
                     {userDetails.subscription && (
                       <div>
@@ -268,7 +268,7 @@ const UsersManagement = () => {
                 </div>
               </div>
               
-              {userDetails.recentActivity.length > 0 && (
+              {userDetails.recentActivity && userDetails.recentActivity.length > 0 && (
                 <div>
                   <h3 className="text-lg font-medium">Recent Activity</h3>
                   <ul className="mt-2 space-y-2">
