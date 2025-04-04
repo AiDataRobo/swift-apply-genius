@@ -9,6 +9,203 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      admin_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: string
+          updated_by: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: string
+          updated_by?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: string
+          updated_by?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      ai_reviews: {
+        Row: {
+          created_at: string
+          feedback: Json | null
+          id: string
+          resume_id: string | null
+          score: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          feedback?: Json | null
+          id?: string
+          resume_id?: string | null
+          score?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          feedback?: Json | null
+          id?: string
+          resume_id?: string | null
+          score?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_reviews_resume_id_fkey"
+            columns: ["resume_id"]
+            isOneToOne: false
+            referencedRelation: "resumes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      career_path_analytics: {
+        Row: {
+          avg_time_spent: number | null
+          clicks: number | null
+          conversions: number | null
+          id: string
+          path_id: string
+          updated_at: string
+          views: number | null
+        }
+        Insert: {
+          avg_time_spent?: number | null
+          clicks?: number | null
+          conversions?: number | null
+          id?: string
+          path_id: string
+          updated_at?: string
+          views?: number | null
+        }
+        Update: {
+          avg_time_spent?: number | null
+          clicks?: number | null
+          conversions?: number | null
+          id?: string
+          path_id?: string
+          updated_at?: string
+          views?: number | null
+        }
+        Relationships: []
+      }
+      cover_letters: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          template_style: Json
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: Json
+          created_at?: string
+          id?: string
+          template_style: Json
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          template_style?: Json
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      interview_guarantee: {
+        Row: {
+          coaching_sessions: number | null
+          created_at: string
+          end_date: string
+          id: string
+          interviews_received: number | null
+          jobs_applied: number | null
+          notes: string | null
+          start_date: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          coaching_sessions?: number | null
+          created_at?: string
+          end_date: string
+          id?: string
+          interviews_received?: number | null
+          jobs_applied?: number | null
+          notes?: string | null
+          start_date?: string
+          status: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          coaching_sessions?: number | null
+          created_at?: string
+          end_date?: string
+          id?: string
+          interviews_received?: number | null
+          jobs_applied?: number | null
+          notes?: string | null
+          start_date?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      plans: {
+        Row: {
+          created_at: string
+          description: string | null
+          features: Json | null
+          id: string
+          interval: string
+          is_active: boolean | null
+          name: string
+          price: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          features?: Json | null
+          id?: string
+          interval: string
+          is_active?: boolean | null
+          name: string
+          price: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          features?: Json | null
+          id?: string
+          interval?: string
+          is_active?: boolean | null
+          name?: string
+          price?: number
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -36,12 +233,248 @@ export type Database = {
         }
         Relationships: []
       }
+      resumes: {
+        Row: {
+          ats_score: number | null
+          content: Json
+          created_at: string
+          id: string
+          is_reviewed: boolean | null
+          template_style: Json
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ats_score?: number | null
+          content: Json
+          created_at?: string
+          id?: string
+          is_reviewed?: boolean | null
+          template_style: Json
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ats_score?: number | null
+          content?: Json
+          created_at?: string
+          id?: string
+          is_reviewed?: boolean | null
+          template_style?: Json
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          cancel_at: string | null
+          created_at: string
+          current_period_end: string
+          current_period_start: string
+          id: string
+          plan_id: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cancel_at?: string | null
+          created_at?: string
+          current_period_end: string
+          current_period_start: string
+          id?: string
+          plan_id: string
+          status: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cancel_at?: string | null
+          created_at?: string
+          current_period_end?: string
+          current_period_start?: string
+          id?: string
+          plan_id?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          id: string
+          message: string
+          priority: string | null
+          resolved_at: string | null
+          status: string
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          id?: string
+          message: string
+          priority?: string | null
+          resolved_at?: string | null
+          status: string
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          id?: string
+          message?: string
+          priority?: string | null
+          resolved_at?: string | null
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          payment_method: string | null
+          status: string
+          subscription_id: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency: string
+          description?: string | null
+          id?: string
+          payment_method?: string | null
+          status: string
+          subscription_id?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          payment_method?: string | null
+          status?: string
+          subscription_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_activity: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      writing_services: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          details: Json | null
+          id: string
+          service_type: string
+          status: string
+          updated_at: string
+          user_id: string
+          writer_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          service_type: string
+          status: string
+          updated_at?: string
+          user_id: string
+          writer_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          service_type?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+          writer_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: {
+          user_id: string
+        }
+        Returns: boolean
+      }
+      log_activity: {
+        Args: {
+          user_id: string
+          action: string
+          details: Json
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

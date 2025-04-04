@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ModeToggle } from '@/components/ModeToggle';
 import { SidebarProvider } from '@/components/ui/sidebar';
@@ -17,14 +17,20 @@ import InterviewGuaranteeProgram from '@/components/admin/InterviewGuaranteeProg
 import CareerPathStats from '@/components/admin/CareerPathStats';
 import FeedbackSupport from '@/components/admin/FeedbackSupport';
 import SettingsAccess from '@/components/admin/SettingsAccess';
+import { useAdminData } from '@/hooks/useAdminData';
+import { useToast } from '@/hooks/use-toast';
 
 const AdminDashboard = () => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuth();
+  const { isAdmin, isCheckingAdmin } = useAdminData();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
   // Default to overview tab
   const [activeTab, setActiveTab] = useState('overview');
 
   // Parse URL query parameters to get tab
-  React.useEffect(() => {
+  useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const tabParam = queryParams.get('tab');
     if (tabParam) {
@@ -33,20 +39,29 @@ const AdminDashboard = () => {
   }, []);
 
   // While checking auth status, show loading state
-  if (isLoading) {
+  if (isAuthLoading || isCheckingAdmin) {
     return <div className="flex h-screen items-center justify-center">
       <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
     </div>;
   }
 
-  // If not logged in or not an admin, redirect to login
-  // Note: In a real app, you'd check for admin role here
+  // If not logged in, redirect to login
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
-  // Mock admin user data - in a real app, this would check for admin permissions
-  const mockAdmin = {
+  // If logged in but not an admin, redirect to dashboard
+  if (isAdmin === false) {
+    toast({
+      title: "Access denied",
+      description: "You don't have permission to access the admin dashboard",
+      variant: "destructive",
+    });
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // Admin user data
+  const adminData = {
     name: user?.user_metadata?.full_name || "Admin User",
     email: user?.email || "",
     role: "Super Admin" // This would come from your permission system
@@ -56,10 +71,10 @@ const AdminDashboard = () => {
     <div className="flex flex-col min-h-screen bg-background">
       <SidebarProvider>
         <div className="flex flex-1 w-full overflow-hidden">
-          <AdminSidebar admin={mockAdmin} />
+          <AdminSidebar admin={adminData} />
           
           <div className="flex-1 flex flex-col min-h-screen overflow-auto">
-            <AdminHeader admin={mockAdmin} />
+            <AdminHeader admin={adminData} />
             
             <main className="flex-grow p-4 md:p-6 overflow-y-auto">
               <div className="container mx-auto max-w-7xl">

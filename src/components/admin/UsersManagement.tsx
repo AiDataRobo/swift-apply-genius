@@ -1,13 +1,6 @@
-import React, { useState } from 'react';
-import {
-  ArrowUpDown,
-  ChevronDown,
-  MoreHorizontal,
-  Search,
-  Shield,
-  UserCog,
-  Users
-} from 'lucide-react';
+
+import React, { useState, useEffect } from 'react';
+import { Search, UserCog, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -16,14 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -34,159 +19,71 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-
-// Mock data
-const users = [
-  {
-    id: 1,
-    name: 'John Smith',
-    email: 'john@example.com',
-    phone: '+1 555-123-4567',
-    plan: 'Premium',
-    signupDate: '2023-10-15',
-    lastActive: '2023-11-05',
-    country: 'United States',
-    status: 'active',
-  },
-  {
-    id: 2,
-    name: 'Maria Garcia',
-    email: 'maria@example.com',
-    phone: '+1 555-987-6543',
-    plan: 'Basic',
-    signupDate: '2023-09-22',
-    lastActive: '2023-11-04',
-    country: 'Mexico',
-    status: 'active',
-  },
-  {
-    id: 3,
-    name: 'Ahmed Khan',
-    email: 'ahmed@example.com',
-    phone: '+1 555-456-7890',
-    plan: 'Premium',
-    signupDate: '2023-08-30',
-    lastActive: '2023-11-02',
-    country: 'United Arab Emirates',
-    status: 'active',
-  },
-  {
-    id: 4,
-    name: 'Sophie Martin',
-    email: 'sophie@example.com',
-    phone: '+1 555-234-5678',
-    plan: 'Basic',
-    signupDate: '2023-10-02',
-    lastActive: '2023-10-28',
-    country: 'France',
-    status: 'active',
-  },
-  {
-    id: 5,
-    name: 'Chen Wei',
-    email: 'chen@example.com',
-    phone: '+1 555-876-5432',
-    plan: 'Premium',
-    signupDate: '2023-09-12',
-    lastActive: '2023-11-01',
-    country: 'China',
-    status: 'active',
-  },
-  {
-    id: 6,
-    name: 'Olivia Johnson',
-    email: 'olivia@example.com',
-    phone: '+1 555-765-4321',
-    plan: 'Basic',
-    signupDate: '2023-07-18',
-    lastActive: '2023-10-20',
-    country: 'Canada',
-    status: 'inactive',
-  },
-  {
-    id: 7,
-    name: 'Carlos Rodriguez',
-    email: 'carlos@example.com',
-    phone: '+1 555-345-6789',
-    plan: 'Premium',
-    signupDate: '2023-10-28',
-    lastActive: '2023-11-03',
-    country: 'Brazil',
-    status: 'active',
-  },
-  {
-    id: 8,
-    name: 'Aisha Patel',
-    email: 'aisha@example.com',
-    phone: '+1 555-654-3210',
-    plan: 'Basic',
-    signupDate: '2023-09-05',
-    lastActive: '2023-10-15',
-    country: 'India',
-    status: 'inactive',
-  },
-  {
-    id: 9,
-    name: 'Hiroshi Tanaka',
-    email: 'hiroshi@example.com',
-    phone: '+1 555-432-1098',
-    plan: 'Premium',
-    signupDate: '2023-08-12',
-    lastActive: '2023-11-01',
-    country: 'Japan',
-    status: 'active',
-  },
-  {
-    id: 10,
-    name: 'Emma Wilson',
-    email: 'emma@example.com',
-    phone: '+1 555-789-0123',
-    plan: 'Basic',
-    signupDate: '2023-10-10',
-    lastActive: '2023-10-25',
-    country: 'United Kingdom',
-    status: 'banned',
-  },
-];
+import { useAdminData } from '@/hooks/useAdminData';
+import { UserWithProfile } from '@/services/supabase/adminService';
+import UsersManagementTable from './UsersManagementTable';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 const UsersManagement = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [planFilter, setPlanFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [sortColumn, setSortColumn] = useState('lastActive');
+  const [sortColumn, setSortColumn] = useState('last_sign_in_at');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [isViewingUser, setIsViewingUser] = useState(false);
+
+  // Get admin data using our custom hook
+  const { 
+    users, 
+    isLoadingUsers, 
+    updateUserStatus,
+    getUserDetails,
+  } = useAdminData();
+
+  // Get details for selected user when viewing profile
+  const {
+    data: userDetails,
+    isLoading: isLoadingUserDetails,
+  } = getUserDetails(selectedUserId || '');
 
   // Filter and sort users based on current filters and sort state
   const filteredUsers = users.filter(user => {
     const matchesSearch = 
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.profile?.full_name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesPlan = planFilter === 'all' || user.plan.toLowerCase() === planFilter.toLowerCase();
+    
+    const matchesPlan = planFilter === 'all' || 
+      (user.plan?.name.toLowerCase() === planFilter.toLowerCase());
+    
     const matchesStatus = statusFilter === 'all' || user.status === statusFilter;
     
     return matchesSearch && matchesPlan && matchesStatus;
   }).sort((a, b) => {
     if (sortColumn === 'name') {
+      const nameA = a.profile?.full_name || '';
+      const nameB = b.profile?.full_name || '';
       return sortDirection === 'asc' 
-        ? a.name.localeCompare(b.name)
-        : b.name.localeCompare(a.name);
-    } else if (sortColumn === 'signupDate') {
+        ? nameA.localeCompare(nameB)
+        : nameB.localeCompare(nameA);
+    } else if (sortColumn === 'created_at') {
       return sortDirection === 'asc'
-        ? new Date(a.signupDate).getTime() - new Date(b.signupDate).getTime()
-        : new Date(b.signupDate).getTime() - new Date(a.signupDate).getTime();
-    } else if (sortColumn === 'lastActive') {
+        ? new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        : new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+    } else if (sortColumn === 'last_sign_in_at') {
+      // Handle null values for last_sign_in_at
+      const timeA = a.last_sign_in_at ? new Date(a.last_sign_in_at).getTime() : 0;
+      const timeB = b.last_sign_in_at ? new Date(b.last_sign_in_at).getTime() : 0;
       return sortDirection === 'asc'
-        ? new Date(a.lastActive).getTime() - new Date(b.lastActive).getTime()
-        : new Date(b.lastActive).getTime() - new Date(a.lastActive).getTime();
+        ? timeA - timeB
+        : timeB - timeA;
     }
     return 0;
   });
@@ -200,17 +97,17 @@ const UsersManagement = () => {
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'active':
-        return <Badge className="bg-green-500">Active</Badge>;
-      case 'inactive':
-        return <Badge variant="outline" className="text-muted-foreground">Inactive</Badge>;
-      case 'banned':
-        return <Badge variant="destructive">Banned</Badge>;
-      default:
-        return <Badge variant="outline">{status}</Badge>;
-    }
+  const handleBanUser = (userId: string) => {
+    updateUserStatus.mutate({ userId, status: 'banned' });
+  };
+
+  const handleUnbanUser = (userId: string) => {
+    updateUserStatus.mutate({ userId, status: 'active' });
+  };
+
+  const handleViewProfile = (userId: string) => {
+    setSelectedUserId(userId);
+    setIsViewingUser(true);
   };
 
   return (
@@ -219,7 +116,7 @@ const UsersManagement = () => {
         <div className="flex items-center gap-3">
           <h2 className="text-2xl font-bold">Users Management</h2>
           <Badge variant="outline" className="ml-2">
-            {users.length} Total
+            {filteredUsers.length} / {users.length} Total
           </Badge>
         </div>
         <Button variant="default">
@@ -263,6 +160,7 @@ const UsersManagement = () => {
                     <SelectItem value="all">All Plans</SelectItem>
                     <SelectItem value="basic">Basic</SelectItem>
                     <SelectItem value="premium">Premium</SelectItem>
+                    <SelectItem value="professional">Professional</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -287,104 +185,115 @@ const UsersManagement = () => {
             </div>
           </div>
 
-          <div className="border rounded-md">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>
-                    <Button 
-                      variant="ghost" 
-                      className="flex items-center gap-1 p-0 font-medium"
-                      onClick={() => handleSort('name')}
-                    >
-                      Name
-                      <ArrowUpDown className="h-3 w-3" />
-                    </Button>
-                  </TableHead>
-                  <TableHead>Email / Phone</TableHead>
-                  <TableHead>Plan</TableHead>
-                  <TableHead>Country</TableHead>
-                  <TableHead>
-                    <Button 
-                      variant="ghost" 
-                      className="flex items-center gap-1 p-0 font-medium"
-                      onClick={() => handleSort('signupDate')}
-                    >
-                      Signup Date
-                      <ArrowUpDown className="h-3 w-3" />
-                    </Button>
-                  </TableHead>
-                  <TableHead>
-                    <Button 
-                      variant="ghost" 
-                      className="flex items-center gap-1 p-0 font-medium"
-                      onClick={() => handleSort('lastActive')}
-                    >
-                      Last Active
-                      <ArrowUpDown className="h-3 w-3" />
-                    </Button>
-                  </TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredUsers.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="font-medium">{user.name}</TableCell>
-                    <TableCell>
-                      <div className="flex flex-col">
-                        <span>{user.email}</span>
-                        <span className="text-xs text-muted-foreground">{user.phone}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant={user.plan === 'Premium' ? 'default' : 'outline'}>
-                        {user.plan}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{user.country}</TableCell>
-                    <TableCell>{user.signupDate}</TableCell>
-                    <TableCell>{user.lastActive}</TableCell>
-                    <TableCell>{getStatusBadge(user.status)}</TableCell>
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                          <DropdownMenuItem>View Profile</DropdownMenuItem>
-                          <DropdownMenuItem>Edit User</DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>Change Plan</DropdownMenuItem>
-                          <DropdownMenuItem>View Documents</DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          {user.status === 'banned' ? (
-                            <DropdownMenuItem className="text-green-600">Unban User</DropdownMenuItem>
-                          ) : (
-                            <DropdownMenuItem className="text-red-600">Ban User</DropdownMenuItem>
-                          )}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {filteredUsers.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={8} className="h-24 text-center">
-                      No users found.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
+          <UsersManagementTable
+            users={filteredUsers}
+            isLoading={isLoadingUsers}
+            sortColumn={sortColumn}
+            sortDirection={sortDirection}
+            handleSort={handleSort}
+            onBanUser={handleBanUser}
+            onUnbanUser={handleUnbanUser}
+            onViewProfile={handleViewProfile}
+          />
         </CardContent>
       </Card>
+
+      {/* User Details Dialog */}
+      <Dialog open={isViewingUser} onOpenChange={setIsViewingUser}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>User Profile</DialogTitle>
+            <DialogDescription>
+              Detailed information about the selected user
+            </DialogDescription>
+          </DialogHeader>
+          
+          {isLoadingUserDetails ? (
+            <div className="flex justify-center p-8">
+              <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
+            </div>
+          ) : userDetails?.profile ? (
+            <div className="grid gap-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <h3 className="text-lg font-medium">Personal Information</h3>
+                  <div className="mt-2 space-y-2">
+                    <div>
+                      <span className="text-sm text-muted-foreground">Name:</span>
+                      <p>{userDetails.profile.full_name || 'N/A'}</p>
+                    </div>
+                    <div>
+                      <span className="text-sm text-muted-foreground">Phone:</span>
+                      <p>{userDetails.profile.phone_number || 'N/A'}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-medium">Subscription</h3>
+                  <div className="mt-2 space-y-2">
+                    <div>
+                      <span className="text-sm text-muted-foreground">Plan:</span>
+                      <p>{userDetails.subscription?.plans.name || 'Basic (Free)'}</p>
+                    </div>
+                    {userDetails.subscription && (
+                      <div>
+                        <span className="text-sm text-muted-foreground">Valid Until:</span>
+                        <p>{new Date(userDetails.subscription.current_period_end).toLocaleDateString()}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h3 className="text-lg font-medium">Account Statistics</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2">
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="text-center">
+                        <p className="text-2xl font-bold">{userDetails.documentCounts.resumes}</p>
+                        <p className="text-sm text-muted-foreground">Resumes</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="text-center">
+                        <p className="text-2xl font-bold">{userDetails.documentCounts.coverLetters}</p>
+                        <p className="text-sm text-muted-foreground">Cover Letters</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+              
+              {userDetails.recentActivity.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-medium">Recent Activity</h3>
+                  <ul className="mt-2 space-y-2">
+                    {userDetails.recentActivity.map((activity: any) => (
+                      <li key={activity.id} className="text-sm">
+                        <span className="font-medium">{activity.action}</span> - {new Date(activity.created_at).toLocaleString()}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              <div className="flex justify-end space-x-2 mt-4">
+                <Button variant="outline" onClick={() => setIsViewingUser(false)}>
+                  Close
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <p>User details not found.</p>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
