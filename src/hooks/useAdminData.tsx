@@ -1,6 +1,12 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { adminService, UserWithProfile } from '@/services/supabase/adminService';
+import { 
+  adminService, 
+  UserWithProfile, 
+  Transaction, 
+  Document,
+  DashboardStats 
+} from '@/services/supabase/adminService';
 import { useToast } from '@/hooks/use-toast';
 
 export function useAdminData() {
@@ -34,9 +40,35 @@ export function useAdminData() {
     data: dashboardStats,
     isLoading: isLoadingStats,
     error: statsError,
+    refetch: refetchStats
   } = useQuery({
     queryKey: ['admin-dashboard-stats'],
     queryFn: () => adminService.getDashboardStats(),
+    enabled: !!isAdmin,
+    refetchInterval: 30000, // Refresh every 30 seconds
+  });
+
+  // Get all transactions
+  const {
+    data: transactions = [],
+    isLoading: isLoadingTransactions,
+    error: transactionsError,
+    refetch: refetchTransactions
+  } = useQuery({
+    queryKey: ['admin-transactions'],
+    queryFn: () => adminService.getTransactions(),
+    enabled: !!isAdmin,
+  });
+
+  // Get all documents
+  const {
+    data: documents = [],
+    isLoading: isLoadingDocuments,
+    error: documentsError,
+    refetch: refetchDocuments
+  } = useQuery({
+    queryKey: ['admin-documents'],
+    queryFn: () => adminService.getDocuments(),
     enabled: !!isAdmin,
   });
 
@@ -80,6 +112,15 @@ export function useAdminData() {
     dashboardStats,
     isLoadingStats,
     statsError,
+    refetchStats,
+    transactions,
+    isLoadingTransactions,
+    transactionsError,
+    refetchTransactions,
+    documents,
+    isLoadingDocuments,
+    documentsError,
+    refetchDocuments,
     updateUserStatus,
     getUserDetails,
   };

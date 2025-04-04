@@ -11,13 +11,71 @@ export interface UserWithProfile {
     full_name: string | null;
     phone_number: string | null;
     avatar_url: string | null;
-  };
+  } | null;
   plan: {
     name: string;
     id: string;
-  } | null;
+  };
   country: string | null;
   status: 'active' | 'inactive' | 'banned';
+}
+
+export interface DashboardStats {
+  userCount: number;
+  activeUsersCount: number;
+  resumeCount: number;
+  coverLetterCount: number;
+  reviewCount: number;
+  subscriptionCount: number;
+  writingServiceCount: number;
+  totalRevenue: number;
+  recentSignups: RecentSignup[];
+  revenueByMonth: MonthlyRevenue[];
+  activeUsersByDay: DailyActivity[];
+}
+
+export interface RecentSignup {
+  id: string;
+  name: string;
+  email: string;
+  country: string;
+  plan: string;
+  date: string;
+}
+
+export interface MonthlyRevenue {
+  month: string;
+  revenue: number;
+}
+
+export interface DailyActivity {
+  day: string;
+  active: number;
+}
+
+export interface Transaction {
+  id: string;
+  amount: number;
+  currency: string;
+  status: string;
+  payment_method: string | null;
+  description: string | null;
+  created_at: string;
+  user_id: string;
+  userEmail: string;
+  subscription_id: string | null;
+}
+
+export interface Document {
+  id: string;
+  title: string;
+  user_id: string;
+  userEmail: string;
+  created_at: string;
+  updated_at: string;
+  documentType: 'resume' | 'coverLetter';
+  is_reviewed: boolean;
+  ats_score: number | null;
 }
 
 export const adminService = {
@@ -51,7 +109,7 @@ export const adminService = {
   async getUsers(): Promise<UserWithProfile[]> {
     try {
       // Fetch users from auth.users (using a Supabase Function since we can't query auth directly)
-      const { data: authUsers, error: authError } = await supabase.functions.invoke('admin-helpers', {
+      const { data: users, error: authError } = await supabase.functions.invoke('admin-helpers', {
         body: { action: 'get_users_with_profiles' }
       });
       
@@ -60,149 +118,51 @@ export const adminService = {
         return [];
       }
       
-      // Get subscriptions to determine user plans
-      const { data: subscriptions, error: subsError } = await supabase
-        .from('subscriptions')
-        .select(`
-          user_id,
-          plan_id,
-          plans(name, id)
-        `)
-        .eq('status', 'active');
-      
-      if (subsError) {
-        console.error('Error fetching subscriptions:', subsError);
-      }
-
-      // Map subscriptions to users
-      const usersWithPlans = (authUsers || []).map(user => {
-        const subscription = subscriptions?.find(sub => sub.user_id === user.id);
-        
-        return {
-          ...user,
-          plan: subscription ? {
-            name: subscription.plans.name,
-            id: subscription.plans.id
-          } : {
-            name: 'Basic',
-            id: 'free'
-          },
-          // Extract country from metadata if available
-          country: user.raw_user_meta_data?.country || 'Unknown',
-          // Default status to active, this would come from a real status field in production
-          status: 'active' as const
-        };
-      });
-      
-      return usersWithPlans;
+      return users || [];
     } catch (error) {
       console.error('Error in getUsers:', error);
       return [];
     }
   },
   
-  async getDashboardStats() {
+  async getDashboardStats(): Promise<DashboardStats> {
     try {
-      // Get user count
-      const { count: userCount, error: userCountError } = await supabase
-        .from('profiles')
-        .select('*', { count: 'exact', head: true });
-        
-      if (userCountError) {
-        console.error('Error fetching user count:', userCountError);
-      }
-      
-      // Get resume count
-      const { count: resumeCount, error: resumeError } = await supabase
-        .from('resumes')
-        .select('*', { count: 'exact', head: true });
-        
-      if (resumeError) {
-        console.error('Error fetching resume count:', resumeError);
-      }
-      
-      // Get cover letter count
-      const { count: coverLetterCount, error: coverLetterError } = await supabase
-        .from('cover_letters')
-        .select('*', { count: 'exact', head: true });
-        
-      if (coverLetterError) {
-        console.error('Error fetching cover letter count:', coverLetterError);
-      }
-      
-      // Get AI review count
-      const { count: reviewCount, error: reviewError } = await supabase
-        .from('ai_reviews')
-        .select('*', { count: 'exact', head: true });
-        
-      if (reviewError) {
-        console.error('Error fetching review count:', reviewError);
-      }
-      
-      // Get active subscription count
-      const { count: subscriptionCount, error: subscriptionError } = await supabase
-        .from('subscriptions')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'active');
-        
-      if (subscriptionError) {
-        console.error('Error fetching subscription count:', subscriptionError);
-      }
-      
-      // Get active writing services orders
-      const { count: writingServiceCount, error: writingError } = await supabase
-        .from('writing_services')
-        .select('*', { count: 'exact', head: true })
-        .in('status', ['pending', 'in_progress']);
-        
-      if (writingError) {
-        console.error('Error fetching writing service count:', writingError);
-      }
-      
-      // Get transaction total revenue
-      const { data: transactions, error: transactionError } = await supabase
-        .from('transactions')
-        .select('amount');
-        
-      if (transactionError) {
-        console.error('Error fetching transactions:', transactionError);
-      }
-      
-      const totalRevenue = transactions?.reduce((sum, t) => sum + parseFloat(t.amount as any), 0) || 0;
-      
-      // Recent signups - last 5 users
-      const { data: recentUsers, error: recentError } = await supabase.functions.invoke('admin-helpers', {
-        body: { 
-          action: 'get_recent_signups',
-          data: { limit: 5 }
-        }
+      const { data, error } = await supabase.functions.invoke('admin-helpers', {
+        body: { action: 'get_dashboard_stats' }
       });
         
-      if (recentError) {
-        console.error('Error fetching recent signups:', recentError);
+      if (error) {
+        console.error('Error fetching dashboard stats:', error);
+        throw error;
       }
       
-      return {
-        userCount: userCount || 0,
-        resumeCount: resumeCount || 0,
-        coverLetterCount: coverLetterCount || 0,
-        reviewCount: reviewCount || 0,
-        subscriptionCount: subscriptionCount || 0,
-        writingServiceCount: writingServiceCount || 0,
-        totalRevenue,
-        recentSignups: recentUsers || []
-      };
-    } catch (error) {
-      console.error('Error in getDashboardStats:', error);
-      return {
+      return data || {
         userCount: 0,
+        activeUsersCount: 0,
         resumeCount: 0,
         coverLetterCount: 0,
         reviewCount: 0,
         subscriptionCount: 0,
         writingServiceCount: 0,
         totalRevenue: 0,
-        recentSignups: []
+        recentSignups: [],
+        revenueByMonth: [],
+        activeUsersByDay: []
+      };
+    } catch (error) {
+      console.error('Error in getDashboardStats:', error);
+      return {
+        userCount: 0,
+        activeUsersCount: 0,
+        resumeCount: 0,
+        coverLetterCount: 0,
+        reviewCount: 0,
+        subscriptionCount: 0,
+        writingServiceCount: 0,
+        totalRevenue: 0,
+        recentSignups: [],
+        revenueByMonth: [],
+        activeUsersByDay: []
       };
     }
   },
@@ -325,6 +285,42 @@ export const adminService = {
         },
         recentActivity: []
       };
+    }
+  },
+  
+  async getTransactions(): Promise<Transaction[]> {
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-helpers', {
+        body: { action: 'get_all_transactions' }
+      });
+      
+      if (error) {
+        console.error('Error fetching transactions:', error);
+        return [];
+      }
+      
+      return data || [];
+    } catch (error) {
+      console.error('Error in getTransactions:', error);
+      return [];
+    }
+  },
+  
+  async getDocuments(): Promise<Document[]> {
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-helpers', {
+        body: { action: 'get_all_documents' }
+      });
+      
+      if (error) {
+        console.error('Error fetching documents:', error);
+        return [];
+      }
+      
+      return data || [];
+    } catch (error) {
+      console.error('Error in getDocuments:', error);
+      return [];
     }
   }
 };

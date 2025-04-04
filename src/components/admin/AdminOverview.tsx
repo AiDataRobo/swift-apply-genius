@@ -35,40 +35,9 @@ import {
   TableHeader, 
   TableRow 
 } from '@/components/ui/table';
-
-// Mock data for charts and stats
-const revenueData = [
-  { month: 'Jan', revenue: 12400 },
-  { month: 'Feb', revenue: 14500 },
-  { month: 'Mar', revenue: 16100 },
-  { month: 'Apr', revenue: 14000 },
-  { month: 'May', revenue: 21500 },
-  { month: 'Jun', revenue: 24000 },
-  { month: 'Jul', revenue: 23000 },
-  { month: 'Aug', revenue: 25200 },
-  { month: 'Sep', revenue: 27800 },
-  { month: 'Oct', revenue: 29600 },
-  { month: 'Nov', revenue: 32000 },
-  { month: 'Dec', revenue: 34500 },
-];
-
-const userActivityData = [
-  { day: 'Mon', active: 450 },
-  { day: 'Tue', active: 520 },
-  { day: 'Wed', active: 670 },
-  { day: 'Thu', active: 610 },
-  { day: 'Fri', active: 580 },
-  { day: 'Sat', active: 420 },
-  { day: 'Sun', active: 350 },
-];
-
-const recentSignups = [
-  { id: 1, name: 'Alex Johnson', email: 'alex@example.com', country: 'United States', plan: 'Premium', date: '2023-11-05' },
-  { id: 2, name: 'Sara Williams', email: 'sara@example.com', country: 'Canada', plan: 'Basic', date: '2023-11-04' },
-  { id: 3, name: 'Raj Patel', email: 'raj@example.com', country: 'India', plan: 'Premium', date: '2023-11-04' },
-  { id: 4, name: 'Emma Chen', email: 'emma@example.com', country: 'Australia', plan: 'Basic', date: '2023-11-03' },
-  { id: 5, name: 'Luis Rodriguez', email: 'luis@example.com', country: 'Mexico', plan: 'Premium', date: '2023-11-02' },
-];
+import { Skeleton } from '@/components/ui/skeleton';
+import { useAdminData } from '@/hooks/useAdminData';
+import { RecentSignup, MonthlyRevenue, DailyActivity } from '@/services/supabase/adminService';
 
 interface StatCardProps {
   title: string;
@@ -77,9 +46,10 @@ interface StatCardProps {
   icon: React.ReactNode;
   trend?: 'up' | 'down' | 'neutral';
   trendValue?: string;
+  isLoading?: boolean;
 }
 
-const StatCard = ({ title, value, description, icon, trend, trendValue }: StatCardProps) => (
+const StatCard = ({ title, value, description, icon, trend, trendValue, isLoading = false }: StatCardProps) => (
   <Card>
     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
       <CardTitle className="text-sm font-medium">{title}</CardTitle>
@@ -88,9 +58,13 @@ const StatCard = ({ title, value, description, icon, trend, trendValue }: StatCa
       </div>
     </CardHeader>
     <CardContent>
-      <div className="text-2xl font-bold">{value}</div>
+      {isLoading ? (
+        <Skeleton className="h-8 w-24 mb-2" />
+      ) : (
+        <div className="text-2xl font-bold">{value}</div>
+      )}
       <p className="text-xs text-muted-foreground">{description}</p>
-      {trend && (
+      {trend && !isLoading && (
         <div className={`flex items-center text-xs mt-2 ${
           trend === 'up' 
             ? 'text-green-500' 
@@ -111,75 +85,106 @@ const StatCard = ({ title, value, description, icon, trend, trendValue }: StatCa
 );
 
 const AdminOverview = () => {
+  const { dashboardStats, isLoadingStats, refetchStats } = useAdminData();
+  
+  const revenueData: MonthlyRevenue[] = dashboardStats?.revenueByMonth || [];
+  const userActivityData: DailyActivity[] = dashboardStats?.activeUsersByDay || [];
+  const recentSignups: RecentSignup[] = dashboardStats?.recentSignups || [];
+  
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
+  
   return (
     <div className="space-y-8">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold">Dashboard Overview</h2>
+        <Button variant="outline" onClick={() => refetchStats()}>
+          <Clock className="mr-2 h-4 w-4" />
+          Refresh Data
+        </Button>
+      </div>
+    
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Total Users"
-          value="12,453"
+          value={dashboardStats?.userCount.toLocaleString() || '0'}
           description="Total registered accounts"
           icon={<Users className="h-5 w-5" />}
           trend="up"
           trendValue="+15% from last month"
+          isLoading={isLoadingStats}
         />
         <StatCard
           title="Active Users Today"
-          value="1,245"
+          value={dashboardStats?.activeUsersCount.toLocaleString() || '0'}
           description="Logged in in the last 24h"
           icon={<Clock className="h-5 w-5" />}
           trend="up"
           trendValue="+5% from yesterday"
+          isLoading={isLoadingStats}
         />
         <StatCard
           title="Total Resumes"
-          value="28,379"
+          value={dashboardStats?.resumeCount.toLocaleString() || '0'}
           description="Created by all users"
           icon={<FileText className="h-5 w-5" />}
           trend="up"
           trendValue="+12% from last month"
+          isLoading={isLoadingStats}
         />
         <StatCard
           title="Cover Letters"
-          value="14,892"
+          value={dashboardStats?.coverLetterCount.toLocaleString() || '0'}
           description="Generated by all users"
           icon={<Mail className="h-5 w-5" />}
           trend="up"
           trendValue="+8% from last month"
+          isLoading={isLoadingStats}
         />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Resume Reviews"
-          value="8,725"
+          value={dashboardStats?.reviewCount.toLocaleString() || '0'}
           description="Uploaded for AI review"
           icon={<Star className="h-5 w-5" />}
           trend="up"
           trendValue="+18% from last month"
+          isLoading={isLoadingStats}
         />
         <StatCard
           title="Writing Orders"
-          value="345"
+          value={dashboardStats?.writingServiceCount.toLocaleString() || '0'}
           description="Active professional writing orders"
           icon={<Award className="h-5 w-5" />}
           trend="up"
           trendValue="+7% from last month"
+          isLoading={isLoadingStats}
         />
         <StatCard
           title="Active Subscriptions"
-          value="5,432"
+          value={dashboardStats?.subscriptionCount.toLocaleString() || '0'}
           description="Current paid plans"
           icon={<ShoppingCart className="h-5 w-5" />}
           trend="up"
           trendValue="+10% from last month"
+          isLoading={isLoadingStats}
         />
         <StatCard
           title="Monthly Revenue"
-          value="$87,490"
+          value={formatCurrency(dashboardStats?.totalRevenue || 0)}
           description="For current month"
           icon={<DollarSign className="h-5 w-5" />}
           trend="up"
           trendValue="+22% from last month"
+          isLoading={isLoadingStats}
         />
       </div>
 
@@ -191,43 +196,49 @@ const AdminOverview = () => {
           </CardHeader>
           <CardContent>
             <div className="h-80">
-              <ChartContainer 
-                config={{ 
-                  revenue: { color: "hsl(var(--primary))" } 
-                }}
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={revenueData}>
-                    <XAxis
-                      dataKey="month"
-                      stroke="#888888"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis
-                      stroke="#888888"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                      tickFormatter={(value) => `$${value}`}
-                    />
-                    <Bar
-                      dataKey="revenue"
-                      fill="var(--color-revenue)"
-                      radius={[4, 4, 0, 0]}
-                    />
-                    <ChartTooltip
-                      content={
-                        <ChartTooltipContent 
-                          labelFormatter={(label) => `Month: ${label}`}
-                          formatter={(value) => [`$${value.toLocaleString()}`, "Revenue"]}
-                        />
-                      }
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </ChartContainer>
+              {isLoadingStats ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
+                </div>
+              ) : (
+                <ChartContainer 
+                  config={{ 
+                    revenue: { color: "hsl(var(--primary))" } 
+                  }}
+                >
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={revenueData}>
+                      <XAxis
+                        dataKey="month"
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <YAxis
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                        tickFormatter={(value) => `$${value}`}
+                      />
+                      <Bar
+                        dataKey="revenue"
+                        fill="var(--color-revenue)"
+                        radius={[4, 4, 0, 0]}
+                      />
+                      <ChartTooltip
+                        content={
+                          <ChartTooltipContent 
+                            labelFormatter={(label) => `Month: ${label}`}
+                            formatter={(value) => [`$${value.toLocaleString()}`, "Revenue"]}
+                          />
+                        }
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -239,43 +250,49 @@ const AdminOverview = () => {
           </CardHeader>
           <CardContent>
             <div className="h-80">
-              <ChartContainer 
-                config={{ 
-                  active: { color: "hsl(var(--primary))" }
-                }}
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={userActivityData}>
-                    <XAxis
-                      dataKey="day"
-                      stroke="#888888"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis
-                      stroke="#888888"
-                      fontSize={12}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <Line
-                      dataKey="active"
-                      stroke="var(--color-active)"
-                      strokeWidth={2}
-                      dot={{ fill: "var(--color-active)" }}
-                    />
-                    <ChartTooltip
-                      content={
-                        <ChartTooltipContent
-                          labelFormatter={(label) => `Day: ${label}`}
-                          formatter={(value) => [`${value.toLocaleString()} users`, "Active"]}
-                        />
-                      }
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </ChartContainer>
+              {isLoadingStats ? (
+                <div className="flex items-center justify-center h-full">
+                  <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
+                </div>
+              ) : (
+                <ChartContainer 
+                  config={{ 
+                    active: { color: "hsl(var(--primary))" }
+                  }}
+                >
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={userActivityData}>
+                      <XAxis
+                        dataKey="day"
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <YAxis
+                        stroke="#888888"
+                        fontSize={12}
+                        tickLine={false}
+                        axisLine={false}
+                      />
+                      <Line
+                        dataKey="active"
+                        stroke="var(--color-active)"
+                        strokeWidth={2}
+                        dot={{ fill: "var(--color-active)" }}
+                      />
+                      <ChartTooltip
+                        content={
+                          <ChartTooltipContent
+                            labelFormatter={(label) => `Day: ${label}`}
+                            formatter={(value) => [`${value.toLocaleString()} users`, "Active"]}
+                          />
+                        }
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -305,23 +322,39 @@ const AdminOverview = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {recentSignups.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.country}</TableCell>
-                  <TableCell>
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                      user.plan === 'Premium' 
-                        ? 'bg-primary text-primary-foreground' 
-                        : 'bg-muted text-muted-foreground'
-                    }`}>
-                      {user.plan}
-                    </span>
-                  </TableCell>
-                  <TableCell>{user.date}</TableCell>
+              {isLoadingStats ? (
+                Array(5).fill(0).map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell><Skeleton className="h-5 w-32" /></TableCell>
+                    <TableCell><Skeleton className="h-5 w-48" /></TableCell>
+                    <TableCell><Skeleton className="h-5 w-24" /></TableCell>
+                    <TableCell><Skeleton className="h-5 w-20" /></TableCell>
+                    <TableCell><Skeleton className="h-5 w-24" /></TableCell>
+                  </TableRow>
+                ))
+              ) : recentSignups.length > 0 ? (
+                recentSignups.map((user) => (
+                  <TableRow key={user.id}>
+                    <TableCell className="font-medium">{user.name}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.country}</TableCell>
+                    <TableCell>
+                      <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                        user.plan === 'Premium' || user.plan === 'Professional'
+                          ? 'bg-primary text-primary-foreground' 
+                          : 'bg-muted text-muted-foreground'
+                      }`}>
+                        {user.plan}
+                      </span>
+                    </TableCell>
+                    <TableCell>{new Date(user.date).toLocaleDateString()}</TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={5} className="text-center py-4">No recent signups found</TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </CardContent>
