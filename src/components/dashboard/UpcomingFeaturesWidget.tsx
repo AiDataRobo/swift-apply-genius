@@ -7,21 +7,21 @@ import { Sparkles, BrainCircuit, Target, ShieldCheck } from 'lucide-react';
 const UpcomingFeaturesWidget = () => {
   const upcomingFeatures = [
     {
-      title: 'AI Career Suggestion Tool',
-      description: 'Get personalized career path recommendations based on your skills and interests',
-      eta: 'July 2023',
+      title: "AI Career Suggestion Tool",
+      description: "Get personalized career path recommendations based on your skills and interests",
+      eta: "July 2023",
       icon: <BrainCircuit className="h-5 w-5 text-purple-500" />
     },
     {
-      title: 'Job Application Tracker',
-      description: 'Manage all your job applications in one place with status updates and reminders',
-      eta: 'August 2023',
+      title: "Job Application Tracker",
+      description: "Manage all your job applications in one place with status updates and reminders",
+      eta: "August 2023",
       icon: <Target className="h-5 w-5 text-blue-500" />
     },
     {
-      title: 'Interview Practice with AI',
-      description: 'Practice for interviews with our AI-powered simulator and get feedback',
-      eta: 'September 2023',
+      title: "Interview Practice with AI",
+      description: "Practice for interviews with our AI-powered simulator and get feedback",
+      eta: "September 2023",
       icon: <ShieldCheck className="h-5 w-5 text-green-500" />
     }
   ];

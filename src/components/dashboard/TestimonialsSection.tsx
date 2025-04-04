@@ -19,7 +19,7 @@ const TestimonialsSection = () => {
       name: 'Priya Singh',
       position: 'Product Manager',
       company: 'Amazon',
-      text: 'The Interview Guarantee Package was worth every penny. I got 7 interview calls in two weeks after struggling for months on my own.',
+      text: "The Interview Guarantee Package was worth every penny. I got 7 interview calls in two weeks after struggling for months on my own.",
       rating: 5,
       avatar: '/placeholder.svg'
     },
@@ -28,7 +28,7 @@ const TestimonialsSection = () => {
       name: 'Ajay Verma',
       position: 'Data Scientist',
       company: 'Microsoft',
-      text: 'The LinkedIn optimization service helped me get noticed by recruiters. I received 5 connection requests from hiring managers in the first week!',
+      text: "The LinkedIn optimization service helped me get noticed by recruiters. I received 5 connection requests from hiring managers in the first week!",
       rating: 4,
       avatar: '/placeholder.svg'
     }

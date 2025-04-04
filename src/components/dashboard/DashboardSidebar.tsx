@@ -47,7 +47,7 @@ const DashboardSidebar = ({ user }: DashboardSidebarProps) => {
     { icon: <Edit size={20} />, label: 'Professional Writing', path: '/resume-writing-services' },
     { icon: <Award size={20} />, label: 'Interview Guarantee', path: '/interview-guarantee-package' },
     { icon: <Briefcase size={20} />, label: 'IT Career Paths', path: '/it-career-paths' },
-    { icon: <User size={20} />, label: 'Account & Settings', path: '/dashboard?tab=settings' },
+    { icon: <User size={20} />, label: 'Account & Settings', path: '/account-settings' },
   ];
 
   return (

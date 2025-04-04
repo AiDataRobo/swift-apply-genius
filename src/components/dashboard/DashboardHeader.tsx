@@ -75,7 +75,7 @@ const DashboardHeader = ({ user }: DashboardHeaderProps) => {
                   </Link>
                 </Button>
                 <Button variant="ghost" className="justify-start" asChild>
-                  <Link to="/dashboard?tab=settings">
+                  <Link to="/account-settings">
                     <Settings className="mr-2 h-4 w-4" />
                     Settings
                   </Link>
@@ -132,7 +132,7 @@ const DashboardHeader = ({ user }: DashboardHeaderProps) => {
                 </div>
                 <div className="border-t pt-4 space-y-2">
                   <Button variant="ghost" className="w-full justify-start" asChild>
-                    <Link to="/dashboard?tab=settings">
+                    <Link to="/account-settings">
                       <Settings className="mr-2 h-4 w-4" />
                       Settings
                     </Link>
