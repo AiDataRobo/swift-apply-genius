@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import {
   ArrowUpDown,
@@ -136,7 +135,7 @@ const users = [
     status: 'inactive',
   },
   {
-    id: a9,
+    id: 9,
     name: 'Hiroshi Tanaka',
     email: 'hiroshi@example.com',
     phone: '+1 555-432-1098',
