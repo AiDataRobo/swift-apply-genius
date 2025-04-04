@@ -10,7 +10,7 @@ const TestimonialsSection = () => {
       name: 'Ravi Kumar',
       position: 'Software Engineer',
       company: 'Google',
-      text: 'With SwiftApply's help, I improved my resume and landed interviews at 3 top tech companies. Their AI suggestions were surprisingly accurate!',
+      text: "With SwiftApply's help, I improved my resume and landed interviews at 3 top tech companies. Their AI suggestions were surprisingly accurate!",
       rating: 5,
       avatar: '/placeholder.svg'
     },
