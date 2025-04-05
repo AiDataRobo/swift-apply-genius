@@ -4,6 +4,7 @@ import { Zap, FileText, CheckCircle, Star, PenTool, Users, Award, Download, Arro
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import BookConsultationButton from '@/components/booking/BookConsultationButton';
 
 interface FeatureItemProps {
   icon: React.ReactNode;
@@ -161,9 +162,11 @@ const WhyChooseUsSection = () => {
                 />
               </div>
               
-              <Button variant="outline" className="w-full md:w-auto">
-                Get a Free Resume Review
-              </Button>
+              <Link to="/resume-review">
+                <Button variant="outline" className="w-full md:w-auto">
+                  Get a Free Resume Review
+                </Button>
+              </Link>
             </motion.div>
           </motion.div>
         </div>
@@ -175,10 +178,12 @@ const WhyChooseUsSection = () => {
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
         >
-          <Button variant="link" className="text-primary">
-            Compare Plans
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <Link to="/pricing">
+            <Button variant="link" className="text-primary">
+              Compare Plans
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

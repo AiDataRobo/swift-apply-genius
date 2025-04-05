@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import NavBar from '@/components/landing/NavBar';
 import HeroSection from '@/components/landing/HeroSection';
 import WhyChooseUsSection from '@/components/landing/WhyChooseUsSection';
-import ServicesSection from '@/components/landing/ServicesSection';
 import HowItWorksSection from '@/components/landing/HowItWorksSection';
 import TestimonialsSection from '@/components/landing/TestimonialsSection';
 import PricingSection from '@/components/landing/PricingSection';
@@ -79,9 +78,6 @@ const Index = () => {
       <main>
         <section className="section-hero">
           <HeroSection />
-        </section>
-        <section className="section-services">
-          <ServicesSection />
         </section>
         <section className="section-why-choose-us">
           <WhyChooseUsSection />

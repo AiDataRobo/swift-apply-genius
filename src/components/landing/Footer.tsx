@@ -12,9 +12,16 @@ import {
   Shield, 
   CreditCard, 
   LifeBuoy, 
-  HelpCircle 
+  HelpCircle,
+  FileText,
+  BookOpen,
+  DollarSign,
+  Users,
+  Map,
+  Phone
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import BookConsultationButton from '@/components/booking/BookConsultationButton';
 
 const Footer = () => {
   return (
@@ -22,7 +29,10 @@ const Footer = () => {
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
-            <h3 className="text-xl font-bold mb-6">EnhanceResume</h3>
+            <h3 className="text-xl font-bold mb-6 flex items-center">
+              <FileText className="h-5 w-5 mr-2 text-primary" />
+              EnhanceResume
+            </h3>
             <p className="text-slate-400 mb-4">
               Professional resume and career services to help you land your dream job.
             </p>
@@ -46,11 +56,11 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-6">Services</h3>
             <ul className="space-y-3">
               <li><Link to="/resume-builder" className="text-slate-400 hover:text-white transition-colors">Resume Builder</Link></li>
-              <li><Link to="/cover-letter-services" className="text-slate-400 hover:text-white transition-colors">Cover Letter Builder</Link></li>
+              <li><Link to="/cover-letter-builder" className="text-slate-400 hover:text-white transition-colors">Cover Letter Builder</Link></li>
               <li><Link to="/resume-writing-services" className="text-slate-400 hover:text-white transition-colors">Professional Writing Services</Link></li>
               <li><Link to="/interview-guarantee-package" className="text-slate-400 hover:text-white transition-colors">Interview Guarantee Package</Link></li>
-              <li><Link to="#" className="text-slate-400 hover:text-white transition-colors">LinkedIn Profile Optimization</Link></li>
-              <li><Link to="#" className="text-slate-400 hover:text-white transition-colors">Career Coaching</Link></li>
+              <li><Link to="/linkedin-optimization" className="text-slate-400 hover:text-white transition-colors">LinkedIn Profile Optimization</Link></li>
+              <li><Link to="/career-coaching" className="text-slate-400 hover:text-white transition-colors">Career Coaching</Link></li>
             </ul>
           </div>
           
@@ -58,10 +68,11 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-6">Resources</h3>
             <ul className="space-y-3">
               <li><Link to="/templates" className="text-slate-400 hover:text-white transition-colors">Resume Templates</Link></li>
-              <li><Link to="#" className="text-slate-400 hover:text-white transition-colors">Career Blog</Link></li>
-              <li><Link to="#" className="text-slate-400 hover:text-white transition-colors">Resume Examples</Link></li>
-              <li><Link to="#" className="text-slate-400 hover:text-white transition-colors">Job Search Tips</Link></li>
-              <li><Link to="#" className="text-slate-400 hover:text-white transition-colors">Interview Preparation</Link></li>
+              <li><Link to="/career-paths" className="text-slate-400 hover:text-white transition-colors">Career Paths</Link></li>
+              <li><Link to="/blog" className="text-slate-400 hover:text-white transition-colors">Career Blog</Link></li>
+              <li><Link to="/resume-examples" className="text-slate-400 hover:text-white transition-colors">Resume Examples</Link></li>
+              <li><Link to="/job-search-tips" className="text-slate-400 hover:text-white transition-colors">Job Search Tips</Link></li>
+              <li><Link to="/interview-preparation" className="text-slate-400 hover:text-white transition-colors">Interview Preparation</Link></li>
             </ul>
           </div>
           
@@ -69,10 +80,11 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-6">Company</h3>
             <ul className="space-y-3">
               <li><Link to="/about" className="text-slate-400 hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/pricing" className="text-slate-400 hover:text-white transition-colors">Pricing</Link></li>
               <li><Link to="/contact" className="text-slate-400 hover:text-white transition-colors">Contact</Link></li>
               <li><Link to="/privacy" className="text-slate-400 hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link to="/terms" className="text-slate-400 hover:text-white transition-colors">Terms of Service</Link></li>
-              <li><Link to="#" className="text-slate-400 hover:text-white transition-colors">FAQ</Link></li>
+              <li><Link to="/faq" className="text-slate-400 hover:text-white transition-colors">FAQ</Link></li>
             </ul>
           </div>
         </div>
@@ -106,9 +118,13 @@ const Footer = () => {
       
       {/* Floating Chat Button */}
       <div className="fixed bottom-6 right-6 z-50">
-        <Button size="lg" className="rounded-full h-14 w-14 shadow-lg">
-          <MessageSquare className="h-6 w-6" />
-        </Button>
+        <BookConsultationButton
+          size="lg"
+          className="rounded-full h-14 w-14 shadow-lg"
+          link="vishal17/expertcareeradvice"
+          aria-label="Book a Consultation">
+            <MessageSquare className="h-6 w-6" />
+        </BookConsultationButton>
       </div>
     </footer>
   );

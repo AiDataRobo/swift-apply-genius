@@ -5,6 +5,7 @@ import { ArrowRight, FileText, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import CalBookingModal from "@/components/booking/CalBookingModal";
+import BookConsultationButton from '@/components/booking/BookConsultationButton';
 
 const HeroCallToAction = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
@@ -33,21 +34,22 @@ const HeroCallToAction = () => {
         whileTap={{ scale: 0.98 }}
         className="flex-1"
       >
-        <Button 
-          variant="outline" 
-          size="lg"
-          className="group border-primary/20 hover:border-primary/40 w-full py-6 px-8 h-auto text-base"
-          onClick={openBookingModal}
-        >
-          <Sparkles className="mr-2 h-5 w-5 text-amber-500 group-hover:scale-110 transition-transform" />
-          Free Resume Review
-        </Button>
+        <Link to="/resume-review">
+          <Button 
+            variant="outline" 
+            size="lg"
+            className="group border-primary/20 hover:border-primary/40 w-full py-6 px-8 h-auto text-base"
+          >
+            <Sparkles className="mr-2 h-5 w-5 text-amber-500 group-hover:scale-110 transition-transform" />
+            Review Your Resume
+          </Button>
+        </Link>
       </motion.div>
 
       <CalBookingModal 
         isOpen={isBookingModalOpen} 
         onClose={closeBookingModal} 
-        calLink="swiftapply/resume-review"
+        calLink="vishal17/expertcareeradvice"
       />
     </div>
   );

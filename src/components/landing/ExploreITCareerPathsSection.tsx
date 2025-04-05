@@ -30,6 +30,15 @@ const ExploreITCareerPathsSection = () => {
     }
   };
 
+  const scrollToCareerQuiz = () => {
+    const quizSection = document.getElementById('career-quiz');
+    if (quizSection) {
+      quizSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      window.location.href = "/career-paths#career-quiz";
+    }
+  };
+
   return (
     <div className="container mx-auto px-6 py-20 md:px-10 lg:px-20 max-w-7xl">
       <div className="text-center mb-16">
@@ -85,7 +94,7 @@ const ExploreITCareerPathsSection = () => {
                         )}
                       </div>
                     </div>
-                    <Link to={`/career-path/${path.id}`} className="mt-auto">
+                    <Link to={`/career-paths/${path.id}`} className="mt-auto">
                       <Button 
                         variant="outline" 
                         className="w-full justify-between"
@@ -117,11 +126,9 @@ const ExploreITCareerPathsSection = () => {
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8 rounded-2xl max-w-3xl mx-auto">
           <h3 className="text-xl font-semibold mb-3">Not sure which career fits you?</h3>
           <p className="text-muted-foreground mb-6">Take our AI-powered career quiz and discover the IT path that matches your skills and interests.</p>
-          <Link to="/it-career-paths#career-quiz">
-            <Button size="lg" className="glass-button">
-              Take the Career Quiz
-            </Button>
-          </Link>
+          <Button size="lg" className="glass-button" onClick={scrollToCareerQuiz}>
+            Take the Career Quiz
+          </Button>
         </div>
       </div>
     </div>
