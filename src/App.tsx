@@ -26,6 +26,9 @@ import CoverLetterServices from './pages/CoverLetterServices';
 import InterviewGuaranteePackage from './pages/InterviewGuaranteePackage';
 import ITCareerPaths from './pages/ITCareerPaths';
 import CareerPathDetail from './pages/CareerPathDetail';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboardPage from './pages/AdminDashboardPage';
+import ProtectedAdminRoute from './components/admin/ProtectedAdminRoute';
 
 function App() {
   // Create a client instance
@@ -63,6 +66,17 @@ function App() {
                   <Route path="/resume-writing-services" element={<ResumeWritingServices />} />
                   <Route path="/cover-letter-services" element={<CoverLetterServices />} />
                   <Route path="/interview-guarantee-package" element={<InterviewGuaranteePackage />} />
+                  
+                  {/* Admin Routes */}
+                  <Route path="/admin/login" element={<AdminLogin />} />
+                  <Route 
+                    path="/admin/dashboard" 
+                    element={
+                      <ProtectedAdminRoute>
+                        <AdminDashboardPage />
+                      </ProtectedAdminRoute>
+                    } 
+                  />
                   
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
