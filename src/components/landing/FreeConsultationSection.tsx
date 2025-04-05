@@ -112,7 +112,9 @@ const FreeConsultationSection = () => {
                 <Button 
                   size="lg" 
                   className="w-full md:w-auto text-lg font-medium px-8 py-6 h-auto"
-                  onClick={openBookingModal}
+                  data-cal-namespace="expertcareeradvice"
+                  data-cal-link="vishal17/expertcareeradvice"
+                  data-cal-config='{"layout":"month_view","theme":"light"}'
                 >
                   <CalendarDays className="mr-2 h-5 w-5" />
                   Book Your Free Consultation

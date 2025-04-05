@@ -7,21 +7,10 @@ import {
   Twitter, 
   Instagram, 
   Linkedin, 
-  Mail, 
-  MessageSquare, 
   Shield, 
   CreditCard, 
-  LifeBuoy, 
-  HelpCircle,
   FileText,
-  BookOpen,
-  DollarSign,
-  Users,
-  Map,
-  Phone
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import BookConsultationButton from '@/components/booking/BookConsultationButton';
 
 const Footer = () => {
   return (
@@ -114,17 +103,6 @@ const Footer = () => {
             </div>
           </div>
         </div>
-      </div>
-      
-      {/* Floating Chat Button */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <BookConsultationButton
-          size="lg"
-          className="rounded-full h-14 w-14 shadow-lg"
-          link="vishal17/expertcareeradvice"
-          aria-label="Book a Consultation">
-            <MessageSquare className="h-6 w-6" />
-        </BookConsultationButton>
       </div>
     </footer>
   );

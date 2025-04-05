@@ -9,7 +9,6 @@ import PricingSection from '@/components/landing/PricingSection';
 import CTASection from '@/components/landing/CTASection';
 import Footer from '@/components/landing/Footer';
 import FreeConsultationSection from '@/components/landing/FreeConsultationSection';
-import FloatingBookButton from '@/components/booking/FloatingBookButton';
 import { useToast } from "@/hooks/use-toast";
 import ExploreITCareerPathsSection from '@/components/landing/ExploreITCareerPathsSection';
 
@@ -102,7 +101,6 @@ const Index = () => {
         </section>
       </main>
       <Footer />
-      <FloatingBookButton />
     </div>
   );
 };
