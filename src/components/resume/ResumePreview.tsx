@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useResumeContext } from "@/contexts/ResumeContext";
 import ResumeTemplate from "@/components/resume/templates";
 import { Button } from "@/components/ui/button";
-import { FileDown, Palette } from "lucide-react";
+import { FileDown, Palette, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 const ResumePreview: React.FC = () => {
@@ -29,8 +29,17 @@ const ResumePreview: React.FC = () => {
             onClick={handleDownloadResume}
             disabled={isExporting}
           >
-            <FileDown className="h-3.5 w-3.5" />
-            {isExporting ? "Generating..." : "Download PDF"}
+            {isExporting ? (
+              <>
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <FileDown className="h-3.5 w-3.5" />
+                Download PDF
+              </>
+            )}
           </Button>
           
           <Link to="/templates">
@@ -65,12 +74,15 @@ const ResumePreview: React.FC = () => {
         />
         
         <div className="absolute bottom-3 right-3 text-[9px] text-gray-400 opacity-70">
-          Created with ResumeBuilder
+          Created with EnhanceResume
         </div>
       </motion.div>
 
       <div className="mt-4 text-xs text-center text-muted-foreground">
-        <p>Your resume is automatically saved as you type</p>
+        <p className="flex items-center justify-center gap-1">
+          <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+          Your resume is automatically saved as you type
+        </p>
       </div>
     </div>
   );

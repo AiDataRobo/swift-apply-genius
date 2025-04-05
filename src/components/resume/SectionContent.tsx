@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useResumeContext } from "@/contexts/ResumeContext";
 import ProfileSection from "@/components/resume/ProfileSection";
@@ -41,7 +40,72 @@ const SectionContent: React.FC = () => {
     handleCustomSectionChange
   } = useResumeContext();
 
-  const renderSectionContent = () => {
+  function renderTips() {
+    return (
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 text-sm"
+      >
+        <div className="flex items-start gap-3">
+          <Sparkles className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
+          <div>
+            <h3 className="font-medium text-blue-700">Resume Building Tips</h3>
+            {activeSection === "profile" && (
+              <p className="text-blue-600 mt-1">Use a professional summary that highlights your key strengths and career goals in 2-3 sentences.</p>
+            )}
+            {activeSection === "skills" && (
+              <p className="text-blue-600 mt-1">Group similar skills and prioritize those most relevant to the job you're applying for.</p>
+            )}
+            {activeSection === "experience" && (
+              <p className="text-blue-600 mt-1">Use action verbs and quantify achievements with numbers when possible (e.g., "Increased sales by 20%").</p>
+            )}
+            {activeSection === "education" && (
+              <p className="text-blue-600 mt-1">List your most recent education first, and include relevant coursework or academic achievements.</p>
+            )}
+            {activeSection === "projects" && (
+              <p className="text-blue-600 mt-1">Highlight projects that demonstrate your skills and are relevant to your target position.</p>
+            )}
+            {activeSection === "certificates" && (
+              <p className="text-blue-600 mt-1">Include the date of certification and any expiration dates if applicable.</p>
+            )}
+            {activeSection === "languages" && (
+              <p className="text-blue-600 mt-1">Be honest about your proficiency level for each language you list.</p>
+            )}
+            {activeSection === "interests" && (
+              <p className="text-blue-600 mt-1">Include interests that demonstrate valuable soft skills or align with company culture.</p>
+            )}
+            {activeSection === "awards" && (
+              <p className="text-blue-600 mt-1">Showcase awards that highlight your achievements and recognition in your field.</p>
+            )}
+            {activeSection === "courses" && (
+              <p className="text-blue-600 mt-1">List relevant courses that have enhanced your skills or knowledge in your profession.</p>
+            )}
+            {activeSection === "declaration" && (
+              <p className="text-blue-600 mt-1">Keep your declaration concise and professional, typically stating the information provided is accurate.</p>
+            )}
+            {activeSection === "sections" && (
+              <p className="text-blue-600 mt-1">Arrange sections in order of relevance to the position you're applying for.</p>
+            )}
+            {resumeData.customSections && resumeData.customSections[activeSection] && (
+              <p className="text-blue-600 mt-1">Customize this section to highlight additional qualifications relevant to your target job.</p>
+            )}
+          </div>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-5 w-5 text-blue-500" 
+            onClick={toggleInstructions}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+        </div>
+      </motion.div>
+    );
+  }
+
+  function renderSectionContent() {
     switch (activeSection) {
       case "profile":
         return (
@@ -139,79 +203,12 @@ const SectionContent: React.FC = () => {
         }
         return null;
     }
-  };
-
-  const renderTips = () => {
-    if (!showInstructions) return null;
-    
-    return (
-      <motion.div 
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6 text-sm"
-      >
-        <div className="flex items-start gap-3">
-          <Sparkles className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" />
-          <div>
-            <h3 className="font-medium text-blue-700">Resume Building Tips</h3>
-            {activeSection === "profile" && (
-              <p className="text-blue-600 mt-1">Use a professional summary that highlights your key strengths and career goals in 2-3 sentences.</p>
-            )}
-            {activeSection === "skills" && (
-              <p className="text-blue-600 mt-1">Group similar skills and prioritize those most relevant to the job you're applying for.</p>
-            )}
-            {activeSection === "experience" && (
-              <p className="text-blue-600 mt-1">Use action verbs and quantify achievements with numbers when possible (e.g., "Increased sales by 20%").</p>
-            )}
-            {activeSection === "education" && (
-              <p className="text-blue-600 mt-1">List your most recent education first, and include relevant coursework or academic achievements.</p>
-            )}
-            {activeSection === "projects" && (
-              <p className="text-blue-600 mt-1">Highlight projects that demonstrate your skills and are relevant to your target position.</p>
-            )}
-            {activeSection === "certificates" && (
-              <p className="text-blue-600 mt-1">Include the date of certification and any expiration dates if applicable.</p>
-            )}
-            {activeSection === "languages" && (
-              <p className="text-blue-600 mt-1">Be honest about your proficiency level for each language you list.</p>
-            )}
-            {activeSection === "interests" && (
-              <p className="text-blue-600 mt-1">Include interests that demonstrate valuable soft skills or align with company culture.</p>
-            )}
-            {activeSection === "awards" && (
-              <p className="text-blue-600 mt-1">Showcase awards that highlight your achievements and recognition in your field.</p>
-            )}
-            {activeSection === "courses" && (
-              <p className="text-blue-600 mt-1">List relevant courses that have enhanced your skills or knowledge in your profession.</p>
-            )}
-            {activeSection === "declaration" && (
-              <p className="text-blue-600 mt-1">Keep your declaration concise and professional, typically stating the information provided is accurate.</p>
-            )}
-            {activeSection === "sections" && (
-              <p className="text-blue-600 mt-1">Arrange sections in order of relevance to the position you're applying for.</p>
-            )}
-            {resumeData.customSections && resumeData.customSections[activeSection] && (
-              <p className="text-blue-600 mt-1">Customize this section to highlight additional qualifications relevant to your target job.</p>
-            )}
-          </div>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="h-5 w-5 text-blue-500" 
-            onClick={toggleInstructions}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-        </div>
-      </motion.div>
-    );
-  };
+  }
 
   return (
     <div className="h-full overflow-y-auto p-6 relative">
       <AnimatePresence>
-        {renderTips()}
+        {showInstructions && renderTips()}
       </AnimatePresence>
 
       {renderSectionContent()}
