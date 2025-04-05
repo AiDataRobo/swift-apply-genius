@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ResumeProvider } from "@/contexts/ResumeContext";
 import Index from './pages/Index';
 import ResumeBuilder from './pages/ResumeBuilder';
 import TemplatesPage from './pages/TemplatesPage';
@@ -45,7 +46,14 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/templates" element={<TemplatesPage />} />
-                  <Route path="/resume-builder" element={<ResumeBuilder />} />
+                  <Route 
+                    path="/resume-builder" 
+                    element={
+                      <ResumeProvider>
+                        <ResumeBuilder />
+                      </ResumeProvider>
+                    } 
+                  />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/account-settings" element={<AccountSettings />} />
                   <Route path="/signup" element={<SignUp />} />
