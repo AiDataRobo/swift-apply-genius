@@ -21,7 +21,7 @@ const ResumeHeader = ({ onChangeTemplate }: ResumeHeaderProps) => {
       <div className="flex items-center gap-2">
         <Link to="/" className="text-xl font-semibold flex items-center">
           <FileText className="h-5 w-5 mr-2 text-primary" />
-          JobOnboard
+          EnhanceResume
         </Link>
         <span className="text-sm text-muted-foreground">/</span>
         <h1 className="text-lg font-medium">Resume Builder</h1>

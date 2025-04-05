@@ -18,7 +18,7 @@ const ContentPageLayout = ({ children, title, subtitle }: ContentPageLayoutProps
         <div className="container max-w-7xl flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <FileText className="h-6 w-6 text-primary" />
-            <span className="font-display font-bold text-xl">SwiftApply</span>
+            <span className="font-display font-bold text-xl">EnhanceResume</span>
           </Link>
           
           <nav className="hidden md:flex items-center gap-8">
@@ -70,7 +70,7 @@ const ContentPageLayout = ({ children, title, subtitle }: ContentPageLayoutProps
             <div>
               <Link to="/" className="flex items-center gap-2 mb-4">
                 <FileText className="h-5 w-5 text-primary" />
-                <span className="font-display font-bold text-lg">SwiftApply</span>
+                <span className="font-display font-bold text-lg">EnhanceResume</span>
               </Link>
               <p className="text-sm text-muted-foreground">
                 AI-powered resume and cover letter builder to help you land your dream job.
@@ -105,7 +105,7 @@ const ContentPageLayout = ({ children, title, subtitle }: ContentPageLayoutProps
           
           <div className="mt-12 pt-6 border-t">
             <p className="text-sm text-muted-foreground text-center">
-              &copy; {new Date().getFullYear()} SwiftApply. All rights reserved.
+              &copy; {new Date().getFullYear()} EnhanceResume. All rights reserved.
             </p>
           </div>
         </div>

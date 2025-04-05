@@ -13,7 +13,7 @@ interface Testimonial {
 
 const testimonials: Testimonial[] = [
   {
-    quote: "JobOnboard's resume builder got me interviews at 3 top tech companies within a week!",
+    quote: "EnhanceResume's resume builder got me interviews at 3 top tech companies within a week!",
     author: "Sarah Johnson",
     title: "Software Engineer"
   },
@@ -79,7 +79,7 @@ const AuthSidebar = ({ isLogin = false }: AuthSidebarProps) => {
       >
         {/* Title */}
         <h2 className="text-2xl md:text-3xl font-bold mb-6">
-          {isLogin ? "Welcome back to JobOnboard!" : "Create your professional career toolkit"}
+          {isLogin ? "Welcome back to EnhanceResume!" : "Create your professional career toolkit"}
         </h2>
         
         {/* Animation */}

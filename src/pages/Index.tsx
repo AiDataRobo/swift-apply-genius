@@ -42,7 +42,7 @@ const Index = () => {
     // Welcome toast with improved message
     setTimeout(() => {
       toast({
-        title: "Welcome to JobOnboard",
+        title: "Welcome to EnhanceResume",
         description: "Create your perfect resume in minutes with our AI-powered tools",
         duration: 5000,
       });

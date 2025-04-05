@@ -22,7 +22,7 @@ const Footer = () => {
       <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
-            <h3 className="text-xl font-bold mb-6">JobOnboard</h3>
+            <h3 className="text-xl font-bold mb-6">EnhanceResume</h3>
             <p className="text-slate-400 mb-4">
               Professional resume and career services to help you land your dream job.
             </p>
@@ -81,7 +81,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-6 md:mb-0">
               <p className="text-slate-400 text-sm">
-                © 2023 JobOnboard. All rights reserved.
+                © {new Date().getFullYear()} EnhanceResume. All rights reserved.
               </p>
             </div>
             

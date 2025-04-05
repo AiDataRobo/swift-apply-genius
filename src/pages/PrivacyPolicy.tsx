@@ -48,7 +48,7 @@ const PrivacyPolicy = () => {
         <ul>
           <li>With service providers who perform services on our behalf</li>
           <li>To comply with legal obligations</li>
-          <li>To protect the rights, property, or safety of SwiftApply, our users, or others</li>
+          <li>To protect the rights, property, or safety of EnhanceResume, our users, or others</li>
           <li>In connection with a merger, sale of company assets, financing, or acquisition</li>
         </ul>
 
@@ -83,7 +83,7 @@ const PrivacyPolicy = () => {
 
         <h2>9. Contact Us</h2>
         <p>
-          If you have any questions about this Privacy Policy, please contact us at privacy@swiftapply.com.
+          If you have any questions about this Privacy Policy, please contact us at privacy@enhanceresume.com.
         </p>
 
         <p className="text-sm text-muted-foreground mt-12">

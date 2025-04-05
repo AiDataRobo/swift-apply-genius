@@ -85,7 +85,7 @@ const DashboardHeader = ({ user }: DashboardHeaderProps) => {
           </Sheet>
           
           <Link to="/" className="text-xl font-semibold ml-2 md:ml-0">
-            SwiftApply<span className="text-primary">.</span>
+            EnhanceResume<span className="text-primary">.</span>
           </Link>
         </div>
         

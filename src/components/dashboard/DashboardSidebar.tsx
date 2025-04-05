@@ -54,7 +54,7 @@ const DashboardSidebar = ({ user }: DashboardSidebarProps) => {
     <Sidebar>
       <SidebarHeader className="border-b p-4">
         <Link to="/" className="flex items-center justify-center">
-          <span className="text-xl font-semibold">SwiftApply<span className="text-primary">.</span></span>
+          <span className="text-xl font-semibold">EnhanceResume<span className="text-primary">.</span></span>
         </Link>
       </SidebarHeader>
       

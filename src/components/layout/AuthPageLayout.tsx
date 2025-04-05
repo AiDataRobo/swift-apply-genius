@@ -29,7 +29,7 @@ const AuthPageLayout = ({ children, title, subtitle, isLogin = false }: AuthPage
           >
             <Link to="/" className="inline-flex items-center gap-2 mb-6 hover:opacity-80 transition-opacity">
               <FileText className="h-6 w-6 text-primary" />
-              <span className="font-display font-bold text-xl">SwiftApply</span>
+              <span className="font-display font-bold text-xl">EnhanceResume</span>
             </Link>
             <h1 className="text-2xl font-bold">{title}</h1>
             {subtitle && <p className="text-muted-foreground mt-1">{subtitle}</p>}
@@ -57,11 +57,11 @@ const AuthPageLayout = ({ children, title, subtitle, isLogin = false }: AuthPage
             
             <div className="flex items-center gap-1 text-xs">
               <CheckCircle className="h-3 w-3 text-green-500" />
-              <span>Join 10,000+ professionals using JobOnboard</span>
+              <span>Join 10,000+ professionals using EnhanceResume</span>
             </div>
             
             <p className="text-sm text-muted-foreground">
-              &copy; {new Date().getFullYear()} SwiftApply. All rights reserved.
+              &copy; {new Date().getFullYear()} EnhanceResume. All rights reserved.
             </p>
           </motion.div>
         </div>
