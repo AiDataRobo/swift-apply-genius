@@ -149,7 +149,7 @@ const ResumeCoverLetters = () => {
                       <TableCell>
                         {doc.documentType === 'resume' ? (
                           doc.is_reviewed ? (
-                            <Badge variant="success" className="bg-green-500">Reviewed</Badge>
+                            <Badge variant="default" className="bg-green-500 hover:bg-green-600">Reviewed</Badge>
                           ) : (
                             <Badge variant="outline">Not Reviewed</Badge>
                           )
