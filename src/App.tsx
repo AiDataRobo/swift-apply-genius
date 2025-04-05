@@ -11,7 +11,6 @@ import Index from './pages/Index';
 import ResumeBuilder from './pages/ResumeBuilder';
 import TemplatesPage from './pages/TemplatesPage';
 import Dashboard from './pages/Dashboard';
-import AdminDashboard from './pages/AdminDashboard';
 import AccountSettings from './pages/AccountSettings';
 import SignUp from './pages/SignUp';
 import LogIn from './pages/LogIn';
@@ -48,7 +47,6 @@ function App() {
                   <Route path="/templates" element={<TemplatesPage />} />
                   <Route path="/resume-builder" element={<ResumeBuilder />} />
                   <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/admin-dashboard" element={<AdminDashboard />} />
                   <Route path="/account-settings" element={<AccountSettings />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/login" element={<LogIn />} />
