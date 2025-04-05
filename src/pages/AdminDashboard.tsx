@@ -38,6 +38,18 @@ const AdminDashboard = () => {
     }
   }, []);
 
+  // Handle non-admin access with useEffect to avoid rendering issues
+  useEffect(() => {
+    if (!isAuthLoading && !isCheckingAdmin && isAdmin === false && user) {
+      toast({
+        title: "Access denied",
+        description: "You don't have permission to access the admin dashboard",
+        variant: "destructive",
+      });
+      navigate('/dashboard', { replace: true });
+    }
+  }, [isAuthLoading, isCheckingAdmin, isAdmin, user, toast, navigate]);
+
   // While checking auth status, show loading state
   if (isAuthLoading || isCheckingAdmin) {
     return <div className="flex h-screen items-center justify-center">
@@ -50,14 +62,9 @@ const AdminDashboard = () => {
     return <Navigate to="/login" replace />;
   }
 
-  // If logged in but not an admin, redirect to dashboard
+  // If logged in but not an admin, we handle this in the useEffect above
   if (isAdmin === false) {
-    toast({
-      title: "Access denied",
-      description: "You don't have permission to access the admin dashboard",
-      variant: "destructive",
-    });
-    return <Navigate to="/dashboard" replace />;
+    return null; // Return null while the redirect happens in the useEffect
   }
 
   // Admin user data
