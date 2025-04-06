@@ -11,6 +11,7 @@ import Footer from '@/components/landing/Footer';
 import FreeConsultationSection from '@/components/landing/FreeConsultationSection';
 import { useToast } from "@/hooks/use-toast";
 import ExploreITCareerPathsSection from '@/components/landing/ExploreITCareerPathsSection';
+import ResumeUploadSection from '@/components/landing/ResumeUploadSection';
 
 const Index = () => {
   const { toast } = useToast();
@@ -80,6 +81,9 @@ const Index = () => {
         </section>
         <section className="section-why-choose-us">
           <WhyChooseUsSection />
+        </section>
+        <section className="section-resume-upload">
+          <ResumeUploadSection />
         </section>
         <section className="section-how-it-works">
           <HowItWorksSection />

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -20,6 +19,7 @@ import ResumeScoreWidget from '@/components/dashboard/ResumeScoreWidget';
 import ReferralProgramWidget from '@/components/dashboard/ReferralProgramWidget';
 import TestimonialsSection from '@/components/dashboard/TestimonialsSection';
 import UpcomingFeaturesWidget from '@/components/dashboard/UpcomingFeaturesWidget';
+import ResumeUploadWidget from '@/components/dashboard/ResumeUploadWidget';
 import { useAuth } from '@/contexts/AuthContext';
 
 const Dashboard = () => {
@@ -91,7 +91,16 @@ const Dashboard = () => {
                         <ProgressTrackerWidget user={mockUser} />
                       </div>
                       <div>
+                        <ResumeUploadWidget />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <div className="lg:col-span-2">
                         <ResumeScoreWidget />
+                      </div>
+                      <div>
+                        <UpcomingFeaturesWidget />
                       </div>
                     </div>
                     
@@ -101,7 +110,6 @@ const Dashboard = () => {
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <ReferralProgramWidget />
-                      <UpcomingFeaturesWidget />
                     </div>
                     
                     <TestimonialsSection />
