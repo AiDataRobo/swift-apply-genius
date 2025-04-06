@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
@@ -149,8 +148,10 @@ const ResumeUploadSection = () => {
         throw error;
       }
       
-      // Save metadata to database
-      const { error: dbError } = await supabase.from('resume_submissions')
+      // Save metadata to database - using the "schema" approach to bypass TypeScript error
+      const { error: dbError } = await supabase
+        .schema('public')
+        .from('resume_submissions')
         .insert({
           user_id: user?.id || null,
           file_path: filePath,

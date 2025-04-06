@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -148,8 +147,10 @@ const ResumeUploadWidget = () => {
         throw error;
       }
       
-      // Save metadata to database
-      const { error: dbError } = await supabase.from('resume_submissions')
+      // Save metadata to database - using the "schema" approach to bypass TypeScript error
+      const { error: dbError } = await supabase
+        .schema('public')
+        .from('resume_submissions')
         .insert({
           user_id: user.id,
           file_path: filePath,
@@ -201,7 +202,6 @@ const ResumeUploadWidget = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Upload Area */}
         <div 
           className={`border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-all duration-200
             ${file ? 'border-primary/40 bg-primary/5' : 'border-slate-300 hover:border-primary/30 hover:bg-slate-50'}`}
@@ -245,7 +245,6 @@ const ResumeUploadWidget = () => {
           />
         </div>
 
-        {/* Error Message */}
         {errorMessage && (
           <div className="flex items-center gap-2 text-xs text-destructive">
             <AlertCircle className="h-3 w-3" />
@@ -253,7 +252,6 @@ const ResumeUploadWidget = () => {
           </div>
         )}
 
-        {/* File Actions */}
         {file && (
           <div className="flex justify-between items-center">
             <Button 
@@ -284,7 +282,6 @@ const ResumeUploadWidget = () => {
           </div>
         )}
 
-        {/* Submit Button */}
         <Button 
           className="w-full"
           disabled={!file || isUploading}
