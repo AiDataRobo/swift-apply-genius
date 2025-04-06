@@ -148,18 +148,21 @@ const ResumeUploadWidget = () => {
         throw error;
       }
       
-      // Use rpc to insert into resume_submissions table to bypass TypeScript checks
-      const { error: rpcError } = await supabase.rpc('create_resume_submission', {
-        user_id_param: user.id,
-        file_path_param: filePath,
-        file_name_param: file.name,
-        file_size_param: file.size,
-        file_type_param: file.type,
-        status_param: 'pending'
-      });
+      // Call the database function using supabase functions
+      const { data: submissionData, error: functionError } = await supabase.rpc(
+        "create_resume_submission", 
+        {
+          user_id_param: user.id,
+          file_path_param: filePath,
+          file_name_param: file.name,
+          file_size_param: file.size,
+          file_type_param: file.type,
+          status_param: 'pending'
+        }
+      );
       
-      if (rpcError) {
-        throw rpcError;
+      if (functionError) {
+        throw functionError;
       }
       
       setUploadStatus('success');

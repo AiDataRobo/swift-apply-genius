@@ -29,22 +29,22 @@ serve(async (req) => {
       status = 'pending'
     } = await req.json();
 
-    // Execute SQL directly to insert the data
-    const { data, error } = await supabaseClient.from('resume_submissions').insert({
-      user_id,
-      file_path,
-      file_name,
-      file_size,
-      file_type,
-      status
-    }).select();
+    // Call the RPC function to create the resume submission
+    const { data, error } = await supabaseClient.rpc('create_resume_submission', {
+      user_id_param: user_id,
+      file_path_param: file_path,
+      file_name_param: file_name,
+      file_size_param: file_size,
+      file_type_param: file_type,
+      status_param: status
+    });
 
     if (error) {
       throw error;
     }
 
     return new Response(
-      JSON.stringify({ success: true, data }),
+      JSON.stringify({ success: true, id: data }),
       { headers: { 'Content-Type': 'application/json', ...corsHeaders } }
     );
   } catch (error) {

@@ -149,18 +149,21 @@ const ResumeUploadSection = () => {
         throw error;
       }
       
-      // Use a raw query to insert the data
-      const { error: rpcError } = await supabase.rpc('create_resume_submission', {
-        user_id_param: user ? user.id : null,
-        file_path_param: filePath,
-        file_name_param: file.name,
-        file_size_param: file.size,
-        file_type_param: file.type,
-        status_param: 'pending'
-      });
+      // Call the database function using supabase functions
+      const { data: submissionData, error: functionError } = await supabase.rpc(
+        "create_resume_submission", 
+        {
+          user_id_param: user ? user.id : null,
+          file_path_param: filePath,
+          file_name_param: file.name,
+          file_size_param: file.size,
+          file_type_param: file.type,
+          status_param: 'pending'
+        }
+      );
       
-      if (rpcError) {
-        throw rpcError;
+      if (functionError) {
+        throw functionError;
       }
       
       setUploadStatus('success');

@@ -119,7 +119,7 @@ serve(async (req) => {
           status_param 
         } = await req.json();
 
-        // Insert the submission using raw SQL through the admin client to bypass RLS
+        // Insert the submission using the create_resume_submission function
         const { data, error } = await supabaseAdmin.rpc('create_resume_submission', {
           user_id_param,
           file_path_param,

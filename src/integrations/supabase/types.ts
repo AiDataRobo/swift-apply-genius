@@ -461,6 +461,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_resume_submission: {
+        Args: {
+          user_id_param: string
+          file_path_param: string
+          file_name_param: string
+          file_size_param: number
+          file_type_param: string
+          status_param?: string
+        }
+        Returns: string
+      }
       is_admin: {
         Args: {
           user_id: string
