@@ -1,3 +1,4 @@
+
 import React, { useState, useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -147,21 +148,18 @@ const ResumeUploadWidget = () => {
         throw error;
       }
       
-      // Save metadata to database - using the "schema" approach to bypass TypeScript error
-      const { error: dbError } = await supabase
-        .schema('public')
-        .from('resume_submissions')
-        .insert({
-          user_id: user.id,
-          file_path: filePath,
-          file_name: file.name,
-          file_size: file.size,
-          file_type: file.type,
-          status: 'pending'
-        });
-        
-      if (dbError) {
-        throw dbError;
+      // Use rpc to insert into resume_submissions table to bypass TypeScript checks
+      const { error: rpcError } = await supabase.rpc('create_resume_submission', {
+        user_id_param: user.id,
+        file_path_param: filePath,
+        file_name_param: file.name,
+        file_size_param: file.size,
+        file_type_param: file.type,
+        status_param: 'pending'
+      });
+      
+      if (rpcError) {
+        throw rpcError;
       }
       
       setUploadStatus('success');

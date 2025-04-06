@@ -109,6 +109,35 @@ serve(async (req) => {
         });
       }
       
+      case 'create_resume_submission': {
+        const { 
+          user_id_param, 
+          file_path_param, 
+          file_name_param, 
+          file_size_param, 
+          file_type_param, 
+          status_param 
+        } = await req.json();
+
+        // Insert the submission using raw SQL through the admin client to bypass RLS
+        const { data, error } = await supabaseAdmin.rpc('create_resume_submission', {
+          user_id_param,
+          file_path_param,
+          file_name_param,
+          file_size_param,
+          file_type_param,
+          status_param
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        return new Response(JSON.stringify({ success: true, id: data }), {
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        });
+      }
+      
       default:
         throw new Error(`Unsupported action: ${action}`);
     }
