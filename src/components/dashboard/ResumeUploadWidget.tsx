@@ -148,21 +148,27 @@ const ResumeUploadWidget = () => {
         throw error;
       }
       
-      // Call the database function using supabase functions
-      const { data: submissionData, error: functionError } = await supabase.rpc(
-        "create_resume_submission", 
-        {
-          user_id_param: user.id,
-          file_path_param: filePath,
-          file_name_param: file.name,
-          file_size_param: file.size,
-          file_type_param: file.type,
-          status_param: 'pending'
-        }
-      );
+      // Call the Edge Function instead of direct RPC call to bypass TypeScript error
+      const functionUrl = `https://myxltvsyrmmiqmhgdsbi.supabase.co/functions/v1/create-resume-submission`;
+      const response = await fetch(functionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabase.auth.getSession().then(res => res.data.session?.access_token)}`
+        },
+        body: JSON.stringify({
+          user_id: user.id,
+          file_path: filePath,
+          file_name: file.name,
+          file_size: file.size,
+          file_type: file.type,
+          status: 'pending'
+        })
+      });
       
-      if (functionError) {
-        throw functionError;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to process resume submission');
       }
       
       setUploadStatus('success');
