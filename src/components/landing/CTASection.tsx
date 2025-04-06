@@ -1,6 +1,6 @@
 
-import React, { useRef, useState } from 'react';
-import { ArrowRight, Sparkles, FileText, Star, Shield, Loader2 } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { ArrowRight, Sparkles, FileText, Star, Shield, Loader2, CheckCircle } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -10,9 +10,20 @@ import { useToast } from "@/hooks/use-toast";
 
 const CTASection = () => {
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const { user } = useAuth();
+
+  // Reset success state after 3 seconds
+  useEffect(() => {
+    if (uploadSuccess) {
+      const timer = setTimeout(() => {
+        setUploadSuccess(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [uploadSuccess]);
 
   // Animation variants
   const containerVariants = {
@@ -121,7 +132,7 @@ const CTASection = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user ? supabase.auth.getSession().then(res => res.data.session?.access_token) : ''}`
+          'Authorization': `Bearer ${user ? await supabase.auth.getSession().then(res => res.data.session?.access_token) : ''}`
         },
         body: JSON.stringify({
           user_id: user ? user.id : null,
@@ -138,6 +149,7 @@ const CTASection = () => {
         throw new Error(errorData.error || 'Failed to process resume submission');
       }
       
+      setUploadSuccess(true);
       toast({
         title: "Resume Uploaded Successfully",
         description: "We've received your resume and will provide feedback soon.",
@@ -283,7 +295,7 @@ const CTASection = () => {
               >
                 <Button 
                   variant="outline" 
-                  className="py-6 px-8 text-lg rounded-xl w-full sm:w-auto hover:bg-white/80 transition-all duration-300"
+                  className="py-6 px-8 text-lg rounded-xl w-full sm:w-auto hover:bg-white/80 transition-all duration-300 relative"
                   onClick={handleFileReviewClick}
                   disabled={isUploading}
                 >
@@ -292,10 +304,35 @@ const CTASection = () => {
                       <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                       Uploading...
                     </>
+                  ) : uploadSuccess ? (
+                    <>
+                      <motion.div
+                        initial={{ scale: 0.5, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        className="flex items-center"
+                      >
+                        <CheckCircle className="mr-2 h-5 w-5 text-green-500" />
+                        Upload Successful!
+                      </motion.div>
+                    </>
                   ) : (
                     <>
+                      <motion.div 
+                        className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-xl" 
+                        animate={{
+                          x: ["0%", "100%"],
+                          opacity: [0, 0.3, 0]
+                        }}
+                        transition={{
+                          duration: 3,
+                          repeat: Infinity,
+                          repeatType: "loop",
+                          ease: "easeInOut",
+                          repeatDelay: 1
+                        }}
+                      />
                       <FileText className="mr-2 h-5 w-5" />
-                      Get a Free Resume Review
+                      <span className="relative z-10">Get a Free Resume Review</span>
                     </>
                   )}
                 </Button>
@@ -329,7 +366,7 @@ const CTASection = () => {
             onClick={handleFileReviewClick}
             disabled={isUploading}
           >
-            {isUploading ? "Uploading..." : "Free Resume Review"}
+            {isUploading ? "Uploading..." : uploadSuccess ? "Sent!" : "Free Resume Review"}
           </Button>
         </div>
       </div>

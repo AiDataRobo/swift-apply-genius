@@ -1,9 +1,10 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowRight, FileText, Sparkles, Upload } from "lucide-react";
+import { ArrowRight, FileText, Sparkles, Upload, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { Player } from "@lottiefiles/react-lottie-player";
 import CalBookingModal from "@/components/booking/CalBookingModal";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 const HeroCallToAction = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -19,6 +21,16 @@ const HeroCallToAction = () => {
   
   const openBookingModal = () => setIsBookingModalOpen(true);
   const closeBookingModal = () => setIsBookingModalOpen(false);
+
+  // Reset success state after 3 seconds
+  useEffect(() => {
+    if (uploadSuccess) {
+      const timer = setTimeout(() => {
+        setUploadSuccess(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [uploadSuccess]);
 
   const handleResumeReviewClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -95,7 +107,7 @@ const HeroCallToAction = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user ? supabase.auth.getSession().then(res => res.data.session?.access_token) : ''}`
+          'Authorization': `Bearer ${user ? await supabase.auth.getSession().then(res => res.data.session?.access_token) : ''}`
         },
         body: JSON.stringify({
           user_id: user ? user.id : null,
@@ -112,6 +124,7 @@ const HeroCallToAction = () => {
         throw new Error(errorData.error || 'Failed to process resume submission');
       }
       
+      setUploadSuccess(true);
       toast({
         title: "Resume Uploaded Successfully",
         description: "We've received your resume and will provide feedback soon.",
@@ -157,19 +170,47 @@ const HeroCallToAction = () => {
         <Button 
           variant="outline" 
           size="lg"
-          className="group border-primary/20 hover:border-primary/40 w-full py-6 px-8 h-auto text-base"
+          className="group border-primary/20 hover:border-primary/40 w-full py-6 px-8 h-auto text-base relative overflow-hidden"
           onClick={handleResumeReviewClick}
           disabled={isUploading}
         >
           {isUploading ? (
             <>
               <div className="h-4 w-4 rounded-full border-2 border-t-transparent border-current animate-spin mr-2" />
-              Uploading...
+              <span>Uploading...</span>
+            </>
+          ) : uploadSuccess ? (
+            <>
+              <motion.div
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="flex items-center"
+              >
+                <CheckCircle className="mr-2 h-5 w-5 text-green-500" />
+                <span>Upload Successful</span>
+              </motion.div>
             </>
           ) : (
             <>
+              <AnimatePresence>
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent"
+                  animate={{
+                    x: ["0%", "100%"],
+                    opacity: [0, 0.3, 0]
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    ease: "easeInOut",
+                    repeatDelay: 1
+                  }}
+                />
+              </AnimatePresence>
+
               <Sparkles className="mr-2 h-5 w-5 text-amber-500 group-hover:scale-110 transition-transform" />
-              Review Your Resume
+              <span className="relative z-10">Review Your Resume</span>
             </>
           )}
         </Button>
