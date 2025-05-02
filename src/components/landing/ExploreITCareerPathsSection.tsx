@@ -1,120 +1,107 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { careerPathsData } from '@/data/careerPathsData';
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, FileText, CheckCircle } from "lucide-react";
-import { Button } from '@/components/ui/button';
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { ArrowRight, Trophy, TrendingUp } from "lucide-react";
+import { careerPathsData } from "@/data/careerPathsData";
 
-const CareerPathCard = ({ career, index }: { career: typeof careerPathsData[0], index: number }) => {
+interface CareerPathCardProps {
+  path: typeof careerPathsData[0];
+  index: number;
+}
+
+const CareerPathCard: React.FC<CareerPathCardProps> = ({ path, index }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: index * 0.1 }}
       viewport={{ once: true }}
-      transition={{ delay: index * 0.1 + 0.2 }}
+      key={path.id}
     >
-      <Card className="h-full hover:shadow-md transition-shadow duration-300 overflow-hidden border-slate-100">
-        <div className={`h-1 ${career.accentColor}`}></div>
-        <CardContent className="p-6">
-          <div className="flex items-center mb-4">
-            <div className={`w-10 h-10 rounded-lg ${career.iconBgColor} flex items-center justify-center mr-3`}>
-              {career.icon}
+      <Card className="bg-white border border-slate-100 overflow-hidden hover:shadow-md transition-shadow duration-300 h-full flex flex-col">
+        <div
+          className={`p-6 ${path.bgColor}`}
+        >
+          <div className="mb-4 w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: path.iconColor }}>
+            {path.icon}
+          </div>
+          <h3 className="text-xl font-bold mb-2">{path.title}</h3>
+          <p className="text-muted-foreground text-sm mb-4">{path.description}</p>
+          
+          <div className="grid grid-cols-2 gap-2 mb-4">
+            <div className="flex items-center">
+              <TrendingUp className="h-4 w-4 text-blue-500 mr-2" />
+              <span className="text-xs text-slate-600">{path.growthPotential}</span>
             </div>
-            <h3 className="text-lg font-semibold">{career.title}</h3>
+            <div className="flex items-center">
+              <Trophy className="h-4 w-4 text-amber-500 mr-2" />
+              <span className="text-xs text-slate-600">{path.salaryRange}</span>
+            </div>
           </div>
           
-          <p className="text-muted-foreground text-sm mb-4">{career.description}</p>
-          
-          <div className="mb-6 space-y-2">
-            <div className="flex items-start">
-              <CheckCircle className="h-4 w-4 text-green-500 mt-1 mr-2 shrink-0" />
-              <span className="text-sm">{career.avgSalary}</span>
-            </div>
-            <div className="flex items-start">
-              <CheckCircle className="h-4 w-4 text-green-500 mt-1 mr-2 shrink-0" />
-              <span className="text-sm">{career.demand}</span>
-            </div>
-          </div>
-          
-          <Button variant="outline" className="w-full" asChild>
-            <Link to={`/career/${career.slug}`}>
-              Explore this Career
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </CardContent>
+          <Link to={`/career-path/${path.id}`} className="inline-flex items-center text-primary hover:underline text-sm font-medium">
+            Explore this Career
+            <ArrowRight className="ml-1 h-4 w-4" />
+          </Link>
+        </div>
       </Card>
     </motion.div>
   );
 };
 
 const ExploreITCareerPathsSection = () => {
-  // Display only the first 6 career paths
-  const displayedCareers = careerPathsData.slice(0, 6);
-  
   return (
-    <section className="py-24">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <motion.div 
-            className="inline-flex items-center px-4 py-2 bg-primary/5 rounded-full mb-4"
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <span className="text-xs font-medium text-primary">CAREER PATHS</span>
-          </motion.div>
-          
-          <motion.h2 
-            className="text-3xl md:text-4xl font-bold mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-          >
-            Explore IT Career Paths
-          </motion.h2>
-          
-          <motion.p 
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            Discover high-demand IT careers and create targeted resumes for your dream role
-          </motion.p>
-        </div>
+    <div className="container mx-auto px-6 max-w-7xl py-24">
+      <div className="text-center mb-12">
+        <motion.div 
+          className="inline-flex items-center px-4 py-2 bg-primary/5 rounded-full mb-4"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <span className="text-xs font-medium text-primary">TECH CAREERS</span>
+        </motion.div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayedCareers.map((career, index) => (
-            <CareerPathCard key={career.slug} career={career} index={index} />
-          ))}
-        </div>
-        
-        <motion.div
-          className="mt-16 text-center"
+        <motion.h2 
+          className="text-3xl md:text-4xl font-bold mb-4 tracking-tight"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.1 }}
         >
-          <Button size="lg" className="px-8" asChild>
-            <Link to="/career-quiz">
-              <FileText className="mr-2 h-5 w-5" />
-              Take Career Quiz
-            </Link>
-          </Button>
-          
-          <Link to="/it-career-paths" className="inline-block mt-4 text-primary hover:underline ml-6">
-            View All Career Paths
-            <ArrowRight className="inline ml-1 h-4 w-4" />
-          </Link>
-        </motion.div>
+          Explore IT Career Paths
+        </motion.h2>
+        
+        <motion.p 
+          className="text-lg text-muted-foreground max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+        >
+          Discover high-demand tech roles, salary potential, and skills required to succeed in today's job market
+        </motion.p>
       </div>
-    </section>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        {careerPathsData.slice(0, 6).map((path, index) => (
+          <CareerPathCard key={path.id} path={path} index={index} />
+        ))}
+      </div>
+      
+      <div className="text-center">
+        <Button asChild>
+          <Link to="/it-career-paths">
+            Explore All Career Paths
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
+      </div>
+    </div>
   );
 };
 

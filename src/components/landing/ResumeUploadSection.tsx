@@ -7,15 +7,20 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
+import CalBookingModal from "@/components/booking/CalBookingModal";
 
 const ResumeUploadSection = () => {
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const { user } = useAuth();
+  
+  const openBookingModal = () => setIsBookingModalOpen(true);
+  const closeBookingModal = () => setIsBookingModalOpen(false);
   
   const acceptedFileTypes = [
     'application/pdf', 
@@ -375,6 +380,8 @@ const ResumeUploadSection = () => {
           </Card>
         </motion.div>
       </div>
+      
+      <CalBookingModal isOpen={isBookingModalOpen} onClose={closeBookingModal} />
     </section>
   );
 };
