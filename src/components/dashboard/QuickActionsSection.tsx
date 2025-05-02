@@ -30,8 +30,8 @@ const QuickActionsSection = () => {
       borderColor: 'border-blue-200 dark:border-blue-800/30'
     },
     {
-      title: 'Upload & Get Review',
-      description: 'Get your resume scored by our ATS analyzer',
+      title: 'ATS Score Checker',
+      description: 'Check your resume against ATS systems',
       icon: <Upload className="h-10 w-10 text-green-600" />,
       animation: '/animations/resume-review.json',
       onClick: () => navigate('/dashboard?tab=ai-assistant'),

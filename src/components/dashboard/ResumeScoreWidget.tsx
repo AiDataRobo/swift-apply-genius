@@ -3,9 +3,11 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Circle, AlertTriangle } from 'lucide-react';
+import { CheckCircle, AlertTriangle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const ResumeScoreWidget = () => {
+  const navigate = useNavigate();
   // Mock data for resume score
   const score = 72;
   const checklistItems = [
@@ -27,12 +29,16 @@ const ResumeScoreWidget = () => {
     if (score >= 60) return 'bg-amber-600';
     return 'bg-red-600';
   };
+
+  const handleATSCheck = () => {
+    navigate('/dashboard?tab=ai-assistant');
+  };
   
   return (
     <Card className="shadow-sm">
       <CardContent className="p-5">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="font-semibold text-lg">Resume ATS Score</h3>
+          <h3 className="font-semibold text-lg">ATS Compatibility Score</h3>
           <div className={`text-2xl font-bold ${getScoreColor(score)}`}>{score}%</div>
         </div>
         
@@ -56,7 +62,7 @@ const ResumeScoreWidget = () => {
         </div>
         
         <div className="space-y-2 mb-4">
-          <h4 className="text-sm font-medium mb-2">Improvement Checklist:</h4>
+          <h4 className="text-sm font-medium mb-2">ATS Improvement Checklist:</h4>
           {checklistItems.map((item, index) => (
             <div key={index} className="flex items-start">
               {item.completed ? (
@@ -69,7 +75,7 @@ const ResumeScoreWidget = () => {
           ))}
         </div>
         
-        <Button className="w-full">Fix My Resume</Button>
+        <Button className="w-full" onClick={handleATSCheck}>Check ATS Score Now</Button>
       </CardContent>
     </Card>
   );

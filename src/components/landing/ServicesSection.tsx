@@ -41,12 +41,12 @@ const ServicesSection = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            From AI-powered tools to hands-on expert assistance, we provide everything you need for job search success
+            From ATS optimization to hands-on expert assistance, we provide everything you need for job search success
           </motion.p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-          {/* AI Resume Builder */}
+          {/* ATS Score Checker */}
           <motion.div 
             className="bg-white rounded-xl p-8 shadow-lg border border-slate-100 flex flex-col h-full"
             variants={fadeInUp}
@@ -59,14 +59,14 @@ const ServicesSection = () => {
               <FileText className="h-7 w-7 text-blue-600" />
             </div>
             
-            <h3 className="text-xl font-bold mb-3">Resume & Cover Letter Builder</h3>
+            <h3 className="text-xl font-bold mb-3">ATS Score Checker</h3>
             
             <p className="text-muted-foreground mb-5 flex-grow">
-              Create professional, ATS-optimized resumes and cover letters in minutes with our AI-powered platform.
+              Check if your resume passes ATS systems and get recommendations to improve your score.
             </p>
             
             <ul className="mb-6 space-y-2">
-              {["AI content generation", "ATS optimization", "Expert templates", "Easy customization"].map((feature, index) => (
+              {["ATS compatibility check", "Keyword analysis", "Format verification", "Improvement suggestions"].map((feature, index) => (
                 <li key={index} className="flex items-start">
                   <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mr-2" />
                   <span className="text-sm">{feature}</span>
@@ -76,13 +76,13 @@ const ServicesSection = () => {
             
             <div className="space-y-3">
               <Button className="w-full" asChild>
-                <Link to="/resume-builder">
-                  Build Your Resume
+                <Link to="/ats-score-checker">
+                  Check Your Resume
                 </Link>
               </Button>
               <Button variant="outline" className="w-full" asChild>
-                <Link to="/cover-letter-services">
-                  Cover Letter Services
+                <Link to="/resume-templates">
+                  ATS-Friendly Templates
                 </Link>
               </Button>
             </div>

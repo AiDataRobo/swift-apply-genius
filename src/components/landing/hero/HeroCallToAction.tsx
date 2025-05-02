@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, FileText, Sparkles, Upload, CheckCircle, AlertCircle } from "lucide-react";
@@ -255,7 +254,7 @@ const HeroCallToAction = () => {
               </AnimatePresence>
 
               <Sparkles className="mr-2 h-5 w-5 text-amber-500 group-hover:scale-110 transition-transform" />
-              <span className="relative z-10">Get a Free Resume Review</span>
+              <span className="relative z-10">Check Your ATS Score</span>
             </>
           )}
         </Button>

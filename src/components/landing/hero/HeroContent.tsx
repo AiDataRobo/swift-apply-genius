@@ -32,8 +32,8 @@ const HeroContent: React.FC = () => {
           }
         }}
       >
-        <span className="text-xs font-medium text-primary mr-2">AI-POWERED</span>
-        <span className="text-xs font-medium">Build Your Resume in Minutes</span>
+        <span className="text-xs font-medium text-primary mr-2">ATS-OPTIMIZED</span>
+        <span className="text-xs font-medium">Check Your Resume's ATS Score</span>
       </motion.div>
       
       <motion.h1 
@@ -47,7 +47,7 @@ const HeroContent: React.FC = () => {
         className="text-lg text-muted-foreground mb-8 max-w-lg"
         variants={fadeInUp}
       >
-        Build a professional, recruiter-approved resume in minutes — or get expert help to craft one from scratch.
+        Build a professional, recruiter-approved resume that passes ATS systems or get expert help to craft one from scratch.
       </motion.p>
       
       <HeroCallToAction />
