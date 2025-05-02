@@ -20,10 +20,16 @@ const HeroCallToAction = () => {
         className="flex-1"
       >
         <Link to="/resume-writing-services" className="block">
-          <Button size="lg" className="glass-button w-full py-6 px-8 h-auto text-base">
-            <FileText className="mr-2 h-5 w-5" />
-            Get My Resume Written
-            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+          <Button 
+            size="lg" 
+            className="glass-button w-full py-6 px-8 h-auto text-base bg-primary hover:bg-primary/90 relative overflow-hidden group"
+          >
+            <span className="relative z-10 flex items-center">
+              <FileText className="mr-2 h-5 w-5" />
+              Get My Resume Written
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
+            <span className="absolute inset-0 w-0 bg-gradient-to-r from-primary/80 to-primary group-hover:w-full transition-all duration-300"></span>
           </Button>
         </Link>
       </motion.div>
@@ -37,9 +43,10 @@ const HeroCallToAction = () => {
           <Button 
             variant="outline" 
             size="lg"
-            className="group border-primary/20 hover:border-primary/40 w-full py-6 px-8 h-auto text-base relative overflow-hidden"
+            className="group border-primary/20 hover:border-primary/40 w-full py-6 px-8 h-auto text-base relative overflow-hidden transition-all duration-300 hover:text-primary"
           >
             See Pricing
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300"></span>
           </Button>
         </Link>
       </motion.div>

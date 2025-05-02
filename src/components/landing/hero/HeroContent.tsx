@@ -15,7 +15,7 @@ const HeroContent: React.FC = () => {
   };
 
   return (
-    <motion.div variants={fadeInUp} className="order-2 lg:order-1">
+    <motion.div variants={fadeInUp} className="order-2 lg:order-1 max-w-lg mx-auto lg:mx-0">
       <motion.div 
         className="inline-flex items-center px-4 py-2 bg-red-500/10 rounded-full mb-6"
         variants={{
@@ -37,10 +37,18 @@ const HeroContent: React.FC = () => {
       </motion.div>
       
       <motion.h1 
-        className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight"
+        className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight leading-tight"
         variants={fadeInUp}
       >
-        Not Getting Interview Calls? <span className="text-primary">It Might Be Your Resume.</span>
+        Not Getting Interview Calls? <span className="text-primary relative">
+          It Might Be Your Resume.
+          <motion.span 
+            className="absolute bottom-0 left-0 w-full h-1 bg-primary/30" 
+            initial={{ width: 0 }}
+            animate={{ width: '100%' }}
+            transition={{ delay: 1, duration: 0.8 }}
+          />
+        </span>
       </motion.h1>
       
       <motion.p 

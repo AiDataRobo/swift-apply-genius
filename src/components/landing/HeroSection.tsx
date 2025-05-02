@@ -26,7 +26,7 @@ const HeroSection: React.FC = () => {
   return (
     <motion.section 
       ref={heroRef} 
-      className="min-h-screen relative flex flex-col items-center justify-center pt-24 pb-16 px-6 overflow-hidden"
+      className="min-h-[90vh] relative flex flex-col items-center justify-center pt-28 pb-16 px-6 overflow-hidden bg-gradient-to-b from-background to-background/95"
       initial="hidden"
       animate="visible"
       variants={staggerChildren}
@@ -37,6 +37,13 @@ const HeroSection: React.FC = () => {
         <HeroContent />
         <HeroAnimation />
       </div>
+      
+      <motion.div 
+        className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-background to-transparent"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+      />
     </motion.section>
   );
 };
