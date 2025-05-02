@@ -1,8 +1,8 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FileText, Upload, CheckCircle, ArrowRight, Download, Calendar } from 'lucide-react';
+import { FileText, Upload, CheckCircle, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import CalBookingModal from "@/components/booking/CalBookingModal";
 
@@ -15,34 +15,26 @@ const HowItWorksSection = () => {
   const steps = [
     {
       step: 1,
-      title: "Choose your path",
-      description: "DIY with our AI tools or get expert help",
+      title: "Submit your career details & current resume",
+      description: "Fill out our detailed questionnaire and upload your existing resume",
       icon: <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-        <FileText className="h-6 w-6 text-primary" />
+        <Upload className="h-6 w-6 text-primary" />
       </div>
     },
     {
       step: 2,
-      title: "Upload or enter your details",
-      description: "Share your work history, skills, and achievements",
+      title: "We assign a professional writer",
+      description: "Get matched with an expert writer specializing in your industry",
       icon: <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
-        <Upload className="h-6 w-6 text-blue-500" />
+        <FileText className="h-6 w-6 text-blue-500" />
       </div>
     },
     {
       step: 3,
-      title: "Customize or collaborate",
-      description: "Fine-tune your resume or work with our experts",
-      icon: <div className="w-12 h-12 rounded-full bg-amber-500/10 flex items-center justify-center">
-        <CheckCircle className="h-6 w-6 text-amber-500" />
-      </div>
-    },
-    {
-      step: 4,
-      title: "Download your job-winning resume",
-      description: "Get your ATS-optimized resume in multiple formats",
+      title: "Get your new resume within 3–5 days",
+      description: "Receive your professionally written, ATS-optimized resume",
       icon: <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
-        <Download className="h-6 w-6 text-green-500" />
+        <CheckCircle className="h-6 w-6 text-green-500" />
       </div>
     }
   ];
@@ -70,7 +62,7 @@ const HowItWorksSection = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            Four Simple Steps to Your Perfect Resume
+            Three Simple Steps to Your Perfect Resume
           </motion.h2>
           
           <motion.p 
@@ -80,7 +72,7 @@ const HowItWorksSection = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            Our streamlined process makes resume creation quick and effortless
+            Our streamlined process makes getting a professional resume quick and effortless
           </motion.p>
         </div>
 
@@ -90,7 +82,7 @@ const HowItWorksSection = () => {
           <div className="absolute top-16 left-0 w-full h-0.5 bg-slate-200 hidden md:block"></div>
           
           {/* Step cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {steps.map((step, index) => (
               <motion.div
                 key={index}
@@ -123,16 +115,9 @@ const HowItWorksSection = () => {
           transition={{ delay: 0.6 }}
         >
           <Button size="lg" className="w-full md:w-auto" asChild>
-            <Link to="/resume-builder">
+            <Link to="/resume-writing-services">
               <FileText className="mr-2 h-5 w-5" />
-              Build My Resume
-            </Link>
-          </Button>
-          
-          <Button size="lg" variant="outline" className="w-full md:w-auto" asChild>
-            <Link to="/resume-review">
-              <Upload className="mr-2 h-5 w-5" />
-              Review My Resume
+              Hire a Resume Writer
             </Link>
           </Button>
           

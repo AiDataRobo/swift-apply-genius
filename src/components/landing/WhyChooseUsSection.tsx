@@ -1,227 +1,104 @@
 
 import React from 'react';
-import { Zap, PenTool, Users, Star, FileText, CheckCircle, Award, MessageSquare, ArrowRight } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-
-interface ServiceCardProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  features: string[];
-  primaryCta: {
-    text: string;
-    link: string;
-  };
-  secondaryCta?: {
-    text: string;
-    link: string;
-  };
-  isPopular?: boolean;
-  delay: number;
-}
-
-const ServiceCard = ({
-  icon,
-  title,
-  description,
-  features,
-  primaryCta,
-  secondaryCta,
-  isPopular,
-  delay
-}: ServiceCardProps) => (
-  <motion.div
-    className="bg-gradient-to-br from-white to-slate-50 p-8 md:p-10 rounded-3xl shadow-lg border border-slate-100 relative overflow-hidden"
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, margin: "-100px" }}
-    variants={{
-      hidden: { opacity: 0, y: 20 },
-      visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5, delay: delay * 0.2 }
-      }
-    }}
-  >
-    {/* Background decoration */}
-    <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -z-0" />
-    
-    {isPopular && (
-      <div className="absolute top-0 right-6 transform -translate-y-1/2 bg-primary text-white text-xs py-1 px-3 rounded-full font-medium">
-        MOST POPULAR
-      </div>
-    )}
-    
-    <div className="relative z-10">
-      <div className={`w-12 h-12 flex items-center justify-center rounded-xl ${isPopular ? 'bg-primary/10 text-primary' : 'bg-blue-500/10 text-blue-500'} mb-6`}>
-        {icon}
-      </div>
-      
-      <h3 className="text-2xl font-bold mb-2 flex items-center">
-        {title}
-        {isPopular && (
-          <span className="ml-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-            <Star className="h-3 w-3 mr-1" />
-            Popular
-          </span>
-        )}
-      </h3>
-      
-      <p className="text-muted-foreground mb-8">{description}</p>
-      
-      <div className="space-y-4 mb-8">
-        {features.map((feature, index) => (
-          <div key={index} className="flex items-start">
-            <div className="mr-3 text-green-600 shrink-0">
-              <CheckCircle className="h-5 w-5" />
-            </div>
-            <span className="text-sm">{feature}</span>
-          </div>
-        ))}
-      </div>
-      
-      <div className="space-y-3">
-        <Button className="w-full" asChild>
-          <Link to={primaryCta.link}>
-            {primaryCta.text}
-          </Link>
-        </Button>
-        
-        {secondaryCta && (
-          <Button variant="outline" className="w-full" asChild>
-            <Link to={secondaryCta.link}>
-              {secondaryCta.text}
-            </Link>
-          </Button>
-        )}
-      </div>
-    </div>
-  </motion.div>
-);
+import { motion } from 'framer-motion';
+import { CheckCircle, X, Award, Clock } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 
 const WhyChooseUsSection = () => {
-  const services = [
+  const features = [
     {
-      icon: <Zap className="h-6 w-6" />,
-      title: "AI Resume Generator",
-      description: "Create a professional, ATS-optimized resume in minutes with our AI tools",
-      features: [
-        "Instantly create an ATS-friendly resume",
-        "Choose from professional templates",
-        "Customize design and content",
-        "Download in multiple formats"
-      ],
-      primaryCta: {
-        text: "Build My Resume",
-        link: "/resume-builder"
-      },
-      delay: 0
+      icon: <X className="h-8 w-8 text-red-500" />,
+      title: "Poorly written resumes miss ATS filters",
+      description: "Most resumes are rejected by Applicant Tracking Systems (ATS) before they ever reach human recruiters."
     },
     {
-      icon: <PenTool className="h-6 w-6" />,
-      title: "Professional Resume Writing",
-      description: "Let our expert writers craft your perfect resume tailored to your career goals",
-      features: [
-        "Written by certified resume writers",
-        "Tailored to your target industry",
-        "ATS optimization & keyword research",
-        "Includes cover letter & LinkedIn profile"
-      ],
-      primaryCta: {
-        text: "Get Professional Help",
-        link: "/resume-writing-services"
-      },
-      secondaryCta: {
-        text: "Get a Free Resume Review",
-        link: "/resume-review"
-      },
-      isPopular: true,
-      delay: 0.2
+      icon: <X className="h-8 w-8 text-red-500" />,
+      title: "Generic templates look unprofessional",
+      description: "Using the same templates as thousands of other applicants makes your application blend in, not stand out."
     },
     {
-      icon: <Users className="h-6 w-6" />,
-      title: "Career Coaching",
-      description: "One-on-one coaching to help you navigate your job search and interview process",
-      features: [
-        "Personalized career strategy",
-        "Interview preparation & mock interviews",
-        "Salary negotiation guidance",
-        "Job search strategy optimization"
-      ],
-      primaryCta: {
-        text: "Book a Consultation",
-        link: "/career-coaching"
-      },
-      delay: 0.4
+      icon: <CheckCircle className="h-8 w-8 text-green-500" />,
+      title: "Expert writers tailor resumes to your goals",
+      description: "Our professional writers customize your resume for your specific industry, role, and career ambitions."
+    },
+    {
+      icon: <CheckCircle className="h-8 w-8 text-green-500" />,
+      title: "Higher response & interview rates proven",
+      description: "87% of our clients see increased interview calls within 2 weeks of using our professionally written resumes."
     }
   ];
 
+  const trustIndicators = [
+    { text: "4.8/5 Client Rating" },
+    { text: "3-5 Day Turnaround" },
+    { text: "7-Day Interview Guarantee" },
+    { text: "25,000+ Successful Resumes" }
+  ];
+
   return (
-    <section id="why-choose-us" className="py-24 relative">
-      <div className="container max-w-7xl mx-auto px-6">
-        <motion.div 
-          className="text-center mb-16"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                when: "beforeChildren",
-                staggerChildren: 0.1
-              }
-            }
-          }}
-        >
-          <motion.h2 
-            className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 tracking-tight"
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-            }}
-          >
-            Three Powerful Solutions For Your Career Success
-          </motion.h2>
-          
-          <motion.p 
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-            }}
-          >
-            Choose the option that fits your needs and timeline for the best results
-          </motion.p>
-        </motion.div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <ServiceCard
+    <section id="why-choose-us" className="py-24 bg-slate-50/50">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Choose EnhanceResume?</h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            We understand what works in today's competitive job market
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          {features.map((feature, index) => (
+            <motion.div
               key={index}
-              {...service}
-            />
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <Card className="p-6 h-full border border-slate-200 hover:border-primary/30 transition-colors">
+                <div className="flex items-start">
+                  <div className="mr-4 mt-1">
+                    {feature.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+                    <p className="text-muted-foreground">{feature.description}</p>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
           ))}
         </div>
-        
-        <motion.div 
-          className="mt-12 text-center"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-        >
-          <Link to="/pricing">
-            <Button variant="link" className="text-primary">
-              Compare All Plans
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-        </motion.div>
+
+        <div className="bg-primary/5 rounded-xl p-8">
+          <div className="text-center mb-6">
+            <h3 className="text-xl font-semibold">Trust Indicators</h3>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {trustIndicators.map((indicator, index) => (
+              <motion.div 
+                key={index}
+                className="flex flex-col items-center text-center"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 + index * 0.1 }}
+              >
+                {index === 0 && <Award className="h-12 w-12 text-amber-500 mb-3" />}
+                {index === 1 && <Clock className="h-12 w-12 text-blue-500 mb-3" />}
+                {index === 2 && <CheckCircle className="h-12 w-12 text-green-500 mb-3" />}
+                {index === 3 && <motion.div 
+                  className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xl mb-3"
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ repeat: Infinity, duration: 2 }}
+                >
+                  25K+
+                </motion.div>}
+                <p className="font-semibold">{indicator.text}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -17,7 +17,7 @@ const HeroContent: React.FC = () => {
   return (
     <motion.div variants={fadeInUp} className="order-2 lg:order-1">
       <motion.div 
-        className="inline-flex items-center px-4 py-2 bg-primary/10 rounded-full mb-6"
+        className="inline-flex items-center px-4 py-2 bg-red-500/10 rounded-full mb-6"
         variants={{
           hidden: { opacity: 0, scale: 0.8 },
           visible: { 
@@ -32,22 +32,22 @@ const HeroContent: React.FC = () => {
           }
         }}
       >
-        <span className="text-xs font-medium text-primary mr-2">ATS-OPTIMIZED</span>
-        <span className="text-xs font-medium">Check Your Resume's ATS Score</span>
+        <span className="text-xs font-medium text-red-500 mr-2">🔥</span>
+        <span className="text-xs font-medium">PROFESSIONAL RESUME WRITING</span>
       </motion.div>
       
       <motion.h1 
         className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight"
         variants={fadeInUp}
       >
-        Land Your <span className="text-primary">Dream Job</span> Faster with an ATS-Optimized Resume
+        Not Getting Interview Calls? <span className="text-primary">It Might Be Your Resume.</span>
       </motion.h1>
       
       <motion.p 
         className="text-lg text-muted-foreground mb-8 max-w-lg"
         variants={fadeInUp}
       >
-        Build a professional, recruiter-approved resume that passes ATS systems or get expert help to craft one from scratch.
+        We craft expert-written, ATS-optimized resumes that land interviews. Let professionals rewrite your career story.
       </motion.p>
       
       <HeroCallToAction />

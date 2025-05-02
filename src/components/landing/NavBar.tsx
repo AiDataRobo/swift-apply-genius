@@ -7,7 +7,7 @@ import { ModeToggle } from "@/components/ui/mode-toggle";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, Menu, ChevronDown } from "lucide-react";
+import { LogOut, Menu, ChevronDown, FileText } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -26,14 +26,6 @@ import {
   SheetDescription,
   SheetClose
 } from "@/components/ui/sheet";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger
-} from "@/components/ui/navigation-menu";
 
 const NavBar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -94,44 +86,24 @@ const NavBar = () => {
         </Link>
         
         <div className="hidden md:flex items-center gap-6">
-          <Link to="/" className="text-sm font-medium transition-colors hover:text-primary">
-            Home
+          <Link to="/#services" className="text-sm font-medium transition-colors hover:text-primary">
+            Services
           </Link>
           
-          <NavigationMenu>
-            <NavigationMenuList>
-              <NavigationMenuItem>
-                <NavigationMenuTrigger className="text-sm font-medium">Services</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="grid w-[500px] gap-3 p-4 md:grid-cols-2">
-                    <Link to="/resume-builder" className="block p-3 space-y-1 rounded-md hover:bg-slate-100">
-                      <div className="font-medium">Resume Builder</div>
-                      <div className="text-xs text-muted-foreground">Build your resume with AI tools</div>
-                    </Link>
-                    <Link to="/cover-letter-services" className="block p-3 space-y-1 rounded-md hover:bg-slate-100">
-                      <div className="font-medium">Cover Letter Services</div>
-                      <div className="text-xs text-muted-foreground">Professional cover letters</div>
-                    </Link>
-                    <Link to="/resume-writing-services" className="block p-3 space-y-1 rounded-md hover:bg-slate-100">
-                      <div className="font-medium">Professional Writing</div>
-                      <div className="text-xs text-muted-foreground">Expert resume writing services</div>
-                    </Link>
-                    <Link to="/interview-guarantee-package" className="block p-3 space-y-1 rounded-md hover:bg-slate-100">
-                      <div className="font-medium">Interview Guarantee</div>
-                      <div className="text-xs text-muted-foreground">Get interviews or money back</div>
-                    </Link>
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
+          <Link to="/#pricing" className="text-sm font-medium transition-colors hover:text-primary">
+            Pricing
+          </Link>
           
-          <Link to="/templates" className="text-sm font-medium transition-colors hover:text-primary">
-            Templates
+          <Link to="/#testimonials" className="text-sm font-medium transition-colors hover:text-primary">
+            Testimonials
           </Link>
           
           <Link to="/about" className="text-sm font-medium transition-colors hover:text-primary">
             About
+          </Link>
+          
+          <Link to="/contact" className="text-sm font-medium transition-colors hover:text-primary">
+            Contact
           </Link>
           
           {user ? (
@@ -168,8 +140,8 @@ const NavBar = () => {
               <Link to="/login" className="text-sm font-medium transition-colors hover:text-primary">
                 Login
               </Link>
-              <Link to="/signup">
-                <Button size="sm">Sign Up</Button>
+              <Link to="/resume-writing-services">
+                <Button size="sm" className="bg-primary">Hire a Resume Expert</Button>
               </Link>
             </>
           )}
@@ -186,38 +158,28 @@ const NavBar = () => {
             <SheetHeader>
               <SheetTitle>Menu</SheetTitle>
               <SheetDescription>
-                Explore our services and options.
+                Explore our professional resume writing services.
               </SheetDescription>
             </SheetHeader>
             <div className="grid gap-4 py-4">
-              <Link to="/" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
-                Home
+              <Link to="/#services" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+                Services
               </Link>
               
-              <div className="space-y-2">
-                <p className="text-sm font-medium py-2">Services</p>
-                <div className="pl-4 border-l space-y-2">
-                  <Link to="/resume-builder" className="text-sm text-muted-foreground hover:text-primary block py-1" onClick={() => setIsMobileMenuOpen(false)}>
-                    Resume Builder
-                  </Link>
-                  <Link to="/cover-letter-services" className="text-sm text-muted-foreground hover:text-primary block py-1" onClick={() => setIsMobileMenuOpen(false)}>
-                    Cover Letter Services
-                  </Link>
-                  <Link to="/resume-writing-services" className="text-sm text-muted-foreground hover:text-primary block py-1" onClick={() => setIsMobileMenuOpen(false)}>
-                    Professional Writing
-                  </Link>
-                  <Link to="/interview-guarantee-package" className="text-sm text-muted-foreground hover:text-primary block py-1" onClick={() => setIsMobileMenuOpen(false)}>
-                    Interview Guarantee
-                  </Link>
-                </div>
-              </div>
+              <Link to="/#pricing" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+                Pricing
+              </Link>
               
-              <Link to="/templates" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
-                Templates
+              <Link to="/#testimonials" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+                Testimonials
               </Link>
               
               <Link to="/about" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
                 About
+              </Link>
+              
+              <Link to="/contact" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
+                Contact
               </Link>
               
               {user ? (
@@ -237,8 +199,8 @@ const NavBar = () => {
                   <Link to="/login" className="text-sm font-medium transition-colors hover:text-primary block py-2" onClick={() => setIsMobileMenuOpen(false)}>
                     Login
                   </Link>
-                  <Link to="/signup" className="block py-2">
-                    <Button size="sm" className="w-full justify-center" onClick={() => setIsMobileMenuOpen(false)}>Sign Up</Button>
+                  <Link to="/resume-writing-services" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Button size="sm" className="w-full justify-center bg-primary">Hire a Resume Expert</Button>
                   </Link>
                 </>
               )}

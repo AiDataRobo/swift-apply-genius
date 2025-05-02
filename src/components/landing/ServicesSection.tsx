@@ -1,184 +1,159 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FileText, PenTool, CheckCircle, BadgeCheck } from 'lucide-react';
+import { FileText, Linkedin, FileCheck, Award } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 const ServicesSection = () => {
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-  };
+  const services = [
+    {
+      icon: <FileText className="h-10 w-10 text-primary" />,
+      title: "Basic Resume Writing",
+      price: "₹1,499",
+      description: "ATS-optimized professional resume tailored for your target role",
+      features: [
+        "Strategic resume formatting",
+        "ATS keyword optimization",
+        "1 round of revisions",
+        "3-day turnaround time"
+      ],
+      cta: "Get Started",
+      link: "/resume-writing-services"
+    },
+    {
+      icon: <div className="flex">
+        <FileText className="h-10 w-10 text-primary" />
+        <Linkedin className="h-10 w-10 text-blue-500 -ml-3" />
+      </div>,
+      title: "Standard Resume Package",
+      price: "₹2,999",
+      description: "Comprehensive package for job applications",
+      features: [
+        "ATS-optimized professional resume",
+        "LinkedIn profile optimization",
+        "2 rounds of revisions",
+        "4-day turnaround time"
+      ],
+      popular: true,
+      cta: "Upgrade Now",
+      link: "/resume-writing-services"
+    },
+    {
+      icon: <FileCheck className="h-10 w-10 text-green-500" />,
+      title: "Premium Resume Package",
+      price: "₹4,499",
+      description: "Complete job application solution",
+      features: [
+        "ATS-optimized professional resume",
+        "LinkedIn profile optimization",
+        "Customized cover letter",
+        "3 rounds of revisions",
+        "Priority support"
+      ],
+      cta: "Go Premium",
+      link: "/resume-writing-services"
+    },
+    {
+      icon: <Award className="h-10 w-10 text-amber-500" />,
+      title: "Interview Guarantee Package",
+      price: "From ₹7,999",
+      description: "Guaranteed interview calls or your money back",
+      features: [
+        "Standard (5 Interviews) → ₹7,999",
+        "Premium (15 Interviews) → ₹14,999",
+        "Unlimited revisions",
+        "100% money back guarantee"
+      ],
+      cta: "Get Guaranteed Interviews",
+      link: "/interview-guarantee-package"
+    }
+  ];
 
   return (
-    <section className="py-24 bg-gradient-to-b from-white to-slate-50/70">
-      <div className="container mx-auto px-6">
+    <section id="services" className="py-24 bg-white">
+      <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <motion.div 
-            className="inline-flex items-center px-4 py-2 bg-primary/5 rounded-full mb-4"
-            initial={{ opacity: 0, y: 10 }}
+          <motion.span 
+            className="inline-block px-4 py-2 bg-primary/10 rounded-full text-primary font-medium text-sm mb-4"
+            initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-xs font-medium text-primary">OUR SERVICES</span>
-          </motion.div>
+            OUR SERVICES
+          </motion.span>
           
           <motion.h2 
-            className="text-3xl md:text-4xl font-bold mb-4 tracking-tight"
+            className="text-3xl md:text-4xl font-bold mb-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            Comprehensive Career Solutions
+            Our Resume Writing Services
           </motion.h2>
           
           <motion.p 
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
+            className="text-lg text-muted-foreground max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
-            From ATS optimization to hands-on expert assistance, we provide everything you need for job search success
+            Professional writing services tailored to your career needs and goals
           </motion.p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-          {/* ATS Score Checker */}
-          <motion.div 
-            className="bg-white rounded-xl p-8 shadow-lg border border-slate-100 flex flex-col h-full"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-          >
-            <div className="bg-blue-50 rounded-full p-3 w-14 h-14 flex items-center justify-center mb-5">
-              <FileText className="h-7 w-7 text-blue-600" />
-            </div>
-            
-            <h3 className="text-xl font-bold mb-3">ATS Score Checker</h3>
-            
-            <p className="text-muted-foreground mb-5 flex-grow">
-              Check if your resume passes ATS systems and get recommendations to improve your score.
-            </p>
-            
-            <ul className="mb-6 space-y-2">
-              {["ATS compatibility check", "Keyword analysis", "Format verification", "Improvement suggestions"].map((feature, index) => (
-                <li key={index} className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mr-2" />
-                  <span className="text-sm">{feature}</span>
-                </li>
-              ))}
-            </ul>
-            
-            <div className="space-y-3">
-              <Button className="w-full" asChild>
-                <Link to="/ats-score-checker">
-                  Check Your Resume
-                </Link>
-              </Button>
-              <Button variant="outline" className="w-full" asChild>
-                <Link to="/resume-templates">
-                  ATS-Friendly Templates
-                </Link>
-              </Button>
-            </div>
-          </motion.div>
-          
-          {/* Professional Writing Services */}
-          <motion.div 
-            className="bg-white rounded-xl p-8 shadow-lg border border-primary/20 flex flex-col h-full relative"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            <div className="absolute top-0 right-6 transform -translate-y-1/2 bg-primary text-white text-xs py-1 px-3 rounded-full font-medium">
-              MOST POPULAR
-            </div>
-            
-            <div className="bg-primary/10 rounded-full p-3 w-14 h-14 flex items-center justify-center mb-5">
-              <PenTool className="h-7 w-7 text-primary" />
-            </div>
-            
-            <h3 className="text-xl font-bold mb-3">Professional Writing Services</h3>
-            
-            <p className="text-muted-foreground mb-5 flex-grow">
-              Let our expert writers craft a customized resume and cover letter tailored to your career goals.
-            </p>
-            
-            <ul className="mb-6 space-y-2">
-              {["Written by industry experts", "2 rounds of revisions", "ATS optimization", "Cover letter included"].map((feature, index) => (
-                <li key={index} className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mr-2" />
-                  <span className="text-sm">{feature}</span>
-                </li>
-              ))}
-            </ul>
-            
-            <div className="space-y-3">
-              <Button className="w-full" asChild>
-                <Link to="/resume-writing-services">
-                  Get Professional Help
-                </Link>
-              </Button>
-              <Button variant="outline" className="w-full">
-                Starting at ₹1,499
-              </Button>
-            </div>
-          </motion.div>
-          
-          {/* Interview Guarantee Package */}
-          <motion.div 
-            className="bg-white rounded-xl p-8 shadow-lg border border-slate-100 flex flex-col h-full"
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-          >
-            <div className="bg-amber-50 rounded-full p-3 w-14 h-14 flex items-center justify-center mb-5">
-              <BadgeCheck className="h-7 w-7 text-amber-600" />
-            </div>
-            
-            <h3 className="text-xl font-bold mb-3">Interview Guarantee Package</h3>
-            
-            <p className="text-muted-foreground mb-5 flex-grow">
-              Our most comprehensive solution with a 7-day interview guarantee or your money back.
-            </p>
-            
-            <ul className="mb-6 space-y-2">
-              {["5-15 interview guarantee", "LinkedIn profile optimization", "Priority support", "Career coaching session"].map((feature, index) => (
-                <li key={index} className="flex items-start">
-                  <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mr-2" />
-                  <span className="text-sm">{feature}</span>
-                </li>
-              ))}
-            </ul>
-            
-            <div className="space-y-3">
-              <Button className="w-full" variant="secondary" asChild>
-                <Link to="/interview-guarantee-package">
-                  Get Interview Guarantee
-                </Link>
-              </Button>
-              <Button variant="outline" className="w-full">
-                Starting at ₹7,999
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-        
-        <div className="mt-16 text-center">
-          <Link to="/templates">
-            <Button variant="outline" size="lg">
-              Browse All Resume Templates
-            </Button>
-          </Link>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" id="pricing">
+          {services.map((service, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 + 0.3 }}
+              className="flex"
+            >
+              <Card className={`flex flex-col h-full w-full border border-slate-200 hover:border-primary/30 transition-all ${service.popular ? 'shadow-lg ring-1 ring-primary/20' : ''}`}>
+                {service.popular && (
+                  <div className="absolute top-0 right-0">
+                    <Badge variant="default" className="rounded-bl-lg rounded-tr-lg">
+                      Most Popular
+                    </Badge>
+                  </div>
+                )}
+                <CardHeader>
+                  <div className="mb-4">
+                    {service.icon}
+                  </div>
+                  <CardTitle className="text-xl">{service.title}</CardTitle>
+                  <div className="mt-2">
+                    <span className="text-2xl font-bold">{service.price}</span>
+                  </div>
+                  <CardDescription className="mt-2">{service.description}</CardDescription>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <ul className="space-y-3">
+                    {service.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-baseline">
+                        <span className="text-primary mr-2">•</span>
+                        <span className="text-sm">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  <Button className="w-full" asChild>
+                    <Link to={service.link}>
+                      {service.cta}
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

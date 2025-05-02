@@ -5,13 +5,11 @@ import HeroSection from '@/components/landing/HeroSection';
 import WhyChooseUsSection from '@/components/landing/WhyChooseUsSection';
 import HowItWorksSection from '@/components/landing/HowItWorksSection';
 import TestimonialsSection from '@/components/landing/TestimonialsSection';
-import PricingSection from '@/components/landing/PricingSection';
+import ServicesSection from '@/components/landing/ServicesSection';
 import CTASection from '@/components/landing/CTASection';
 import Footer from '@/components/landing/Footer';
 import FreeConsultationSection from '@/components/landing/FreeConsultationSection';
 import { useToast } from "@/hooks/use-toast";
-import ExploreITCareerPathsSection from '@/components/landing/ExploreITCareerPathsSection';
-import ResumeUploadSection from '@/components/landing/ResumeUploadSection';
 
 const Index = () => {
   const { toast } = useToast();
@@ -42,7 +40,7 @@ const Index = () => {
     setTimeout(() => {
       toast({
         title: "Welcome to EnhanceResume",
-        description: "Create your perfect resume in minutes with our AI-powered tools",
+        description: "Professional resume writing services to help you land interviews",
         duration: 5000,
       });
     }, 2000);
@@ -82,20 +80,14 @@ const Index = () => {
         <section className="section-why-choose-us">
           <WhyChooseUsSection />
         </section>
+        <section className="section-services">
+          <ServicesSection />
+        </section>
         <section className="section-how-it-works">
           <HowItWorksSection />
         </section>
-        <section id="it-career-paths" className="section-it-career-paths bg-gradient-to-b from-white to-slate-50">
-          <ExploreITCareerPathsSection />
-        </section>
-        <section className="section-resume-upload">
-          <ResumeUploadSection />
-        </section>
         <section className="section-testimonials">
           <TestimonialsSection />
-        </section>
-        <section className="section-pricing">
-          <PricingSection />
         </section>
         <section className="section-free-consultation">
           <FreeConsultationSection />
