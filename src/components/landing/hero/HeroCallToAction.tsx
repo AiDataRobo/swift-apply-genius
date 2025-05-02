@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, FileText, Sparkles, Upload, CheckCircle, AlertCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Player } from "@lottiefiles/react-lottie-player";
 import CalBookingModal from "@/components/booking/CalBookingModal";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -183,9 +182,9 @@ const HeroCallToAction = () => {
         className="flex-1"
       >
         <Link to="/resume-builder" className="block">
-          <Button size="lg" className="glass-button w-full sm:w-auto py-6 px-8 h-auto text-base">
+          <Button size="lg" className="glass-button w-full py-6 px-8 h-auto text-base">
             <FileText className="mr-2 h-5 w-5" />
-            Create Your Resume
+            Create My Resume
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
           </Button>
         </Link>
@@ -256,7 +255,7 @@ const HeroCallToAction = () => {
               </AnimatePresence>
 
               <Sparkles className="mr-2 h-5 w-5 text-amber-500 group-hover:scale-110 transition-transform" />
-              <span className="relative z-10">Review Your Resume</span>
+              <span className="relative z-10">Get a Free Resume Review</span>
             </>
           )}
         </Button>

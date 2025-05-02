@@ -1,140 +1,153 @@
 
 import React, { useState } from 'react';
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { CalendarClock, CalendarDays, Clock, User, AlertCircle } from "lucide-react";
-import CalBookingModal from '../booking/CalBookingModal';
-import { motion } from 'framer-motion';
+import { Card, CardContent } from "@/components/ui/card";
+import { FileText, Users, MessageSquare, CheckCircle } from "lucide-react";
+import CalBookingModal from "@/components/booking/CalBookingModal";
+
+interface ExpertServiceProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  benefit: string;
+  delay: number;
+  onClick: () => void;
+}
+
+const ExpertService: React.FC<ExpertServiceProps> = ({ 
+  icon, title, description, benefit, delay, onClick 
+}) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.5, delay: delay * 0.2 }}
+    >
+      <Card className="h-full transition-all duration-300 hover:shadow-md border-slate-100">
+        <CardContent className="p-6 flex flex-col h-full">
+          <div className="mb-4 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+            {icon}
+          </div>
+          
+          <h3 className="text-xl font-bold mb-2">{title}</h3>
+          <p className="text-muted-foreground mb-4 text-sm flex-grow">{description}</p>
+          
+          <div className="mb-6">
+            <p className="text-sm font-medium flex items-center">
+              <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
+              {benefit}
+            </p>
+          </div>
+          
+          <Button 
+            variant="outline" 
+            className="w-full mt-auto"
+            onClick={onClick}
+          >
+            Book Now
+          </Button>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+};
 
 const FreeConsultationSection = () => {
-  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
-
-  const openBookingModal = () => setIsBookingModalOpen(true);
-  const closeBookingModal = () => setIsBookingModalOpen(false);
-
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState('expertcareeradvice');
+  
+  const openModal = (service: string) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
   };
+  
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  
+  const expertServices = [
+    {
+      icon: <FileText className="h-6 w-6" />,
+      title: "Resume Strategy",
+      description: "Get personalized advice on optimizing your resume for specific roles and industries",
+      benefit: "3x more interview callbacks",
+      calLink: "vishal17/resume-strategy",
+      delay: 1
+    },
+    {
+      icon: <Users className="h-6 w-6" />,
+      title: "LinkedIn Optimization",
+      description: "Make your online professional profile stand out and attract recruiters",
+      benefit: "70% more profile views",
+      calLink: "vishal17/linkedin-optimization",
+      delay: 2
+    },
+    {
+      icon: <MessageSquare className="h-6 w-6" />,
+      title: "Interview Preparation",
+      description: "Mock interviews and coaching to help you ace your job interviews",
+      benefit: "95% interview success rate",
+      calLink: "vishal17/interview-prep",
+      delay: 3
+    }
+  ];
 
   return (
-    <section id="book-consultation" className="py-24 bg-gradient-to-b from-white to-slate-50/50">
-      <div className="container mx-auto px-6 md:px-10 lg:px-20 max-w-7xl">
-        <div className="text-center mb-12">
+    <div className="py-24 bg-gradient-to-b from-white to-slate-50">
+      <div className="container mx-auto px-6">
+        <div className="text-center mb-16">
           <motion.div 
             className="inline-flex items-center px-4 py-2 bg-primary/5 rounded-full mb-4"
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-xs font-medium text-primary">FREE CONSULTATION</span>
+            <span className="text-xs font-medium text-primary">EXPERT ADVICE</span>
           </motion.div>
           
           <motion.h2 
-            className="text-3xl md:text-4xl font-bold mb-4 tracking-tight"
+            className="text-3xl md:text-4xl font-bold mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Get Personalized Career Guidance
+          </motion.h2>
+          
+          <motion.p 
+            className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
           >
-            Get Expert Career Advice
-          </motion.h2>
-          
-          <motion.p 
-            className="text-lg text-muted-foreground max-w-2xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
-            Schedule a free 15-minute consultation with our resume experts to discuss your career goals and get personalized advice
+            Book a 1-on-1 session with our career experts to accelerate your job search
           </motion.p>
         </div>
-
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.2
-              }
-            }
-          }}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-        >
-          <motion.div variants={fadeIn} className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div className="bg-indigo-50 rounded-full p-3 w-14 h-14 flex items-center justify-center mb-5">
-              <CalendarClock className="h-7 w-7 text-indigo-600" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Easy Scheduling</h3>
-            <p className="text-muted-foreground">Select a time that works best for you from our available slots.</p>
-          </motion.div>
-
-          <motion.div variants={fadeIn} className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div className="bg-green-50 rounded-full p-3 w-14 h-14 flex items-center justify-center mb-5">
-              <Clock className="h-7 w-7 text-green-600" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">15-Minute Session</h3>
-            <p className="text-muted-foreground">Quick yet comprehensive consultation to address your specific needs.</p>
-          </motion.div>
-
-          <motion.div variants={fadeIn} className="bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-            <div className="bg-amber-50 rounded-full p-3 w-14 h-14 flex items-center justify-center mb-5">
-              <User className="h-7 w-7 text-amber-600" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Expert Advice</h3>
-            <p className="text-muted-foreground">Get personalized feedback from professional resume writers.</p>
-          </motion.div>
-        </motion.div>
-
-        <motion.div 
-          className="bg-white rounded-xl p-8 md:p-12 shadow-lg border border-primary/10 max-w-3xl mx-auto relative overflow-hidden"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className="absolute top-0 right-0 w-80 h-80 bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-          
-          <div className="relative z-10">
-            <div className="flex flex-col md:flex-row md:items-center gap-6 mb-8">
-              <div className="flex-1">
-                <h3 className="text-2xl font-bold mb-2">Ready to transform your job search?</h3>
-                <p className="text-muted-foreground mb-4">Our experts will analyze your career goals and provide actionable advice.</p>
-                <div className="flex items-center text-sm text-primary">
-                  <AlertCircle className="h-4 w-4 mr-1" />
-                  <span>Limited free slots available each week</span>
-                </div>
-              </div>
-              <div className="flex-shrink-0">
-                <Button 
-                  size="lg" 
-                  className="w-full md:w-auto text-lg font-medium px-8 py-6 h-auto"
-                  data-cal-namespace="expertcareeradvice"
-                  data-cal-link="vishal17/expertcareeradvice"
-                  data-cal-config='{"layout":"month_view","theme":"light"}'
-                >
-                  <CalendarDays className="mr-2 h-5 w-5" />
-                  Book Your Free Consultation
-                </Button>
-              </div>
-            </div>
-            
-            <div className="text-sm text-muted-foreground">
-              <p>By booking a consultation, you agree to our terms of service and privacy policy. No credit card required.</p>
-            </div>
-          </div>
-        </motion.div>
-
-        <CalBookingModal 
-          isOpen={isBookingModalOpen} 
-          onClose={closeBookingModal} 
-          calLink="swiftapply/resume-consultation" 
-        />
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {expertServices.map((service, index) => (
+            <ExpertService
+              key={index}
+              icon={service.icon}
+              title={service.title}
+              description={service.description}
+              benefit={service.benefit}
+              delay={service.delay}
+              onClick={() => openModal(service.calLink)}
+            />
+          ))}
+        </div>
       </div>
-    </section>
+      
+      <CalBookingModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        calLink={selectedService}
+      />
+    </div>
   );
 };
 

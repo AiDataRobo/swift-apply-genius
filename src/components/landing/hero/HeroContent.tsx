@@ -3,11 +3,8 @@ import React from 'react';
 import { motion } from "framer-motion";
 import HeroCallToAction from './HeroCallToAction';
 import HeroTrustBadge from './HeroTrustBadge';
-import { useToast } from '@/hooks/use-toast';
 
 const HeroContent: React.FC = () => {
-  const { toast } = useToast();
-  
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -15,15 +12,6 @@ const HeroContent: React.FC = () => {
       y: 0,
       transition: { duration: 0.6 }
     }
-  };
-
-  const handleFileUpload = () => {
-    // In a real implementation, this would handle file upload logic
-    toast({
-      title: "Resume Uploaded",
-      description: "We'll review your resume and get back to you within 48 hours.",
-      duration: 5000,
-    });
   };
 
   return (
@@ -52,14 +40,14 @@ const HeroContent: React.FC = () => {
         className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tight"
         variants={fadeInUp}
       >
-        Land Your <span className="text-primary">Dream Job</span> with a Professional Resume
+        Land Your <span className="text-primary">Dream Job</span> Faster with an ATS-Optimized Resume
       </motion.h1>
       
       <motion.p 
         className="text-lg text-muted-foreground mb-8 max-w-lg"
         variants={fadeInUp}
       >
-        Create an ATS-optimized resume instantly with our AI tools or get a professionally written resume with a 95% interview success rate.
+        Build a professional, recruiter-approved resume in minutes — or get expert help to craft one from scratch.
       </motion.p>
       
       <HeroCallToAction />

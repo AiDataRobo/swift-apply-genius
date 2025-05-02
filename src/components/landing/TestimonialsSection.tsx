@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Star, Quote, Briefcase } from 'lucide-react';
+import { Star, Quote, Briefcase, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const testimonials = [
   {
@@ -46,6 +47,18 @@ const testimonials = [
 ];
 
 const TestimonialsSection = () => {
+  const [activeSlide, setActiveSlide] = useState(0);
+  
+  const nextSlide = () => {
+    setActiveSlide((prev) => (prev + 1) % Math.ceil(testimonials.length / 3));
+  };
+  
+  const prevSlide = () => {
+    setActiveSlide((prev) => (prev === 0 ? Math.ceil(testimonials.length / 3) - 1 : prev - 1));
+  };
+  
+  const visibleTestimonials = testimonials.slice(activeSlide * 3, activeSlide * 3 + 3);
+
   return (
     <section className="py-24 bg-gradient-to-b from-slate-50 to-white">
       <div className="container mx-auto px-6">
@@ -80,61 +93,88 @@ const TestimonialsSection = () => {
           </motion.p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="h-full"
-            >
-              <Card className="h-full shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden border-slate-100">
-                <CardContent className="p-6 flex flex-col h-full">
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="flex items-center">
-                      <Avatar className="h-12 w-12 mr-4 border-2 border-primary/10">
-                        {testimonial.image ? (
-                          <AvatarImage src={testimonial.image} alt={testimonial.name} />
-                        ) : (
-                          <AvatarFallback className="bg-primary/10 text-primary">
-                            {testimonial.name.split(' ').map(n => n[0]).join('')}
-                          </AvatarFallback>
-                        )}
-                      </Avatar>
+        <div className="relative">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {visibleTestimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="h-full"
+              >
+                <Card className="h-full shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden border-slate-100">
+                  <CardContent className="p-6 flex flex-col h-full">
+                    <div className="flex justify-between items-start mb-6">
+                      <div className="flex items-center">
+                        <Avatar className="h-12 w-12 mr-4 border-2 border-primary/10">
+                          {testimonial.image ? (
+                            <AvatarImage src={testimonial.image} alt={testimonial.name} />
+                          ) : (
+                            <AvatarFallback className="bg-primary/10 text-primary">
+                              {testimonial.name.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          )}
+                        </Avatar>
+                        <div>
+                          <h4 className="font-semibold">{testimonial.name}</h4>
+                          <p className="text-sm text-muted-foreground">{testimonial.position} at {testimonial.company}</p>
+                        </div>
+                      </div>
                       <div>
-                        <h4 className="font-semibold">{testimonial.name}</h4>
-                        <p className="text-sm text-muted-foreground">{testimonial.position} at {testimonial.company}</p>
+                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-100">
+                          <Briefcase className="h-3 w-3 mr-1" />
+                          {testimonial.achievement}
+                        </Badge>
                       </div>
                     </div>
-                    <div>
-                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-100">
-                        <Briefcase className="h-3 w-3 mr-1" />
-                        {testimonial.achievement}
-                      </Badge>
-                    </div>
-                  </div>
 
-                  <div className="mb-4 flex-grow">
-                    <div className="relative">
-                      <Quote className="absolute -left-2 -top-2 h-6 w-6 text-slate-200 rotate-180" />
-                      <p className="italic text-slate-600 pl-6">{testimonial.testimonial}</p>
+                    <div className="mb-4 flex-grow">
+                      <div className="relative">
+                        <Quote className="absolute -left-2 -top-2 h-6 w-6 text-slate-200 rotate-180" />
+                        <p className="italic text-slate-600 pl-6">{testimonial.testimonial}</p>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center mt-auto">
-                    <div className="flex">
-                      {[...Array(testimonial.rating)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
-                      ))}
+                    
+                    <div className="flex items-center mt-auto">
+                      <div className="flex">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                        ))}
+                      </div>
+                      <span className="text-xs text-slate-500 ml-2">Verified Review</span>
                     </div>
-                    <span className="text-xs text-slate-500 ml-2">Verified Review</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+          
+          {/* Carousel Navigation */}
+          {testimonials.length > 3 && (
+            <div className="flex justify-center mt-8 gap-4">
+              <Button variant="outline" size="icon" onClick={prevSlide} className="rounded-full">
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" onClick={nextSlide} className="rounded-full">
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+        </div>
+        
+        <div className="mt-16 max-w-3xl mx-auto">
+          <div className="relative aspect-video rounded-xl overflow-hidden shadow-xl border border-slate-200">
+            {/* Video testimonial embed (placeholder) */}
+            <div className="absolute inset-0 bg-slate-100 flex items-center justify-center">
+              <div className="text-center">
+                <Play className="h-16 w-16 text-primary mx-auto mb-4" />
+                <p className="text-lg font-medium">Watch Rahul's Success Story</p>
+                <p className="text-sm text-muted-foreground">From job hunting for 3 months to landing a role at IBM</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
